@@ -140,6 +140,14 @@ export function Contact() {
                   <CheckCircle className="w-5 h-5" />
                   Prazos garantidos
                 </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="w-5 h-5" />
+                  Soluções personalizadas para seu negócio
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="w-5 h-5" />
+                  Fazemos a manutenção do seu site e sistema
+                </li>
               </ul>
             </div>
           </div>

@@ -3,6 +3,7 @@ import { Services } from './components/Services';
 import { Portfolio } from './components/Portfolio';
 import { Contact } from './components/Contact';
 import { WhatsAppButton } from './components/WhatsAppButton';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Portfolio />
       <Contact />
       <WhatsAppButton />
+      <Footer />
     </div>
   );
 }

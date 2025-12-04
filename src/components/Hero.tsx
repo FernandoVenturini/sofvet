@@ -1,0 +1,66 @@
+import { ArrowRight, Code, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+const Hero = () => {
+  return (
+    <section
+      id="inicio"
+      className="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden"
+    >
+      {/* Background Effects */}
+      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-primary/5 rounded-full blur-2xl" />
+
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border mb-8 animate-fade-up">
+            <Sparkles className="w-4 h-4 text-primary" />
+            <span className="text-sm text-muted-foreground">
+              Desenvolvimento Web Profissional
+            </span>
+          </div>
+
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold mb-6 animate-fade-up-delay-1">
+            Transformamos suas
+            <span className="text-gradient block mt-2">ideias em código</span>
+          </h1>
+
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 animate-fade-up-delay-2">
+            Landing pages, sistemas web e soluções digitais personalizadas para
+            clínicas, consultórios, advocacia e empresas de todos os segmentos.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up-delay-3">
+            <Button variant="hero" size="xl" className="group">
+              Solicitar Orçamento
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Button>
+            <Button variant="outline" size="xl">
+              <Code className="w-5 h-5" />
+              Ver Projetos
+            </Button>
+          </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-8 mt-16 pt-16 border-t border-border">
+            {[
+              { value: "50+", label: "Projetos Entregues" },
+              { value: "100%", label: "Clientes Satisfeitos" },
+              { value: "24h", label: "Suporte Rápido" },
+            ].map((stat, index) => (
+              <div key={index} className="text-center">
+                <div className="text-3xl md:text-4xl font-heading font-bold text-primary mb-2">
+                  {stat.value}
+                </div>
+                <div className="text-sm text-muted-foreground">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Hero;

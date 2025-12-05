@@ -7,21 +7,41 @@ import { useToast } from "@/hooks/use-toast";
 import emailjs from "@emailjs/browser";
 
 // Contact component
-const Contact = () => { 
+const Contact = () => {
   const { toast } = useToast(); // Toast hook for notifications
-  const [formData, setFormData] = useState({ // Form data state
+  const [formData, setFormData] = useState({
+    // Form data state
     name: "",
     email: "",
     phone: "",
     message: "",
   });
 
+  // 🔧 NOVA FUNÇÃO: Abrir WhatsApp com mensagem pré-definida
+  const openWhatsApp = () => {
+    // Mensagem padrão que aparecerá quando usuário clicar
+    const defaultMessage = "Olá Fernando! Vi seu site e gostaria de solicitar um orçamento.";
+    
+    // Codifica a mensagem para URL (remove espaços e caracteres especiais)
+    const encodedMessage = encodeURIComponent(defaultMessage);
+    
+    // Número no formato internacional SEM o '+' inicial e SEM espaços
+    const phoneNumber = "447470534807";
+    
+    // Cria a URL do WhatsApp
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+    
+    // Abre em nova aba
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+  };
+
   // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => { 
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault(); // Prevent default form submission behavior
 
     // Validate form
-    if (!formData.name || !formData.email || !formData.message) { // Check required fields
+    if (!formData.name || !formData.email || !formData.message) {
+      // Check required fields
       // Show error toast
       toast({
         title: "Erro",
@@ -47,7 +67,7 @@ const Contact = () => {
         formData, // Form data
         "x4oNoCRr552KYLeni" // Your EmailJS user ID
       )
-      .then( // Handle response
+      .then(
         (response) => {
           // Success callback
           console.log("Email Enviado!", response.status, response.text); // Log success message
@@ -86,6 +106,7 @@ const Contact = () => {
 
         <div className="grid lg:grid-cols-5 gap-12 max-w-6xl mx-auto">
           <div className="lg:col-span-2 space-y-8">
+            {/* 📧 Seção Email */}
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
                 <Mail className="w-5 h-5 text-primary" />
@@ -100,18 +121,37 @@ const Contact = () => {
               </div>
             </div>
 
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+            {/* 📱 SEÇÃO WHATSAPP MODIFICADA */}
+            {/* 🔧 IMPLEMENTAÇÃO: Adicionamos onClick, cursor-pointer e efeitos hover */}
+            <div
+              onClick={openWhatsApp} // 🔧 NOVO: Chama função ao clicar
+              className="flex items-start gap-4 cursor-pointer group hover:opacity-80 transition-opacity"
+              role="button" // 🔧 NOVO: Melhora acessibilidade
+              tabIndex={0} // 🔧 NOVO: Permite navegação por teclado
+              onKeyDown={(e) => {
+                // 🔧 NOVO: Permite ativar com Enter ou Espaço
+                if (e.key === "Enter" || e.key === " ") {
+                  openWhatsApp();
+                }
+              }}
+              aria-label="Abrir conversa no WhatsApp" // 🔧 NOVO: Descrição para acessibilidade
+            >
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
                 <Phone className="w-5 h-5 text-primary" />
               </div>
               <div>
                 <h3 className="font-heading font-semibold text-foreground mb-1">
                   WhatsApp
                 </h3>
-                <p className="text-muted-foreground">+44 07470534807</p>
+                <p className="text-muted-foreground">+44 7470 534807</p>
+                {/* 🔧 NOVO: Texto indicativo de ação */}
+                <p className="text-sm text-primary mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  Clique para conversar
+                </p>
               </div>
             </div>
 
+            {/* 📍 Seção Localização */}
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
                 <MapPin className="w-5 h-5 text-primary" />
@@ -125,6 +165,7 @@ const Contact = () => {
             </div>
           </div>
 
+          {/* 📋 Formulário de Contato */}
           <form
             onSubmit={handleSubmit}
             className="lg:col-span-3 space-y-6 p-8 rounded-2xl bg-card border border-border"

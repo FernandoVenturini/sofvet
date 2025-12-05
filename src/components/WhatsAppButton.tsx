@@ -3,7 +3,7 @@ import { MessageCircle } from "lucide-react";
 const WhatsAppButton = () => {
   const phoneNumber = "4407470534807"; // Replace with actual number
   const message = encodeURIComponent(
-    "Olá! Gostaria de saber mais sobre os serviços da LVF_Code."
+    "Olá! Precisa de um site ou sistema? Fale comigo pelo WhatsApp para um orçamento gratuito! Conte-me sua ideia e vamos juntos transformá-la em realidade."
   );
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
 
@@ -12,15 +12,11 @@ const WhatsAppButton = () => {
       href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:scale-110 hover:shadow-xl transition-all duration-300 animate-pulse-glow group"
+      className="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-1 bg-[#25D366] text-white px-3 py-3 rounded-2xl shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 animate-pulse-glow group"
       aria-label="Contato via WhatsApp"
     >
-      <MessageCircle className="w-7 h-7 text-white" />
-      
-      {/* Tooltip */}
-      <span className="absolute right-full mr-3 px-3 py-2 bg-card border border-border rounded-lg text-sm text-foreground whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-        Fale conosco!
-      </span>
+      <MessageCircle className="w-7 h-7" />
+      <span className="text-xs font-semibold">Fale conosco</span>
     </a>
   );
 };

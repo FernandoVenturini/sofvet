@@ -26,7 +26,7 @@ const Hero = () => {
           </h1>
 
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 animate-fade-up-delay-2">
-            Landing pages, sistemas web e soluções digitais personalizadas para
+            Sistemas, Web sites, Loja virtual, e-commerce, Landing pages,  e soluções digitais personalizadas para
             clínicas, consultórios, advocacia e empresas de todos os segmentos.
           </p>
 

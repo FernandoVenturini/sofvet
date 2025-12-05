@@ -194,7 +194,7 @@ const Portfolio = () => {
 
         <div className="text-center mt-16">
           <Button variant="outline" size="lg" className="group">
-            Ver Todos os Projetos
+            <a href="#contato">Orçamento Grátis</a>
             <ExternalLink className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Button>
         </div>

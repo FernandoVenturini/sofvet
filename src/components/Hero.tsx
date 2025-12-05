@@ -14,8 +14,7 @@ const Hero = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border mb-8 animate-fade-up">
-            <Sparkles className="w-4 h-4 text-primary" />
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border mb-8 mt-8 animate-fade-up">
             <span className="text-sm text-muted-foreground">
               Desenvolvimento Web Profissional
             </span>
@@ -33,19 +32,19 @@ const Hero = () => {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up-delay-3">
             <Button variant="hero" size="xl" className="group">
-              Solicitar Orçamento
+              <a href="#contato">Solicitar Orçamento</a>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
             <Button variant="outline" size="xl">
               <Code className="w-5 h-5" />
-              Ver Projetos
+              <a href="#portfolio">Ver Projetos</a>
             </Button>
           </div>
 
           {/* Stats */}
           <div className="grid grid-cols-3 gap-8 mt-16 pt-16 border-t border-border">
             {[
-              { value: "50+", label: "Projetos Entregues" },
+              { value: "150+", label: "Projetos Entregues" },
               { value: "100%", label: "Clientes Satisfeitos" },
               { value: "24h", label: "Suporte Rápido" },
             ].map((stat, index) => (
@@ -53,7 +52,9 @@ const Hero = () => {
                 <div className="text-3xl md:text-4xl font-heading font-bold text-primary mb-2">
                   {stat.value}
                 </div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
+                <div className="text-sm text-muted-foreground">
+                  {stat.label}
+                </div>
               </div>
             ))}
           </div>

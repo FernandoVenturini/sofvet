@@ -38,7 +38,7 @@ const Header = () => {
 
           <div className="hidden md:flex items-center gap-4">
             <Button variant="hero" size="lg">
-              Orçamento Grátis
+              <a href="#contato">Orçamento Grátis</a>
             </Button>
           </div>
 

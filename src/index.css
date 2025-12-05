@@ -1,9 +1,12 @@
+/* 1. IMPORTS PRIMEIRO */
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+
+/* 2. DEPOIS TAILWIND */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
-
+/* 3. DEPOIS SEUS ESTILOS */
 @layer base {
   :root {
     --background: 0 0% 4%;

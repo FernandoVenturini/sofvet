@@ -4,41 +4,67 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import emailjs from "@emailjs/browser";
 
-const Contact = () => {
-  const { toast } = useToast();
-  const [formData, setFormData] = useState({
+// Contact component
+const Contact = () => { 
+  const { toast } = useToast(); // Toast hook for notifications
+  const [formData, setFormData] = useState({ // Form data state
     name: "",
     email: "",
     phone: "",
     message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
+  // Handle form submission
+  const handleSubmit = (e: React.FormEvent) => { 
+    e.preventDefault(); // Prevent default form submission behavior
+
     // Validate form
-    if (!formData.name || !formData.email || !formData.message) {
+    if (!formData.name || !formData.email || !formData.message) { // Check required fields
+      // Show error toast
       toast({
         title: "Erro",
         description: "Por favor, preencha todos os campos obrigatórios.",
         variant: "destructive",
       });
-      return;
+      return; // Exit if validation fails
     }
 
+    // Show success toast
     toast({
       title: "Mensagem enviada!",
       description: "Entraremos em contato em breve.",
     });
 
     setFormData({ name: "", email: "", phone: "", message: "" });
+
+    // EmailJS service to send email
+    emailjs
+      .send(
+        "service_q91p5si", // Your EmailJS service ID
+        "template_nd3pvdf", // Your EmailJS template ID
+        formData, // Form data
+        "x4oNoCRr552KYLeni" // Your EmailJS user ID
+      )
+      .then( // Handle response
+        (response) => {
+          // Success callback
+          console.log("Email Enviado!", response.status, response.text); // Log success message
+          setFormData({ name: "", email: "", phone: "", message: "" }); // Clear form after successful submission
+        },
+        (error) => {
+          // Error callback
+          console.log("Error", error.status, error.text); // Log error message
+        }
+      );
   };
 
+  // Handle input changes
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value }); // Update form data state
   };
 
   return (
@@ -53,7 +79,8 @@ const Contact = () => {
             <span className="text-primary"> projeto</span>?
           </h2>
           <p className="text-muted-foreground text-lg">
-            Entre em contato e receba um orçamento personalizado para suas necessidades.
+            Entre em contato e receba um orçamento personalizado para suas
+            necessidades.
           </p>
         </div>
 
@@ -67,7 +94,9 @@ const Contact = () => {
                 <h3 className="font-heading font-semibold text-foreground mb-1">
                   E-mail
                 </h3>
-                <p className="text-muted-foreground">contato@lvfcode.com.br</p>
+                <p className="text-muted-foreground">
+                  contatolvfcode@gmail.com
+                </p>
               </div>
             </div>
 
@@ -79,7 +108,7 @@ const Contact = () => {
                 <h3 className="font-heading font-semibold text-foreground mb-1">
                   WhatsApp
                 </h3>
-                <p className="text-muted-foreground">(11) 99999-9999</p>
+                <p className="text-muted-foreground">+44 07470534807</p>
               </div>
             </div>
 
@@ -91,7 +120,7 @@ const Contact = () => {
                 <h3 className="font-heading font-semibold text-foreground mb-1">
                   Localização
                 </h3>
-                <p className="text-muted-foreground">São Paulo, SP - Brasil</p>
+                <p className="text-muted-foreground">Nottinghan - UK</p>
               </div>
             </div>
           </div>

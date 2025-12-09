@@ -6,7 +6,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navLinks = [
-    { href: "#inicio", label: "Home" },
+    { href: "#home", label: "Home" },
     { href: "#planos", label: "Planos" },
     { href: "#teste_gratis", label: "Teste Grátis" },
     { href: "#contato", label: "Contato" },
@@ -18,10 +18,10 @@ const Header = () => {
         <div className="flex items-center justify-between h-16 md:h-20">
           <a href="#inicio" className="flex flex-col items-center">
             <span className="text-2xl font-heading font-bold text-foreground">
-              <span className="text-primary">SisGer</span>Vet
+              <span className="text-primary">Sof</span>Vet
             </span>
             <span className="text-xs md:text-sm mt-0.5 text-gray-600">
-              Sistema de Gerenciamento Veterinário
+              Software Veterinário
             </span>
           </a>
 

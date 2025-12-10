@@ -1,7 +1,7 @@
 import {
-  Stethoscope,
-  Scale,
-  Plane,
+  Lightbulb,
+  ShieldPlus,
+  Percent,
   Building2,
   Globe,
   Smartphone,
@@ -10,46 +10,29 @@ import { Card, CardContent } from "@/components/ui/card";
 
 const planos = [
   {
-    icon: Stethoscope,
-    title: "Clínicas e Consultórios",
+    icon: Lightbulb,
+    title: "Light",
     description:
-      "Sistemas completos para clínicas veterinárias, médicas e odontológicas com agendamento online.",
+      "Ideal para clínicas e consultórios de pequeno porte que desejam uma solução básica e eficiente. Inclui agendamento de consultas, prontuário eletrônico, cadastro de pacientes e controle de atendimentos.",
     features: ["Agendamento", "Prontuário", "Gestão"],
   },
   {
-    icon: Scale,
-    title: "Escritórios de Advocacia",
+    icon: ShieldPlus,
+    title: "Full",
     description:
-      "Sites institucionais e sistemas de gestão de processos para advogados e escritórios jurídicos.",
-    features: ["Site Institucional", "Gestão de Processos", "CRM"],
+      "Perfeito para clínicas e consultórios que buscam uma gestão completa. Inclui todos os recursos do plano Light, além de controle financeiro, estoque, emissão de notas fiscais, relatórios avançados e integração com laboratórios parceiros.",
+    features: [
+      "Controle Financeiro",
+      "Gestão",
+      "Emissão de notas",
+    ],
   },
   {
-    icon: Plane,
-    title: "Transfer e Turismo",
+    icon: Percent,
+    title: "Fiscal",
     description:
-      "Plataformas de reserva e sistemas de gestão para empresas de translado e agências de viagem.",
-    features: ["Reservas Online", "Gestão de Frota", "Pagamentos"],
-  },
-  {
-    icon: Building2,
-    title: "Empresas em Geral",
-    description:
-      "Soluções web personalizadas para qualquer tipo de negócio. Do site institucional ao e-commerce.",
-    features: ["Sites", "E-commerce", "Sistemas"],
-  },
-  {
-    icon: Globe,
-    title: "Landing Pages",
-    description:
-      "Páginas de alta conversão para campanhas de marketing, lançamentos e captação de leads.",
-    features: ["Alta Conversão", "SEO", "Responsivo"],
-  },
-  {
-    icon: Smartphone,
-    title: "Aplicações Web",
-    description:
-      "Sistemas web modernos e responsivos que funcionam em qualquer dispositivo.",
-    features: ["PWA", "Dashboard", "APIs"],
+      "Voltado para empresas que necessitam de soluções fiscais e contábeis robustas. Oferece integração com sistemas de contabilidade, emissão de notas fiscais eletrônicas, gestão tributária e relatórios financeiros detalhados.",
+    features: ["Nota FIscal Eletrônica", "Relatorios", "Pagamentos"],
   },
 ];
 
@@ -68,7 +51,7 @@ const Planos = () => {
             <span className="text-primary"> Sistema"</span>
           </h2>
           <p className="text-muted-foreground text-lg">
-            Escolha o plano ideal para sua empresa e impulsione seu crescimento.
+            Escolha o plano ideal para sua clinica e impulsione seu crescimento.
           </p>
         </div>
 

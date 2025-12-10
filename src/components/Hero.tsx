@@ -46,19 +46,20 @@ const Hero = () => {
           <div className="grid grid-cols-3 gap-8 mt-16 pt-16 border-t border-border">
             {[
               { value: "", label: "100% na nuvem" },
-              { value: "", label: "Já usado por mais de 1000 clínicas" },
-              { value: "", label: "Sua clínica cabe no bolso" },
-              { value: "", label: "Acesse de qualquer lugar, a qualquer hora" },
-              { value: "", label: "Mais organização = mais faturamento" },
-              { value: "", label: "Transforme caos em lucro" },
-              { value: "", label: "Sua clínica no bolso" },
-              { value: "", label: "Comissão" },
+              { value: "", label: "Usado por mais de 1000 clínicas" },
+              { value: "", label: "Agenda" },
+              { value: "", label: "Acesse de qualquer lugar" },
+              { value: "", label: "Estoque" },
+              { value: "", label: "Financeiro" },
+              { value: "", label: "Clientes" },
+              { value: "", label: "Controle total" },
+              { value: "", label: "O software veterinário que simplifica sua vida" },
             ].map((stat, index) => (
               <div key={index} className="text-center">
                 <div className="text-3xl md:text-4xl font-heading font-bold text-primary mb-2">
                   {stat.value}
                 </div>
-                <div className="text-2xl text-muted-foreground">
+                <div className="text-1xl text-muted-foreground">
                   {stat.label}
                 </div>
               </div>

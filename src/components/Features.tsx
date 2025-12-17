@@ -50,7 +50,7 @@ const features = [
     },
     {
         icon: Zap,
-        title: "Rápido pra caramba",
+        title: "Rápido e Agil",
         desc: "Abriu o SofVet abre em 2 segundos. Mesmo com 10 mil pacientes."
     },
 ];
@@ -67,7 +67,7 @@ const Features = () => {
                     </span>
                     <h2 className="text-5xl md:text-6xl font-black mt-4 text-white">
                         Simples.
-                        <span className="text-red-600"> Rápido.</span> Veterinário.
+                        <span className="text-red-600"> Rápido.</span> Fácil.
                     </h2>
                     <p className="text-gray-400 text-lg mt-6 max-w-3xl mx-auto">
                         Feito por quem vive o dia a dia da clínica. Nada de função inútil. Só o que realmente importa.

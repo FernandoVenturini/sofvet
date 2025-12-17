@@ -66,7 +66,7 @@ const Hero = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20 pt-11 pb-10
 		  ">
             {[
-              { value: "1.200+", label: "Clínicas ativas" },
+              { value: "2.400+", label: "Clínicas ativas" },
               { value: "24/7", label: "Suporte veterinário" },
               { value: "0", label: "Fidelidade" },
               { value: "100%", label: "Na nuvem" },

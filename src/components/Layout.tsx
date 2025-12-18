@@ -27,7 +27,7 @@ const Layout = () => {
                     <img
                         src="/assets/logo-sofvet.png"
                         alt="SofVet Logo"
-                        className="mx-auto h-34 w-auto object-contain drop-shadow-2xl filter brightness-110 contrast-125"
+                        className="mx-auto h-40 w-auto object-contain brightness-125 contrast-125 drop-shadow-[0_0_10px_rgba(220,38,38,0.8)]"
                     />
                     <p className="text-sm text-gray-400 mt-4">Software Veterinário</p>
                 </div>
@@ -38,17 +38,43 @@ const Layout = () => {
                         Dashboard
                     </Link>
 
-                    {/* Accordion para menus */}
                     <Accordion type="single" collapsible>
-                        {/* Seus menus aqui */}
+                        <AccordionItem value="fichas">
+                            <AccordionTrigger className="px-4 py-3 text-lg hover:bg-red-600/20 rounded">
+                                <FileText className="mr-3 h-5 w-5" />
+                                Fichas (Pacientes)
+                            </AccordionTrigger>
+                            <AccordionContent className="space-y-1 pl-6">
+                                <Link to="/fichas/nova" className="block py-2 text-gray-300 hover:text-white">
+                                    Incluir Nova Ficha
+                                </Link>
+                                <Link to="/fichas/lista" className="block py-2 text-gray-400 hover:text-white">
+                                    Lista / Busca de Fichas
+                                </Link>
+                                <Link to="/fichas/retorno" className="block py-2 text-gray-400 hover:text-white">
+                                    Alterar / Consultar Retorno
+                                </Link>
+                            </AccordionContent>
+                        </AccordionItem>
+
+                        <AccordionItem value="diversos">
+                            <AccordionTrigger className="px-4 py-3 text-lg hover:bg-red-600/20 rounded">
+                                Diversos
+                            </AccordionTrigger>
+                            <AccordionContent className="space-y-1 pl-6">
+                                <Link to="/mensagens" className="block py-2 text-gray-400 hover:text-white">Mensagens</Link>
+                                <Link to="/teclas" className="block py-2 text-gray-400 hover:text-white">Teclas de Função</Link>
+                                <Link to="/usuarios" className="block py-2 text-gray-400 hover:text-white">Usuários e Senhas</Link>
+                                <Link to="/config" className="block py-2 text-gray-400 hover:text-white">Configurações</Link>
+                                <Link to="/backup" className="block py-2 text-gray-400 hover:text-white">Backup Diário</Link>
+                            </AccordionContent>
+                        </AccordionItem>
                     </Accordion>
 
-                    {/* Itens simples */}
                     <Link to="/movimento" className="flex items-center px-4 py-3 text-lg hover:bg-red-600/20 rounded">
                         <ClipboardList className="mr-3 h-5 w-5" />
                         Movimento
                     </Link>
-                    {/* Outros itens */}
                 </div>
             </div>
 
@@ -60,7 +86,7 @@ const Layout = () => {
                         <img
                             src="/assets/logo-sofvet.png"
                             alt="SofVet Logo"
-                            className="h-14 w-auto object-contain drop-shadow-2xl filter brightness-110 contrast-125"
+                            className="h-14 w-auto object-contain brightness-125 contrast-125 drop-shadow-[0_0_10px_rgba(220,38,38,0.8)]"
                         />
                     </div>
 
@@ -76,7 +102,7 @@ const Layout = () => {
                                 <img
                                     src="/assets/logo-sofvet.png"
                                     alt="SofVet Logo"
-                                    className="mx-auto h-40 w-auto object-contain drop-shadow-2xl filter brightness-110 contrast-125"
+                                    className="mx-auto h-40 w-auto object-contain brightness-125 contrast-125 drop-shadow-[0_0_10px_rgba(220,38,38,0.8)]"
                                 />
                                 <p className="text-sm text-gray-400 mt-4">Software Veterinário</p>
                             </div>

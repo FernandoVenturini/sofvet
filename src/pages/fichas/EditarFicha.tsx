@@ -118,7 +118,7 @@ const EditarFicha = () => {
     };
 
     if (loading) {
-        return <div className="text-white text-center">Carregando ficha...</div>;
+        return <div className="text-white text-center">Carregando ficha....</div>;
     }
 
     return (

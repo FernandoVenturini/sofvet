@@ -14,6 +14,7 @@ import Layout from './components/Layout';
 import NovaFicha from './pages/fichas/NovaFicha';
 import ListaFichas from './pages/fichas/ListaFichas';
 import EditarFicha from './pages/fichas/EditarFicha';
+import Landing from './pages/Landing';
 
 
 // ← ADICIONEI A DEFINIÇÃO DO queryClient
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/" element={<Login />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/landing" element={<Landing />} />  // opcional, para acesso direto
 
             {/* Todas as rotas protegidas dentro do Layout (sidebar + header) */}
             <Route element={<Layout />}>

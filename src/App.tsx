@@ -8,17 +8,17 @@ import RoutesAdm from "./routes/RoutesAdm";
 const queryClient = new QueryClient();
 
 function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <AuthProvider>
-          <RoutesAdm />
-        </AuthProvider>
-      </TooltipProvider>
-    </QueryClientProvider>
-  );
+	return (
+		<QueryClientProvider client={queryClient}>
+			<TooltipProvider>
+				<Toaster />
+				<Sonner />
+				<AuthProvider>
+					<RoutesAdm />
+				</AuthProvider>
+			</TooltipProvider>
+		</QueryClientProvider>
+	);
 }
 
 export default App;

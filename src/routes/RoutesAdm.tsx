@@ -13,6 +13,10 @@ import ListaFichas from "../pages/fichas/ListaFichas";
 import EditarFicha from "../pages/fichas/EditarFicha";
 import TabelaVacinas from '../pages/tabelas/TabelaVacinas';
 import AgendaRetornos from '@/pages/agenda/AgendaRetornos';
+import Movimento from '@/pages/movimentos/Movimento';
+import Relatorios from '@/pages/relatorios/Relatorios';
+import BackupDiario from '@/pages/diversos/BackupDiario';
+import Usuarios from '@/pages/diversos/Usuarios';
 
 export default function RoutesAdm() {
   return (
@@ -31,6 +35,10 @@ export default function RoutesAdm() {
         <Route path="/fichas/editar/:id" element={<PrivateRoute><EditarFicha /></PrivateRoute>} />
 		<Route path="/tabelas/vacinas" element={<PrivateRoute><TabelaVacinas /></PrivateRoute>} />
 		<Route path="/agenda/retornos" element={<PrivateRoute><AgendaRetornos /></PrivateRoute>} />
+		<Route path="/movimento" element={<PrivateRoute><Movimento /></PrivateRoute>} />
+		<Route path="/relatorios" element={<PrivateRoute><Relatorios /></PrivateRoute>} />
+		<Route path="/diversos/backup" element={<PrivateRoute><BackupDiario /></PrivateRoute>} />
+		<Route path="/diversos/usuarios" element={<PrivateRoute><Usuarios /></PrivateRoute>} />
         {/* Adicione mais rotas protegidas aqui */}
       </Route>
 

@@ -23,7 +23,7 @@ import {
 } from '@/components/ui/form';
 import { Loader2 } from 'lucide-react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/lib/firebase';  // Ajuste o path se necessário
+import { auth } from '@/lib/firebase';
 
 // Schema de validação com Zod
 const signupSchema = z

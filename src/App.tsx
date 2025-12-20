@@ -5,6 +5,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { AuthProvider } from "./context/AuthContext";
 import RoutesAdm from "./routes/RoutesAdm";
 
+// ← ADICIONADO A DEFINIÇÃO DO queryClient
 const queryClient = new QueryClient();
 
 function App() {

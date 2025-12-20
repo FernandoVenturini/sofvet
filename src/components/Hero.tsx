@@ -5,7 +5,7 @@ const Hero = () => {
   return (
     <section
       id="inicio"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black pt-28 md:pt-32 lg:pt-36"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black pt-20 md:pt-24 lg:pt-28"
     >
       {/* Background sutil vermelho */}
       <div className="absolute inset-0 bg-gradient-to-b from-red-950/20 via-black to-black" />
@@ -15,10 +15,10 @@ const Hero = () => {
       <div className="container mx-auto px-6 relative z-10 text-center">
         <div className="max-w-5xl mx-auto">
 
-          {/* Badge — AGORA TOTALMENTE VISÍVEL */}
-          <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-red-600/10 border border-red-600/30 text-red-400 text-sm font-bold mb-8">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-red-600/10 border border-red-600/30 text-red-400 text-sm font-bold mb-7">
             <HeartHandshake className="w-5 h-5" />
-            Feito por quem ja atuou na area.
+            Feito por quem já atuou na área.
           </div>
 
           {/* Título principal */}
@@ -40,7 +40,7 @@ const Hero = () => {
           {/* Botões */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center mt-12">
             <Button
-              size="xl"
+              size="sm"
               className="bg-red-600 hover:bg-red-700 text-white font-bold text-xl px-12 py-8 rounded-2xl shadow-2xl shadow-red-600/30 hover:shadow-red-600/50 hover:scale-105 transition-all"
               asChild
             >
@@ -51,7 +51,7 @@ const Hero = () => {
             </Button>
 
             <Button
-              size="xl"
+              size="sm"
               variant="outline"
               className="border-red-600 text-red-500 hover:bg-red-600 hover:text-white font-bold text-xl px-12 py-8 rounded-2xl"
               asChild

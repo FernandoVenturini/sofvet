@@ -94,7 +94,7 @@ const Contact = () => {
           <span className="text-primary font-semibold text-sm uppercase tracking-wider">
             Contato
           </span>
-          <h2 className="text-5xl font-bold text-center mb-8">
+          <h2 className="text-6xl font-bold text-center mb-8">
             Fale com a gente <span className="text-red-600">agora</span> e <span className="text-red-600">teste grátis</span> por 14 dias...
           </h2>
 		  <Button

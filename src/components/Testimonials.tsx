@@ -14,6 +14,18 @@ const Testimonials = () => {
                             <p className="mt-4 font-semibold text-white">- Dr. João Silva</p>
                         </CardContent>
                     </Card>
+                    <Card className="bg-black/70 border-red-600/30">
+                        <CardContent className="pt-6">
+                            <p className="text-gray-300 italic">"O SofVet mudou completamente a gestão da minha clínica. Recomendo!"</p>
+                            <p className="mt-4 font-semibold text-white">- Dr. João Silva</p>
+                        </CardContent>
+                    </Card>
+                    <Card className="bg-black/70 border-red-600/30">
+                        <CardContent className="pt-6">
+                            <p className="text-gray-300 italic">"O SofVet mudou completamente a gestão da minha clínica. Recomendo!"</p>
+                            <p className="mt-4 font-semibold text-white">- Dra. Ana Costa</p>
+                        </CardContent>
+                    </Card>
                     {/* Mais depoimentos */}
                 </div>
             </div>

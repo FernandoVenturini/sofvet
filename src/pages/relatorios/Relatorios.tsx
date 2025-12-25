@@ -1,198 +1,275 @@
-import { useEffect, useState } from 'react';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { useState, useEffect } from 'react';
+import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { format, startOfMonth, endOfMonth, isWithinInterval } from 'date-fns';
-
-interface MovimentoItem {
-  nomeProduto: string;
-  quantidade: number;
-  subtotal: number;
-}
-
-interface Movimento {
-  total: number;
-  data: any;
-  itens: MovimentoItem[];
-}
-
-interface VacinaPendente {
-  nomeAnimal: string;
-  nomeProprietario: string;
-  vacinaNome: string;
-  dose: number;
-  dataPrevista: string;
-}
-
-interface Aniversariante {
-  nomeAnimal: string;
-  nomeProprietario: string;
-  dataNascimento: string;
-}
+import { Printer } from 'lucide-react';
+import { format } from 'date-fns';
 
 const Relatorios = () => {
-  const [faturamentoTotal, setFaturamentoTotal] = useState(0);
-  const [vacinasPendentes, setVacinasPendentes] = useState<VacinaPendente[]>([]);
-  const [aniversariantes, setAniversariantes] = useState<Aniversariante[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('faturamento');
+  const [dataInicio, setDataInicio] = useState('');
+  const [dataFim, setDataFim] = useState('');
+  const [dados, setDados] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const carregarRelatorios = async () => {
-      setLoading(true);
-      try {
-        // 1. Faturamento total (todos os movimentos)
-        let totalFaturado = 0;
-        const animaisSnapshot = await getDocs(collection(db, 'animais'));
-        for (const animalDoc of animaisSnapshot.docs) {
-          const movimentosSnapshot = await getDocs(collection(db, 'animais', animalDoc.id, 'movimentos'));
-          movimentosSnapshot.forEach((movDoc) => {
-            const data = movDoc.data() as Movimento;
-            totalFaturado += data.total || 0;
-          });
-        }
-        setFaturamentoTotal(totalFaturado);
+    if (dataInicio && dataFim) carregarRelatorio();
+  }, [activeTab, dataInicio, dataFim]);
 
-        // 2. Vacinas pendentes (próximas doses)
-        const pendentes: VacinaPendente[] = [];
-        animaisSnapshot.forEach((animalDoc) => {
-          const data = animalDoc.data();
-          const vacinas = data.vacinas || [];
+  const carregarRelatorio = async () => {
+    setLoading(true);
+    try {
+      let lista: any[] = [];
+
+      if (activeTab === 'faturamento') {
+        const snap = await getDocs(collection(db, 'consultas'));
+        snap.forEach(doc => {
+          const d = doc.data();
+          if (d.data >= dataInicio && d.data <= dataFim) lista.push(d);
+        });
+        setDados(lista);
+      }
+
+      if (activeTab === 'devedores') {
+        const snap = await getDocs(collection(db, 'consultas'));
+        snap.forEach(doc => {
+          const d = doc.data();
+          if (d.formaPagamento === 'parcelado' && d.parcelas > 1) lista.push(d);
+        });
+        setDados(lista);
+      }
+
+      if (activeTab === 'vacinas-pendentes') {
+        const snap = await getDocs(collection(db, 'animais'));
+        snap.forEach(doc => {
+          const d = doc.data();
+          const vacinas = d.vacinas || [];
+          vacinas.forEach((v: any) => {
+            if (v.proximaData && v.proximaData >= dataInicio && v.proximaData <= dataFim) {
+              lista.push({ ...d, proximaVacina: v });
+            }
+          });
+        });
+        setDados(lista);
+      }
+
+      if (activeTab === 'animais-especie') {
+        const snap = await getDocs(collection(db, 'animais'));
+        const contagem: any = {};
+        snap.forEach(doc => {
+          const especie = doc.data().especie || 'Não informada';
+          contagem[especie] = (contagem[especie] || 0) + 1;
+        });
+        setDados(Object.entries(contagem).map(([especie, total]) => ({ especie, total })));
+      }
+
+      if (activeTab === 'produtos-vendidos') {
+        const snap = await getDocs(collection(db, 'consultas'));
+        const contagem: any = {};
+        snap.forEach(doc => {
+          const itens = doc.data().itens || [];
+          itens.forEach((item: any) => {
+            const nome = item.nome || 'Sem nome';
+            contagem[nome] = (contagem[nome] || 0) + item.quantidade;
+          });
+        });
+        setDados(Object.entries(contagem).map(([nome, quantidade]) => ({ nome, quantidade })));
+      }
+
+      if (activeTab === 'mala-direta') {
+        const snap = await getDocs(collection(db, 'animais'));
+        snap.forEach(doc => {
+          const d = doc.data();
+          const vacinas = d.vacinas || [];
           vacinas.forEach((v: any) => {
             if (v.proximaData) {
-              pendentes.push({
-                nomeAnimal: data.nomeAnimal || '',
-                nomeProprietario: data.nomeProprietario || '',
-                vacinaNome: v.nomeVacina || '',
-                dose: v.dose || 0,
+              lista.push({
+                animal: d.nomeAnimal,
+                proprietario: d.nomeProprietario,
+                telefone: d.telefoneProprietario,
+                vacina: v.nomeVacina,
+                dose: v.dose,
                 dataPrevista: v.proximaData,
               });
             }
           });
         });
-        // Ordena por data mais próxima
-        pendentes.sort((a, b) => new Date(a.dataPrevista).getTime() - new Date(b.dataPrevista).getTime());
-        setVacinasPendentes(pendentes);
-
-        // 3. Aniversariantes do mês atual
-        const hoje = new Date();
-        const inicioMes = startOfMonth(hoje);
-        const fimMes = endOfMonth(hoje);
-        const aniversariantesMes: Aniversariante[] = [];
-
-        animaisSnapshot.forEach((animalDoc) => {
-          const data = animalDoc.data();
-          if (data.dataNascimento) {
-            const nascimento = new Date(data.dataNascimento);
-            const nascimentoEsteAno = new Date(hoje.getFullYear(), nascimento.getMonth(), nascimento.getDate());
-            if (isWithinInterval(nascimentoEsteAno, { start: inicioMes, end: fimMes })) {
-              aniversariantesMes.push({
-                nomeAnimal: data.nomeAnimal || '',
-                nomeProprietario: data.nomeProprietario || '',
-                dataNascimento: data.dataNascimento,
-              });
-            }
-          }
-        });
-        setAniversariantes(aniversariantesMes);
-
-      } catch (error) {
-        console.error('Erro ao carregar relatórios:', error);
-        alert('Erro ao carregar relatórios.');
-      } finally {
-        setLoading(false);
+        setDados(lista);
       }
-    };
+    } catch (error) {
+      alert('Erro ao gerar relatório');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    carregarRelatorios();
-  }, []);
-
-  if (loading) {
-    return <div className="text-white text-center py-20">Carregando relatórios...</div>;
-  }
+  const imprimir = () => window.print();
 
   return (
     <div className="max-w-6xl mx-auto py-8 px-4">
-      <h1 className="text-4xl font-bold text-white text-center mb-10">Relatórios</h1>
+      <h1 className="text-4xl font-bold text-white text-center mb-8">Relatórios</h1>
 
-      {/* Faturamento Total */}
+      {/* Filtros */}
       <Card className="bg-black/50 border-red-600/30 mb-8">
         <CardHeader>
-          <CardTitle className="text-white">Faturamento Total (Todos os Tempos)</CardTitle>
+          <CardTitle className="text-white">Filtros</CardTitle>
         </CardHeader>
-        <CardContent>
-          <p className="text-5xl font-bold text-green-400">
-            R$ {faturamentoTotal.toFixed(2)}
-          </p>
+        <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <Label className="text-white">Data Início</Label>
+            <Input type="date" value={dataInicio} onChange={e => setDataInicio(e.target.value)} className="bg-black/50 border-red-600/50 text-white" />
+          </div>
+          <div>
+            <Label className="text-white">Data Fim</Label>
+            <Input type="date" value={dataFim} onChange={e => setDataFim(e.target.value)} className="bg-black/50 border-red-600/50 text-white" />
+          </div>
+          <div className="flex items-end">
+            <Button onClick={carregarRelatorio} className="w-full bg-red-600 hover:bg-red-700">
+              Gerar Relatório
+            </Button>
+          </div>
         </CardContent>
       </Card>
 
-      {/* Vacinas Pendentes */}
-      <Card className="bg-black/50 border-red-600/30 mb-8">
-        <CardHeader>
-          <CardTitle className="text-white">
-            Vacinas Pendentes ({vacinasPendentes.length})
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {vacinasPendentes.length === 0 ? (
-            <p className="text-gray-400 text-center py-8">Nenhuma vacina pendente</p>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="text-white">Animal</TableHead>
-                  <TableHead className="text-white">Proprietário</TableHead>
-                  <TableHead className="text-white">Vacina</TableHead>
-                  <TableHead className="text-white">Dose</TableHead>
-                  <TableHead className="text-white">Data Prevista</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {vacinasPendentes.map((v, index) => (
-                  <TableRow key={index}>
-                    <TableCell className="text-white">{v.nomeAnimal}</TableCell>
-                    <TableCell className="text-gray-300">{v.nomeProprietario}</TableCell>
-                    <TableCell className="text-white">{v.vacinaNome}</TableCell>
-                    <TableCell className="text-white">{v.dose}ª dose</TableCell>
-                    <TableCell className="text-white">
-                      {format(new Date(v.dataPrevista), 'dd/MM/yyyy')}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
-        </CardContent>
-      </Card>
+      {/* Abas dos relatórios */}
+      <div className="flex flex-wrap gap-2 mb-6">
+        {[
+          { id: 'faturamento', label: 'Faturamento' },
+          { id: 'devedores', label: 'Clientes Devedores' },
+          { id: 'vacinas-pendentes', label: 'Vacinas Pendentes' },
+          { id: 'animais-especie', label: 'Animais por Espécie' },
+          { id: 'produtos-vendidos', label: 'Produtos Mais Vendidos' },
+          { id: 'mala-direta', label: 'Mala Direta Revacinação' },
+        ].map(tab => (
+          <Button
+            key={tab.id}
+            variant={activeTab === tab.id ? 'default' : 'outline'}
+            onClick={() => setActiveTab(tab.id)}
+            className={activeTab === tab.id ? 'bg-red-600' : 'border-red-600 text-red-500 hover:bg-red-600/20'}
+          >
+            {tab.label}
+          </Button>
+        ))}
+        <Button onClick={imprimir} className="ml-auto bg-blue-600 hover:bg-blue-700">
+          <Printer className="mr-2 h-4 w-4" />
+          Imprimir
+        </Button>
+      </div>
 
-      {/* Aniversariantes do Mês */}
+      {/* Resultados */}
       <Card className="bg-black/50 border-red-600/30">
         <CardHeader>
           <CardTitle className="text-white">
-            Aniversariantes do Mês ({aniversariantes.length})
+            {activeTab === 'faturamento' && 'Faturamento'}
+            {activeTab === 'devedores' && 'Clientes Devedores'}
+            {activeTab === 'vacinas-pendentes' && 'Vacinas Pendentes'}
+            {activeTab === 'animais-especie' && 'Animais por Espécie'}
+            {activeTab === 'produtos-vendidos' && 'Produtos/Serviços Mais Vendidos'}
+            {activeTab === 'mala-direta' && 'Mala Direta de Revacinação'}
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {aniversariantes.length === 0 ? (
-            <p className="text-gray-400 text-center py-8">Nenhum aniversariante este mês</p>
+          {loading ? (
+            <p className="text-gray-400 text-center py-8">Carregando...</p>
+          ) : dados.length === 0 ? (
+            <p className="text-gray-400 text-center py-8">Nenhum dado encontrado</p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="text-white">Animal</TableHead>
-                  <TableHead className="text-white">Proprietário</TableHead>
-                  <TableHead className="text-white">Data de Nascimento</TableHead>
+                  {activeTab === 'faturamento' && (
+                    <>
+                      <TableHead className="text-white">Data</TableHead>
+                      <TableHead className="text-white">Animal</TableHead>
+                      <TableHead className="text-white">Total</TableHead>
+                    </>
+                  )}
+                  {activeTab === 'devedores' && (
+                    <>
+                      <TableHead className="text-white">Proprietário</TableHead>
+                      <TableHead className="text-white">Animal</TableHead>
+                      <TableHead className="text-white">Parcelas</TableHead>
+                    </>
+                  )}
+                  {activeTab === 'vacinas-pendentes' && (
+                    <>
+                      <TableHead className="text-white">Animal</TableHead>
+                      <TableHead className="text-white">Vacina</TableHead>
+                      <TableHead className="text-white">Próxima Dose</TableHead>
+                    </>
+                  )}
+                  {activeTab === 'animais-especie' && (
+                    <>
+                      <TableHead className="text-white">Espécie</TableHead>
+                      <TableHead className="text-white">Quantidade</TableHead>
+                    </>
+                  )}
+                  {activeTab === 'produtos-vendidos' && (
+                    <>
+                      <TableHead className="text-white">Produto/Serviço</TableHead>
+                      <TableHead className="text-white">Quantidade Vendida</TableHead>
+                    </>
+                  )}
+                  {activeTab === 'mala-direta' && (
+                    <>
+                      <TableHead className="text-white">Animal</TableHead>
+                      <TableHead className="text-white">Proprietário</TableHead>
+                      <TableHead className="text-white">Telefone</TableHead>
+                      <TableHead className="text-white">Vacina</TableHead>
+                      <TableHead className="text-white">Data Prevista</TableHead>
+                    </>
+                  )}
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {aniversariantes.map((a, index) => (
-                  <TableRow key={index}>
-                    <TableCell className="text-white font-medium">{a.nomeAnimal}</TableCell>
-                    <TableCell className="text-gray-300">{a.nomeProprietario}</TableCell>
-                    <TableCell className="text-white">
-                      {format(new Date(a.dataNascimento), 'dd/MM/yyyy')}
-                    </TableCell>
+                {dados.map((item, i) => (
+                  <TableRow key={i}>
+                    {activeTab === 'faturamento' && (
+                      <>
+                        <TableCell className="text-white">{format(new Date(item.data), 'dd/MM/yyyy')}</TableCell>
+                        <TableCell className="text-white">{item.animalNome}</TableCell>
+                        <TableCell className="text-white">R$ {item.total.toFixed(2)}</TableCell>
+                      </>
+                    )}
+                    {activeTab === 'devedores' && (
+                      <>
+                        <TableCell className="text-white">{item.proprietarioNome}</TableCell>
+                        <TableCell className="text-white">{item.animalNome}</TableCell>
+                        <TableCell className="text-white">{item.parcelas} parcelas</TableCell>
+                      </>
+                    )}
+                    {activeTab === 'vacinas-pendentes' && (
+                      <>
+                        <TableCell className="text-white">{item.nomeAnimal}</TableCell>
+                        <TableCell className="text-white">{item.proximaVacina.nomeVacina}</TableCell>
+                        <TableCell className="text-white">{format(new Date(item.proximaVacina.proximaData), 'dd/MM/yyyy')}</TableCell>
+                      </>
+                    )}
+                    {activeTab === 'animais-especie' && (
+                      <>
+                        <TableCell className="text-white">{item[0]}</TableCell>
+                        <TableCell className="text-white">{item[1]}</TableCell>
+                      </>
+                    )}
+                    {activeTab === 'produtos-vendidos' && (
+                      <>
+                        <TableCell className="text-white">{item[0]}</TableCell>
+                        <TableCell className="text-white">{item[1]}</TableCell>
+                      </>
+                    )}
+                    {activeTab === 'mala-direta' && (
+                      <>
+                        <TableCell className="text-white">{item.animal}</TableCell>
+                        <TableCell className="text-white">{item.proprietario}</TableCell>
+                        <TableCell className="text-white">{item.telefone}</TableCell>
+                        <TableCell className="text-white">{item.vacina}</TableCell>
+                        <TableCell className="text-white">{format(new Date(item.dataPrevista), 'dd/MM/yyyy')}</TableCell>
+                      </>
+                    )}
                   </TableRow>
                 ))}
               </TableBody>

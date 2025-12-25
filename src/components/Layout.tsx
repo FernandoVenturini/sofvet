@@ -38,7 +38,7 @@ const Layout = () => {
 						Dashboard
 					</Link>
 
-					{/* Fichas (Pacientes) - SEPARADO */}
+					{/* Fichas (Pacientes) */}
 					<Accordion type="single" collapsible>
 						<AccordionItem value="fichas">
 							<AccordionTrigger className="px-4 py-3 text-lg hover:bg-red-600/20 rounded">
@@ -55,13 +55,17 @@ const Layout = () => {
 								<Link to="/fichas/retorno" className="block py-2 text-gray-300 hover:text-white">
 									Alterar / Consultar Retorno
 								</Link>
+								{/* ← ADICIONADO: Agenda de Retornos (vacinas programadas) */}
 								<Link to="/agenda/retornos" className="block py-2 text-gray-300 hover:text-white">
 									Agenda de Retornos
+								</Link>
+								<Link to="/agenda/completa" className="block py-2 text-gray-300 hover:text-white">
+									Agenda Completa
 								</Link>
 							</AccordionContent>
 						</AccordionItem>
 
-						{/* Tabelas - SEPARADO */}
+						{/* Tabelas */}
 						<AccordionItem value="tabelas">
 							<AccordionTrigger className="px-4 py-3 text-lg hover:bg-red-600/20 rounded">
 								<Database className="mr-3 h-5 w-5" />
@@ -77,6 +81,7 @@ const Layout = () => {
 								<Link to="/tabelas/funcionarios" className="block py-2 text-gray-400 hover:text-white">
 									Funcionários
 								</Link>
+								{/* ← ADICIONADO: Produtos e Serviços (essencial para o Movimento) */}
 								<Link to="/tabelas/produtos" className="block py-2 text-gray-400 hover:text-white">
 									Produtos e Serviços
 								</Link>
@@ -101,21 +106,41 @@ const Layout = () => {
 						{/* Diversos */}
 						<AccordionItem value="diversos">
 							<AccordionTrigger className="px-4 py-3 text-lg hover:bg-red-600/20 rounded">
+								<Settings className="mr-3 h-5 w-5" />
 								Diversos
 							</AccordionTrigger>
 							<AccordionContent className="space-y-1 pl-6">
-								<Link to="/mensagens" className="block py-2 text-gray-400 hover:text-white">Mensagens</Link>
-								<Link to="/diversos/backup" className="block py-2 text-gray-400 hover:text-white">Backup Diário</Link>
-								<Link to="/diversos/usuarios" className="block py-2 text-gray-400 hover:text-white">Usuários e Senhas</Link>
-								<Link to="/config" className="block py-2 text-gray-400 hover:text-white">Configurações</Link>
+								<Link to="/mensagens" className="block py-2 text-gray-400 hover:text-white">
+									Mensagens
+								</Link>
+								<Link to="/diversos/backup" className="block py-2 text-gray-400 hover:text-white">
+									Backup Diário
+								</Link>
+								<Link to="/diversos/usuarios" className="block py-2 text-gray-400 hover:text-white">
+									Usuários e Senhas
+								</Link>
+								<Link to="/config" className="block py-2 text-gray-400 hover:text-white">
+									Configurações
+								</Link>
+							</AccordionContent>
+						</AccordionItem>
+
+						{/* ← ADICIONEI: Accordion exclusivo para Movimento */}
+						<AccordionItem value="movimento">
+							<AccordionTrigger className="px-4 py-3 text-lg hover:bg-red-600/20 rounded">
+								<ClipboardList className="mr-3 h-5 w-5" />
+								Movimento
+							</AccordionTrigger>
+							<AccordionContent className="space-y-1 pl-6">
+								<Link to="/movimento/nova" className="block py-2 text-gray-300 hover:text-white">
+									Nova Consulta
+								</Link>
+								<Link to="/movimento/lista" className="block py-2 text-gray-300 hover:text-white">
+									Lista de Consultas
+								</Link>
 							</AccordionContent>
 						</AccordionItem>
 					</Accordion>
-
-					<Link to="/movimento" className="flex items-center px-4 py-3 text-lg hover:bg-red-600/20 rounded">
-						<ClipboardList className="mr-3 h-5 w-5" />
-						Movimento
-					</Link>
 
 					<Link to="/relatorios" className="flex items-center px-4 py-3 text-lg hover:bg-red-600/20 rounded">
 						<FileText className="mr-3 h-5 w-5" />
@@ -160,7 +185,6 @@ const Layout = () => {
 								/>
 								<p className="text-sm text-gray-400 mt-4">Software Veterinário</p>
 							</div>
-							{/* Menu mobile - você pode repetir o menu aqui se quiser */}
 						</SheetContent>
 					</Sheet>
 

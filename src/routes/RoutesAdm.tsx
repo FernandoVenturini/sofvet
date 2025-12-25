@@ -17,6 +17,10 @@ import Movimento from '@/pages/movimentos/Movimento';
 import Relatorios from '@/pages/relatorios/Relatorios';
 import BackupDiario from '@/pages/diversos/BackupDiario';
 import Usuarios from '@/pages/diversos/Usuarios';
+import NovaConsulta from "@/pages/movimentos/NovaConsulta";
+import TabelaProdutos from "@/pages/tabelas/TabelaProdutos";
+import ListaConsultas from "@/pages/movimentos/ListaConsultas";
+import AgendaCompleta from "@/pages/agenda/AgendaCompleta";
 
 export default function RoutesAdm() {
   return (
@@ -33,12 +37,16 @@ export default function RoutesAdm() {
         <Route path="/fichas/nova" element={<PrivateRoute><NovaFicha /></PrivateRoute>} />
         <Route path="/fichas/lista" element={<PrivateRoute><ListaFichas /></PrivateRoute>} />
         <Route path="/fichas/editar/:id" element={<PrivateRoute><EditarFicha /></PrivateRoute>} />
-		<Route path="/tabelas/vacinas" element={<PrivateRoute><TabelaVacinas /></PrivateRoute>} />
-		<Route path="/agenda/retornos" element={<PrivateRoute><AgendaRetornos /></PrivateRoute>} />
-		<Route path="/movimento" element={<PrivateRoute><Movimento /></PrivateRoute>} />
-		<Route path="/relatorios" element={<PrivateRoute><Relatorios /></PrivateRoute>} />
-		<Route path="/diversos/backup" element={<PrivateRoute><BackupDiario /></PrivateRoute>} />
-		<Route path="/diversos/usuarios" element={<PrivateRoute><Usuarios /></PrivateRoute>} />
+        <Route path="/tabelas/vacinas" element={<PrivateRoute><TabelaVacinas /></PrivateRoute>} />
+        <Route path="/agenda/retornos" element={<PrivateRoute><AgendaRetornos /></PrivateRoute>} />
+        <Route path="/movimento" element={<PrivateRoute><Movimento /></PrivateRoute>} />
+        <Route path="/relatorios" element={<PrivateRoute><Relatorios /></PrivateRoute>} />
+        <Route path="/diversos/backup" element={<PrivateRoute><BackupDiario /></PrivateRoute>} />
+        <Route path="/diversos/usuarios" element={<PrivateRoute><Usuarios /></PrivateRoute>} />
+        <Route path="movimento/nova" element={<PrivateRoute><NovaConsulta /></PrivateRoute>} />
+        <Route path="tabelas/produtos" element={<PrivateRoute><TabelaProdutos/></PrivateRoute>} />
+        <Route path="/movimento/lista" element={<PrivateRoute><ListaConsultas/></PrivateRoute>} />
+        <Route path="/agenda/completa" element={<PrivateRoute><AgendaCompleta/></PrivateRoute>} />
         {/* Adicione mais rotas protegidas aqui */}
       </Route>
 

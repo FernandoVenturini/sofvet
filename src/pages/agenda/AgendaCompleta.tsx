@@ -18,6 +18,11 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
+
+const locales = {
+  'pt-BR': ptBR,
+};
+
 const localizer = dateFnsLocalizer({
     format,
     parse,

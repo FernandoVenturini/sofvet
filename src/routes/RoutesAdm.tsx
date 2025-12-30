@@ -18,13 +18,15 @@ import Relatorios from '@/pages/relatorios/Relatorios';
 import BackupDiario from '@/pages/diversos/BackupDiario';
 import Usuarios from '@/pages/diversos/Usuarios';
 import NovaConsulta from "@/pages/movimentos/NovaConsulta";
-import TabelaProdutos from "@/pages/tabelas/TabelaProdutos";
 import ListaConsultas from "@/pages/movimentos/ListaConsultas";
 import AgendaCompleta from "@/pages/agenda/AgendaCompleta";
 import TabelaEspecieRacaPelagem from '../pages/tabelas/TabelaEspecieRacaPelagem';
 import Retorno from '../pages/fichas/Retorno';
-import TabelaFuncionarios from '../pages/tabelas/TabelaFuncionarios';
+import TabelaFuncionarios from '../pages/tabelas/TabelaFuncionarios';// Ensure this path and file name are correct
+import TabelaProprietarios from '../pages/tabelas/TabelaProprietarios';
 import TabelaProdutosServicos from '../pages/tabelas/TabelaProdutosServicos';
+import TabelaFornecedores from '../pages/tabelas/TabelaFornecedores';
+
 
 export default function RoutesAdm() {
   return (
@@ -48,13 +50,14 @@ export default function RoutesAdm() {
         <Route path="/diversos/backup" element={<PrivateRoute><BackupDiario /></PrivateRoute>} />
         <Route path="/diversos/usuarios" element={<PrivateRoute><Usuarios /></PrivateRoute>} />
         <Route path="movimento/nova" element={<PrivateRoute><NovaConsulta /></PrivateRoute>} />
-        <Route path="tabelas/produtos" element={<PrivateRoute><TabelaProdutos/></PrivateRoute>} />
         <Route path="/movimento/lista" element={<PrivateRoute><ListaConsultas/></PrivateRoute>} />
         <Route path="/agenda/completa" element={<PrivateRoute><AgendaCompleta/></PrivateRoute>} />
         <Route path="/tabelas/especie-raca" element={<PrivateRoute><TabelaEspecieRacaPelagem /></PrivateRoute>} />
         <Route path="/fichas/retorno" element={<PrivateRoute><Retorno /></PrivateRoute>} />
         <Route path="/tabelas/funcionarios" element={<PrivateRoute><TabelaFuncionarios /></PrivateRoute>} />
         <Route path="/tabelas/produtos" element={<PrivateRoute><TabelaProdutosServicos /></PrivateRoute>} />
+        <Route path="/tabelas/proprietarios" element={<PrivateRoute><TabelaProprietarios/></PrivateRoute>} />
+        <Route path="/tabelas/fornecedores" element={<PrivateRoute><TabelaFornecedores /></PrivateRoute>} />
         {/* Adicione mais rotas protegidas aqui */}
       </Route>
 

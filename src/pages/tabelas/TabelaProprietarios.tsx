@@ -1,0 +1,1573 @@
+import { useState, useEffect } from 'react';
+import { Proprietario, FichaAnimal, LancamentoConta } from '@/types/proprietario';
+import { proprietarioService } from '@/services/proprietarioService';
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+    CardDescription
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow
+} from '@/components/ui/table';
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter
+} from '@/components/ui/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Separator } from '@/components/ui/separator';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import {
+    Trash2,
+    Edit,
+    Eye,
+    FileText,
+    Mail,
+    AlertTriangle,
+    Ban,
+    Plus,
+    Search,
+    ArrowLeft,
+    User,
+    PawPrint,
+    DollarSign,
+    Filter,
+    Download,
+    Printer
+} from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+const TabelaProprietarios = () => {
+    // Estados principais
+    const [abaAtiva, setAbaAtiva] = useState<'lista' | 'detalhe' | 'cadastro'>('lista');
+    const [abaDetalhe, setAbaDetalhe] = useState<'dados' | 'fichas' | 'conta'>('dados');
+    const [proprietarios, setProprietarios] = useState<Proprietario[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [busca, setBusca] = useState('');
+    const [proprietarioSelecionado, setProprietarioSelecionado] = useState<Proprietario | null>(null);
+    const [fichasAnimais, setFichasAnimais] = useState<FichaAnimal[]>([]);
+    const [lancamentosConta, setLancamentosConta] = useState<LancamentoConta[]>([]);
+    const [filtroRestricao, setFiltroRestricao] = useState<'todos' | 'com-restricao' | 'sem-restricao'>('todos');
+    const [filtroSaldo, setFiltroSaldo] = useState<'todos' | 'devedores' | 'credores'>('todos');
+
+    // Formulário de cadastro - COMPLETO como no SofVet
+    const [codigo, setCodigo] = useState('');
+    const [nome, setNome] = useState('');
+    const [endereco, setEndereco] = useState('');
+    const [bairro, setBairro] = useState('');
+    const [cidade, setCidade] = useState('');
+    const [estado, setEstado] = useState('SP');
+    const [cep, setCep] = useState('');
+    const [rg, setRg] = useState('');
+    const [cpf, setCpf] = useState('');
+    const [dataNascimento, setDataNascimento] = useState('');
+    const [ddd, setDdd] = useState('11');
+    const [telefone1, setTelefone1] = useState('');
+    const [telefone2, setTelefone2] = useState('');
+    const [telefone3, setTelefone3] = useState('');
+    const [complemento, setComplemento] = useState('');
+    const [email, setEmail] = useState('');
+    const [marcado, setMarcado] = useState(false);
+    const [motivoMarcacao, setMotivoMarcacao] = useState('');
+    const [restricao, setRestricao] = useState(false);
+    const [motivoRestricao, setMotivoRestricao] = useState('');
+
+    // Edição
+    const [editOpen, setEditOpen] = useState(false);
+    const [editId, setEditId] = useState('');
+    const [editCodigo, setEditCodigo] = useState('');
+    const [editNome, setEditNome] = useState('');
+    const [editEndereco, setEditEndereco] = useState('');
+    const [editBairro, setEditBairro] = useState('');
+    const [editCidade, setEditCidade] = useState('');
+    const [editEstado, setEditEstado] = useState('SP');
+    const [editCep, setEditCep] = useState('');
+    const [editRg, setEditRg] = useState('');
+    const [editCpf, setEditCpf] = useState('');
+    const [editDataNascimento, setEditDataNascimento] = useState('');
+    const [editDdd, setEditDdd] = useState('11');
+    const [editTelefone1, setEditTelefone1] = useState('');
+    const [editTelefone2, setEditTelefone2] = useState('');
+    const [editTelefone3, setEditTelefone3] = useState('');
+    const [editComplemento, setEditComplemento] = useState('');
+    const [editEmail, setEditEmail] = useState('');
+    const [editMarcado, setEditMarcado] = useState(false);
+    const [editMotivoMarcacao, setEditMotivoMarcacao] = useState('');
+    const [editRestricao, setEditRestricao] = useState(false);
+    const [editMotivoRestricao, setEditMotivoRestricao] = useState('');
+    const [editAtivo, setEditAtivo] = useState(true);
+
+    // Lançamento na conta corrente
+    const [novoLancamentoOpen, setNovoLancamentoOpen] = useState(false);
+    const [lancamentoTipo, setLancamentoTipo] = useState<'CREDITO' | 'DEBITO'>('CREDITO');
+    const [lancamentoValor, setLancamentoValor] = useState('');
+    const [lancamentoDescricao, setLancamentoDescricao] = useState('');
+
+    useEffect(() => {
+        carregarProprietarios();
+    }, []);
+
+    const carregarProprietarios = async () => {
+        setLoading(true);
+        try {
+            const dados = await proprietarioService.buscarTodos();
+            setProprietarios(dados);
+        } catch (error) {
+            console.error('Erro ao carregar proprietários:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const carregarDetalhesProprietario = async (proprietario: Proprietario) => {
+        setProprietarioSelecionado(proprietario);
+        setAbaAtiva('detalhe');
+        setAbaDetalhe('dados');
+
+        try {
+            const fichas = await proprietarioService.buscarFichas(proprietario.id);
+            setFichasAnimais(fichas);
+
+            const lancamentos = await proprietarioService.buscarLancamentosConta(proprietario.id);
+            setLancamentosConta(lancamentos);
+        } catch (error) {
+            console.error('Erro ao carregar detalhes:', error);
+        }
+    };
+
+    const gerarCodigoAutomatico = async () => {
+        if (!codigo) {
+            const novoCodigo = await proprietarioService.gerarCodigo();
+            setCodigo(novoCodigo);
+        }
+    };
+
+    const salvarProprietario = async () => {
+        if (!nome.trim()) {
+            alert('Nome é obrigatório');
+            return;
+        }
+
+        try {
+            const codigoFinal = codigo || await proprietarioService.gerarCodigo();
+
+            await proprietarioService.criar({
+                codigo: codigoFinal,
+                nome: nome.trim(),
+                endereco: endereco.trim(),
+                bairro: bairro.trim(),
+                cidade: cidade.trim(),
+                estado: estado,
+                cep: cep.trim(),
+                rg: rg.trim(),
+                cpf: cpf.trim(),
+                dataNascimento: dataNascimento,
+                ddd: ddd,
+                telefone1: telefone1.trim(),
+                telefone2: telefone2.trim(),
+                telefone3: telefone3.trim(),
+                complemento: complemento.trim(),
+                email: email.trim(),
+                marcado: marcado,
+                motivoMarcacao: motivoMarcacao.trim(),
+                restricao: restricao,
+                motivoRestricao: motivoRestricao.trim(),
+                saldo: 0,
+                dataCadastro: new Date().toISOString(),
+                ativo: true,
+            });
+
+            // Limpar formulário
+            setCodigo('');
+            setNome('');
+            setEndereco('');
+            setBairro('');
+            setCidade('');
+            setEstado('SP');
+            setCep('');
+            setRg('');
+            setCpf('');
+            setDataNascimento('');
+            setDdd('11');
+            setTelefone1('');
+            setTelefone2('');
+            setTelefone3('');
+            setComplemento('');
+            setEmail('');
+            setMarcado(false);
+            setMotivoMarcacao('');
+            setRestricao(false);
+            setMotivoRestricao('');
+
+            alert('Proprietário salvo com sucesso!');
+            carregarProprietarios();
+            setAbaAtiva('lista');
+        } catch (error) {
+            console.error('Erro ao salvar:', error);
+            alert('Erro ao salvar proprietário');
+        }
+    };
+
+    const abrirEdicao = (p: Proprietario) => {
+        setEditId(p.id);
+        setEditCodigo(p.codigo);
+        setEditNome(p.nome);
+        setEditEndereco(p.endereco);
+        setEditBairro(p.bairro);
+        setEditCidade(p.cidade);
+        setEditEstado(p.estado);
+        setEditCep(p.cep);
+        setEditRg(p.rg);
+        setEditCpf(p.cpf);
+        setEditDataNascimento(p.dataNascimento);
+        setEditDdd(p.ddd);
+        setEditTelefone1(p.telefone1);
+        setEditTelefone2(p.telefone2);
+        setEditTelefone3(p.telefone3);
+        setEditComplemento(p.complemento);
+        setEditEmail(p.email);
+        setEditMarcado(p.marcado);
+        setEditMotivoMarcacao(p.motivoMarcacao || '');
+        setEditRestricao(p.restricao);
+        setEditMotivoRestricao(p.motivoRestricao || '');
+        setEditAtivo(p.ativo);
+        setEditOpen(true);
+    };
+
+    const salvarEdicao = async () => {
+        if (!editNome.trim()) {
+            alert('Nome é obrigatório');
+            return;
+        }
+
+        try {
+            await proprietarioService.atualizar(editId, {
+                codigo: editCodigo,
+                nome: editNome.trim(),
+                endereco: editEndereco.trim(),
+                bairro: editBairro.trim(),
+                cidade: editCidade.trim(),
+                estado: editEstado,
+                cep: editCep.trim(),
+                rg: editRg.trim(),
+                cpf: editCpf.trim(),
+                dataNascimento: editDataNascimento,
+                ddd: editDdd,
+                telefone1: editTelefone1.trim(),
+                telefone2: editTelefone2.trim(),
+                telefone3: editTelefone3.trim(),
+                complemento: editComplemento.trim(),
+                email: editEmail.trim(),
+                marcado: editMarcado,
+                motivoMarcacao: editMotivoMarcacao.trim(),
+                restricao: editRestricao,
+                motivoRestricao: editMotivoRestricao.trim(),
+                ativo: editAtivo,
+            });
+
+            setEditOpen(false);
+            alert('Proprietário atualizado!');
+            carregarProprietarios();
+
+            // Atualizar detalhes se estiver visualizando
+            if (proprietarioSelecionado?.id === editId) {
+                const atualizado = await proprietarioService.buscarPorId(editId);
+                if (atualizado) {
+                    setProprietarioSelecionado(atualizado);
+                }
+            }
+        } catch (error) {
+            console.error('Erro ao editar:', error);
+            alert('Erro ao atualizar proprietário');
+        }
+    };
+
+    const excluirProprietario = async (id: string) => {
+        if (!confirm('Excluir permanentemente este proprietário? Todos os dados serão perdidos.')) return;
+
+        try {
+            await proprietarioService.excluir(id);
+            alert('Proprietário excluído com sucesso!');
+            carregarProprietarios();
+
+            if (proprietarioSelecionado?.id === id) {
+                setAbaAtiva('lista');
+                setProprietarioSelecionado(null);
+            }
+        } catch (error) {
+            console.error('Erro ao excluir:', error);
+            alert('Erro ao excluir proprietário');
+        }
+    };
+
+    const adicionarLancamentoConta = async () => {
+        if (!proprietarioSelecionado || !lancamentoValor || !lancamentoDescricao) {
+            alert('Preencha todos os campos do lançamento');
+            return;
+        }
+
+        try {
+            await proprietarioService.adicionarLancamentoConta({
+                proprietarioId: proprietarioSelecionado.id,
+                tipo: lancamentoTipo,
+                valor: parseFloat(lancamentoValor),
+                descricao: lancamentoDescricao.trim(),
+                operacao: 'LANÇAMENTO MANUAL',
+                data: new Date().toISOString(),
+            });
+
+            // Atualizar saldo do proprietário
+            const novoSaldo = proprietarioSelecionado.saldo +
+                (lancamentoTipo === 'CREDITO' ? parseFloat(lancamentoValor) : -parseFloat(lancamentoValor));
+
+            await proprietarioService.atualizar(proprietarioSelecionado.id, {
+                saldo: novoSaldo
+            });
+
+            // Atualizar dados
+            const lancamentos = await proprietarioService.buscarLancamentosConta(proprietarioSelecionado.id);
+            setLancamentosConta(lancamentos);
+
+            const proprietarioAtualizado = await proprietarioService.buscarPorId(proprietarioSelecionado.id);
+            if (proprietarioAtualizado) {
+                setProprietarioSelecionado(proprietarioAtualizado);
+            }
+
+            // Limpar formulário
+            setLancamentoValor('');
+            setLancamentoDescricao('');
+            setNovoLancamentoOpen(false);
+
+            alert('Lançamento adicionado com sucesso!');
+        } catch (error) {
+            console.error('Erro ao adicionar lançamento:', error);
+            alert('Erro ao adicionar lançamento');
+        }
+    };
+
+    const enviarCartaDevedor = async () => {
+        if (!proprietarioSelecionado) return;
+
+        if (proprietarioSelecionado.saldo >= 0) {
+            alert('Este cliente não possui débitos!');
+            return;
+        }
+
+        if (confirm(`Enviar carta de cobrança para ${proprietarioSelecionado.nome}?`)) {
+            // Simular envio de carta
+            alert(`Carta de cobrança enviada para ${proprietarioSelecionado.nome}!\nEndereço: ${proprietarioSelecionado.endereco}, ${proprietarioSelecionado.cidade}`);
+        }
+    };
+
+    const calcularSaldoTotal = () => {
+        return lancamentosConta.reduce((total, lancamento) => {
+            return total + (lancamento.tipo === 'DEBITO' ? -lancamento.valor : lancamento.valor);
+        }, 0);
+    };
+
+    const formatarData = (data: string) => {
+        try {
+            return new Date(data).toLocaleDateString('pt-BR');
+        } catch {
+            return data;
+        }
+    };
+
+    const formatarMoeda = (valor: number) => {
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        }).format(valor);
+    };
+
+    const formatarTelefone = (ddd: string, telefone: string) => {
+        return `(${ddd}) ${telefone}`;
+    };
+
+    // Filtrar proprietários
+    const proprietariosFiltrados = proprietarios.filter(p => {
+        // Filtro de busca
+        const buscaMatch =
+            p.nome.toLowerCase().includes(busca.toLowerCase()) ||
+            p.cpf.toLowerCase().includes(busca.toLowerCase()) ||
+            p.codigo.toLowerCase().includes(busca.toLowerCase()) ||
+            p.telefone1.toLowerCase().includes(busca.toLowerCase());
+
+        // Filtro de restrição
+        const restricaoMatch =
+            filtroRestricao === 'todos' ||
+            (filtroRestricao === 'com-restricao' && p.restricao) ||
+            (filtroRestricao === 'sem-restricao' && !p.restricao);
+
+        // Filtro de saldo
+        const saldoMatch =
+            filtroSaldo === 'todos' ||
+            (filtroSaldo === 'devedores' && p.saldo < 0) ||
+            (filtroSaldo === 'credores' && p.saldo >= 0);
+
+        return buscaMatch && restricaoMatch && saldoMatch;
+    });
+
+    // Estatísticas
+    const totalProprietarios = proprietarios.length;
+    const comRestricao = proprietarios.filter(p => p.restricao).length;
+    const marcados = proprietarios.filter(p => p.marcado).length;
+    const devedores = proprietarios.filter(p => p.saldo < 0).length;
+    const totalDivida = proprietarios
+        .filter(p => p.saldo < 0)
+        .reduce((total, p) => total + Math.abs(p.saldo), 0);
+
+    if (loading && abaAtiva === 'lista') {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="text-white text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
+                    <p>Carregando proprietários...</p>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="max-w-7xl mx-auto py-8 px-4">
+            <h1 className="text-4xl font-bold text-white text-center mb-2">
+                Tabela de Proprietários - SofVet
+            </h1>
+            <p className="text-gray-400 text-center mb-10">Gerencie os proprietários de animais conforme manual SofVet</p>
+
+            {/* ABA: LISTA DE PROPRIETÁRIOS */}
+            {abaAtiva === 'lista' && (
+                <>
+                    {/* Botões de ação e busca */}
+                    <div className="flex flex-wrap gap-4 mb-6">
+                        <Button
+                            onClick={() => setAbaAtiva('cadastro')}
+                            className="bg-red-600 hover:bg-red-700 py-6 text-lg flex-1 min-w-[200px]"
+                        >
+                            <Plus className="mr-2 h-5 w-5" />
+                            Novo Proprietário
+                        </Button>
+
+                        <div className="flex-1 min-w-[300px] relative">
+                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                            <Input
+                                placeholder="Buscar por nome, CPF, código ou telefone..."
+                                value={busca}
+                                onChange={e => setBusca(e.target.value)}
+                                className="bg-black/50 border-red-600/50 text-white py-6 text-lg pl-10"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Filtros */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <Card className="bg-black/50 border-red-600/30">
+                            <CardContent className="pt-6">
+                                <Label className="text-white mb-2 block">Filtrar por Restrição</Label>
+                                <Select value={filtroRestricao} onValueChange={(value: any) => setFiltroRestricao(value)}>
+                                    <SelectTrigger className="bg-black/50 border-red-600/50 text-white">
+                                        <SelectValue placeholder="Todos" />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-black border-red-600/50">
+                                        <SelectItem value="todos">Todos os proprietários</SelectItem>
+                                        <SelectItem value="com-restricao">Com restrição</SelectItem>
+                                        <SelectItem value="sem-restricao">Sem restrição</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </CardContent>
+                        </Card>
+
+                        <Card className="bg-black/50 border-red-600/30">
+                            <CardContent className="pt-6">
+                                <Label className="text-white mb-2 block">Filtrar por Saldo</Label>
+                                <Select value={filtroSaldo} onValueChange={(value: any) => setFiltroSaldo(value)}>
+                                    <SelectTrigger className="bg-black/50 border-red-600/50 text-white">
+                                        <SelectValue placeholder="Todos" />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-black border-red-600/50">
+                                        <SelectItem value="todos">Todos</SelectItem>
+                                        <SelectItem value="devedores">Com débitos</SelectItem>
+                                        <SelectItem value="credores">Sem débitos</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </CardContent>
+                        </Card>
+
+                        <Card className="bg-black/50 border-red-600/30">
+                            <CardContent className="pt-6 flex items-center justify-center h-full">
+                                <Button
+                                    variant="outline"
+                                    className="border-red-600/50 text-white hover:bg-red-600/20 w-full"
+                                    onClick={() => {
+                                        setBusca('');
+                                        setFiltroRestricao('todos');
+                                        setFiltroSaldo('todos');
+                                    }}
+                                >
+                                    <Filter className="mr-2 h-4 w-4" />
+                                    Limpar Filtros
+                                </Button>
+                            </CardContent>
+                        </Card>
+                    </div>
+
+                    {/* Estatísticas */}
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                        <Card className="bg-black/50 border-red-600/30">
+                            <CardContent className="pt-6">
+                                <div className="text-center">
+                                    <p className="text-3xl font-bold text-white">{totalProprietarios}</p>
+                                    <p className="text-gray-400">Total</p>
+                                </div>
+                            </CardContent>
+                        </Card>
+                        <Card className="bg-black/50 border-red-600/30">
+                            <CardContent className="pt-6">
+                                <div className="text-center">
+                                    <p className="text-3xl font-bold text-red-400">{comRestricao}</p>
+                                    <p className="text-gray-400">Com Restrição</p>
+                                </div>
+                            </CardContent>
+                        </Card>
+                        <Card className="bg-black/50 border-red-600/30">
+                            <CardContent className="pt-6">
+                                <div className="text-center">
+                                    <p className="text-3xl font-bold text-yellow-400">{marcados}</p>
+                                    <p className="text-gray-400">Marcados</p>
+                                </div>
+                            </CardContent>
+                        </Card>
+                        <Card className="bg-black/50 border-red-600/30">
+                            <CardContent className="pt-6">
+                                <div className="text-center">
+                                    <p className="text-3xl font-bold text-green-400">{formatarMoeda(totalDivida)}</p>
+                                    <p className="text-gray-400">Dívida Total</p>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+
+                    {/* Tabela de Proprietários */}
+                    <Card className="bg-black/50 border-red-600/30">
+                        <CardHeader>
+                            <CardTitle className="text-white flex justify-between items-center">
+                                <span>Proprietários Cadastrados ({proprietariosFiltrados.length})</span>
+                                <div className="flex gap-2">
+                                    <Button variant="outline" size="sm" className="border-red-600/50 text-white hover:bg-red-600/20">
+                                        <Printer className="h-4 w-4 mr-2" />
+                                        Imprimir
+                                    </Button>
+                                    <Button variant="outline" size="sm" className="border-red-600/50 text-white hover:bg-red-600/20">
+                                        <Download className="h-4 w-4 mr-2" />
+                                        Exportar
+                                    </Button>
+                                </div>
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="overflow-x-auto">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead className="text-white">Código</TableHead>
+                                            <TableHead className="text-white">Nome</TableHead>
+                                            <TableHead className="text-white hidden md:table-cell">Cidade/UF</TableHead>
+                                            <TableHead className="text-white hidden lg:table-cell">Telefone</TableHead>
+                                            <TableHead className="text-white">Saldo</TableHead>
+                                            <TableHead className="text-white text-right">Ações</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {proprietariosFiltrados.length === 0 ? (
+                                            <TableRow>
+                                                <TableCell colSpan={6} className="text-center text-gray-400 py-8">
+                                                    Nenhum proprietário encontrado com os filtros atuais
+                                                </TableCell>
+                                            </TableRow>
+                                        ) : (
+                                            proprietariosFiltrados.map(p => (
+                                                <TableRow
+                                                    key={p.id}
+                                                    className={`hover:bg-red-900/10 transition-colors ${p.restricao ? 'bg-red-900/20' : ''}`}
+                                                >
+                                                    <TableCell className="text-white font-mono font-bold">
+                                                        {p.codigo}
+                                                    </TableCell>
+                                                    <TableCell className="text-white font-medium">
+                                                        <div className="flex items-center gap-2">
+                                                            <User className="h-4 w-4" />
+                                                            {p.nome}
+                                                            {p.marcado && (
+                                                                <Badge variant="outline" className="text-yellow-400 border-yellow-400">
+                                                                    <AlertTriangle className="h-3 w-3 mr-1" />
+                                                                    Marcado
+                                                                </Badge>
+                                                            )}
+                                                            {p.restricao && (
+                                                                <Badge variant="outline" className="text-red-400 border-red-400">
+                                                                    <Ban className="h-3 w-3 mr-1" />
+                                                                    Restrito
+                                                                </Badge>
+                                                            )}
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell className="text-white hidden md:table-cell">
+                                                        {p.cidade}/{p.estado}
+                                                    </TableCell>
+                                                    <TableCell className="text-white hidden lg:table-cell">
+                                                        {formatarTelefone(p.ddd, p.telefone1)}
+                                                    </TableCell>
+                                                    <TableCell className="text-white">
+                                                        <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-bold ${p.saldo < 0
+                                                                ? 'bg-red-900/30 text-red-300'
+                                                                : 'bg-green-900/30 text-green-300'
+                                                            }`}>
+                                                            <DollarSign className="h-3 w-3 mr-1" />
+                                                            {formatarMoeda(p.saldo)}
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell className="text-right">
+                                                        <div className="flex justify-end gap-2">
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                                onClick={() => carregarDetalhesProprietario(p)}
+                                                                title="Visualizar"
+                                                                className="hover:bg-blue-900/30"
+                                                            >
+                                                                <Eye className="h-4 w-4 text-blue-400" />
+                                                            </Button>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                                onClick={() => abrirEdicao(p)}
+                                                                title="Editar"
+                                                                className="hover:bg-green-900/30"
+                                                            >
+                                                                <Edit className="h-4 w-4 text-green-400" />
+                                                            </Button>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                                onClick={() => excluirProprietario(p.id)}
+                                                                title="Excluir"
+                                                                className="hover:bg-red-900/30"
+                                                            >
+                                                                <Trash2 className="h-4 w-4 text-red-400" />
+                                                            </Button>
+                                                        </div>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))
+                                        )}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </>
+            )}
+
+            {/* ABA: CADASTRO DE NOVO PROPRIETÁRIO */}
+            {abaAtiva === 'cadastro' && (
+                <Card className="bg-black/50 border-red-600/30">
+                    <CardHeader>
+                        <div className="flex justify-between items-center">
+                            <div>
+                                <CardTitle className="text-white">Cadastrar Novo Proprietário</CardTitle>
+                                <CardDescription className="text-gray-400">
+                                    Preencha todos os campos conforme manual do SofVet
+                                </CardDescription>
+                            </div>
+                            <Button
+                                variant="outline"
+                                onClick={() => setAbaAtiva('lista')}
+                                className="border-red-600/50 text-white hover:bg-red-600/20"
+                            >
+                                <ArrowLeft className="mr-2 h-4 w-4" />
+                                Voltar para Lista
+                            </Button>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        <ScrollArea className="h-[70vh] pr-4">
+                            <div className="space-y-8">
+                                {/* Código e Dados Básicos */}
+                                <div>
+                                    <h3 className="text-lg font-semibold text-white mb-4 pb-2 border-b border-red-600/30">
+                                        Dados Básicos
+                                    </h3>
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        <div className="space-y-2">
+                                            <Label className="text-white">Código *</Label>
+                                            <div className="flex gap-2">
+                                                <Input
+                                                    value={codigo}
+                                                    onChange={e => setCodigo(e.target.value)}
+                                                    placeholder="Gerar automaticamente"
+                                                    className="bg-black/50 border-red-600/50 text-white"
+                                                />
+                                                <Button
+                                                    type="button"
+                                                    onClick={gerarCodigoAutomatico}
+                                                    className="bg-red-600 hover:bg-red-700 whitespace-nowrap"
+                                                >
+                                                    Gerar
+                                                </Button>
+                                            </div>
+                                            <p className="text-xs text-gray-400">Código único do proprietário no sistema</p>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label className="text-white">Nome *</Label>
+                                            <Input
+                                                value={nome}
+                                                onChange={e => setNome(e.target.value)}
+                                                className="bg-black/50 border-red-600/50 text-white"
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label className="text-white">CPF</Label>
+                                            <Input
+                                                value={cpf}
+                                                onChange={e => setCpf(e.target.value)}
+                                                className="bg-black/50 border-red-600/50 text-white"
+                                                placeholder="000.000.000-00"
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label className="text-white">RG</Label>
+                                            <Input
+                                                value={rg}
+                                                onChange={e => setRg(e.target.value)}
+                                                className="bg-black/50 border-red-600/50 text-white"
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label className="text-white">Data Nascimento</Label>
+                                            <Input
+                                                type="date"
+                                                value={dataNascimento}
+                                                onChange={e => setDataNascimento(e.target.value)}
+                                                className="bg-black/50 border-red-600/50 text-white"
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label className="text-white">E-mail</Label>
+                                            <Input
+                                                type="email"
+                                                value={email}
+                                                onChange={e => setEmail(e.target.value)}
+                                                className="bg-black/50 border-red-600/50 text-white"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Endereço */}
+                                <div>
+                                    <h3 className="text-lg font-semibold text-white mb-4 pb-2 border-b border-red-600/30">
+                                        Endereço
+                                    </h3>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        <div className="md:col-span-2 space-y-2">
+                                            <Label className="text-white">Endereço</Label>
+                                            <Input
+                                                value={endereco}
+                                                onChange={e => setEndereco(e.target.value)}
+                                                className="bg-black/50 border-red-600/50 text-white"
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label className="text-white">Bairro</Label>
+                                            <Input
+                                                value={bairro}
+                                                onChange={e => setBairro(e.target.value)}
+                                                className="bg-black/50 border-red-600/50 text-white"
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label className="text-white">Cidade</Label>
+                                            <Input
+                                                value={cidade}
+                                                onChange={e => setCidade(e.target.value)}
+                                                className="bg-black/50 border-red-600/50 text-white"
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label className="text-white">Estado</Label>
+                                            <Select value={estado} onValueChange={setEstado}>
+                                                <SelectTrigger className="bg-black/50 border-red-600/50 text-white">
+                                                    <SelectValue placeholder="Selecione" />
+                                                </SelectTrigger>
+                                                <SelectContent className="bg-black border-red-600/50">
+                                                    <SelectItem value="SP">São Paulo (SP)</SelectItem>
+                                                    <SelectItem value="RJ">Rio de Janeiro (RJ)</SelectItem>
+                                                    <SelectItem value="MG">Minas Gerais (MG)</SelectItem>
+                                                    <SelectItem value="RS">Rio Grande do Sul (RS)</SelectItem>
+                                                    <SelectItem value="PR">Paraná (PR)</SelectItem>
+                                                    <SelectItem value="SC">Santa Catarina (SC)</SelectItem>
+                                                    <SelectItem value="BA">Bahia (BA)</SelectItem>
+                                                    <SelectItem value="ES">Espírito Santo (ES)</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label className="text-white">CEP</Label>
+                                            <Input
+                                                value={cep}
+                                                onChange={e => setCep(e.target.value)}
+                                                className="bg-black/50 border-red-600/50 text-white"
+                                                placeholder="00000-000"
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label className="text-white">Complemento</Label>
+                                            <Input
+                                                value={complemento}
+                                                onChange={e => setComplemento(e.target.value)}
+                                                className="bg-black/50 border-red-600/50 text-white"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Contatos */}
+                                <div>
+                                    <h3 className="text-lg font-semibold text-white mb-4 pb-2 border-b border-red-600/30">
+                                        Contatos
+                                    </h3>
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        <div className="space-y-2">
+                                            <Label className="text-white">Telefone 1 *</Label>
+                                            <div className="flex gap-2">
+                                                <Input
+                                                    value={ddd}
+                                                    onChange={e => setDdd(e.target.value)}
+                                                    className="w-20 bg-black/50 border-red-600/50 text-white"
+                                                    placeholder="DDD"
+                                                    maxLength={2}
+                                                />
+                                                <Input
+                                                    value={telefone1}
+                                                    onChange={e => setTelefone1(e.target.value)}
+                                                    className="flex-1 bg-black/50 border-red-600/50 text-white"
+                                                    placeholder="99999-9999"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label className="text-white">Telefone 2</Label>
+                                            <Input
+                                                value={telefone2}
+                                                onChange={e => setTelefone2(e.target.value)}
+                                                className="bg-black/50 border-red-600/50 text-white"
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label className="text-white">Telefone 3</Label>
+                                            <Input
+                                                value={telefone3}
+                                                onChange={e => setTelefone3(e.target.value)}
+                                                className="bg-black/50 border-red-600/50 text-white"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Restrições e Observações */}
+                                <div>
+                                    <h3 className="text-lg font-semibold text-white mb-4 pb-2 border-b border-red-600/30">
+                                        Restrições e Observações
+                                    </h3>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="space-y-4">
+                                            <div className="flex items-center space-x-2">
+                                                <Checkbox
+                                                    id="marcado"
+                                                    checked={marcado}
+                                                    onCheckedChange={(checked) => setMarcado(checked as boolean)}
+                                                    className="border-red-600 data-[state=checked]:bg-red-600"
+                                                />
+                                                <Label htmlFor="marcado" className="text-white cursor-pointer">
+                                                    <div className="flex items-center">
+                                                        <AlertTriangle className="h-4 w-4 text-yellow-400 mr-2" />
+                                                        Marcado? (Observação especial)
+                                                    </div>
+                                                </Label>
+                                            </div>
+                                            {marcado && (
+                                                <div className="space-y-2 ml-6">
+                                                    <Label className="text-white">Motivo da Marcação</Label>
+                                                    <Input
+                                                        value={motivoMarcacao}
+                                                        onChange={e => setMotivoMarcacao(e.target.value)}
+                                                        className="bg-black/50 border-red-600/50 text-white"
+                                                        placeholder="Ex: Cliente VIP, Alergias, etc."
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <div className="space-y-4">
+                                            <div className="flex items-center space-x-2">
+                                                <Checkbox
+                                                    id="restricao"
+                                                    checked={restricao}
+                                                    onCheckedChange={(checked) => setRestricao(checked as boolean)}
+                                                    className="border-red-600 data-[state=checked]:bg-red-600"
+                                                />
+                                                <Label htmlFor="restricao" className="text-white cursor-pointer">
+                                                    <div className="flex items-center">
+                                                        <Ban className="h-4 w-4 text-red-400 mr-2" />
+                                                        Restrição? (Bloqueia vendas)
+                                                    </div>
+                                                </Label>
+                                            </div>
+                                            {restricao && (
+                                                <div className="space-y-2 ml-6">
+                                                    <Label className="text-white">Motivo da Restrição</Label>
+                                                    <Input
+                                                        value={motivoRestricao}
+                                                        onChange={e => setMotivoRestricao(e.target.value)}
+                                                        className="bg-black/50 border-red-600/50 text-white"
+                                                        placeholder="Ex: Inadimplente, Problemas anteriores, etc."
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Botões de ação */}
+                                <div className="flex justify-end gap-4 pt-6 border-t border-red-600/30">
+                                    <Button
+                                        variant="outline"
+                                        onClick={() => setAbaAtiva('lista')}
+                                        className="border-red-600/50 text-white hover:bg-red-600/20"
+                                    >
+                                        Cancelar
+                                    </Button>
+                                    <Button
+                                        onClick={salvarProprietario}
+                                        className="bg-red-600 hover:bg-red-700 py-6 text-lg px-8"
+                                    >
+                                        <Plus className="mr-2 h-5 w-5" />
+                                        Salvar Proprietário
+                                    </Button>
+                                </div>
+                            </div>
+                        </ScrollArea>
+                    </CardContent>
+                </Card>
+            )}
+
+            {/* ABA: DETALHES DO PROPRIETÁRIO */}
+            {abaAtiva === 'detalhe' && proprietarioSelecionado && (
+                <Card className="bg-black/50 border-red-600/30">
+                    <CardHeader>
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <div className="flex items-center gap-4 mb-2">
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => setAbaAtiva('lista')}
+                                        className="border-red-600/50 text-white hover:bg-red-600/20"
+                                    >
+                                        <ArrowLeft className="mr-2 h-4 w-4" />
+                                        Voltar
+                                    </Button>
+                                    <CardTitle className="text-white">
+                                        {proprietarioSelecionado.nome}
+                                        <span className="text-gray-400 font-mono ml-4">Cód: {proprietarioSelecionado.codigo}</span>
+                                    </CardTitle>
+                                </div>
+                                <CardDescription className="text-gray-400">
+                                    {proprietarioSelecionado.endereco}, {proprietarioSelecionado.bairro} - {proprietarioSelecionado.cidade}/{proprietarioSelecionado.estado}
+                                </CardDescription>
+                            </div>
+                            <div className="flex gap-2">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => abrirEdicao(proprietarioSelecionado)}
+                                    className="border-green-600/50 text-green-400 hover:bg-green-600/20"
+                                >
+                                    <Edit className="mr-2 h-4 w-4" />
+                                    Editar
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => excluirProprietario(proprietarioSelecionado.id)}
+                                    className="border-red-600/50 text-red-400 hover:bg-red-600/20"
+                                >
+                                    <Trash2 className="mr-2 h-4 w-4" />
+                                    Excluir
+                                </Button>
+                            </div>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        {/* Abas de detalhes */}
+                        <Tabs value={abaDetalhe} onValueChange={(value: any) => setAbaDetalhe(value)} className="w-full">
+                            <TabsList className="grid w-full grid-cols-3 bg-black/50 border border-red-600/30">
+                                <TabsTrigger value="dados" className="data-[state=active]:bg-red-600 data-[state=active]:text-white">
+                                    <User className="mr-2 h-4 w-4" />
+                                    Dados Principais
+                                </TabsTrigger>
+                                <TabsTrigger value="fichas" className="data-[state=active]:bg-red-600 data-[state=active]:text-white">
+                                    <PawPrint className="mr-2 h-4 w-4" />
+                                    Fichas ({fichasAnimais.length})
+                                </TabsTrigger>
+                                <TabsTrigger value="conta" className="data-[state=active]:bg-red-600 data-[state=active]:text-white">
+                                    <DollarSign className="mr-2 h-4 w-4" />
+                                    Conta Corrente
+                                </TabsTrigger>
+                            </TabsList>
+
+                            {/* Conteúdo: Dados Principais */}
+                            <TabsContent value="dados" className="space-y-6 pt-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    <div className="space-y-4">
+                                        <h4 className="text-lg font-semibold text-white">Informações Pessoais</h4>
+                                        <div className="space-y-3">
+                                            <div>
+                                                <p className="text-sm text-gray-400">CPF</p>
+                                                <p className="text-white">{proprietarioSelecionado.cpf || 'Não informado'}</p>
+                                            </div>
+                                            <div>
+                                                <p className="text-sm text-gray-400">RG</p>
+                                                <p className="text-white">{proprietarioSelecionado.rg || 'Não informado'}</p>
+                                            </div>
+                                            <div>
+                                                <p className="text-sm text-gray-400">Data Nascimento</p>
+                                                <p className="text-white">{formatarData(proprietarioSelecionado.dataNascimento) || 'Não informado'}</p>
+                                            </div>
+                                            <div>
+                                                <p className="text-sm text-gray-400">Data Cadastro</p>
+                                                <p className="text-white">{formatarData(proprietarioSelecionado.dataCadastro)}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <h4 className="text-lg font-semibold text-white">Contatos</h4>
+                                        <div className="space-y-3">
+                                            <div>
+                                                <p className="text-sm text-gray-400">Telefone 1</p>
+                                                <p className="text-white">{formatarTelefone(proprietarioSelecionado.ddd, proprietarioSelecionado.telefone1)}</p>
+                                            </div>
+                                            {proprietarioSelecionado.telefone2 && (
+                                                <div>
+                                                    <p className="text-sm text-gray-400">Telefone 2</p>
+                                                    <p className="text-white">{proprietarioSelecionado.telefone2}</p>
+                                                </div>
+                                            )}
+                                            {proprietarioSelecionado.telefone3 && (
+                                                <div>
+                                                    <p className="text-sm text-gray-400">Telefone 3</p>
+                                                    <p className="text-white">{proprietarioSelecionado.telefone3}</p>
+                                                </div>
+                                            )}
+                                            {proprietarioSelecionado.email && (
+                                                <div>
+                                                    <p className="text-sm text-gray-400">E-mail</p>
+                                                    <p className="text-white">{proprietarioSelecionado.email}</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <h4 className="text-lg font-semibold text-white">Status e Observações</h4>
+                                        <div className="space-y-3">
+                                            <div>
+                                                <p className="text-sm text-gray-400">Saldo Atual</p>
+                                                <p className={`text-2xl font-bold ${proprietarioSelecionado.saldo < 0 ? 'text-red-400' : 'text-green-400'}`}>
+                                                    {formatarMoeda(proprietarioSelecionado.saldo)}
+                                                </p>
+                                            </div>
+                                            {proprietarioSelecionado.marcado && (
+                                                <div className="p-3 bg-yellow-900/30 rounded border border-yellow-600/50">
+                                                    <div className="flex items-center gap-2 mb-1">
+                                                        <AlertTriangle className="h-4 w-4 text-yellow-400" />
+                                                        <p className="text-sm font-medium text-yellow-400">Marcado</p>
+                                                    </div>
+                                                    <p className="text-sm text-yellow-300">{proprietarioSelecionado.motivoMarcacao}</p>
+                                                </div>
+                                            )}
+                                            {proprietarioSelecionado.restricao && (
+                                                <div className="p-3 bg-red-900/30 rounded border border-red-600/50">
+                                                    <div className="flex items-center gap-2 mb-1">
+                                                        <Ban className="h-4 w-4 text-red-400" />
+                                                        <p className="text-sm font-medium text-red-400">Com Restrição</p>
+                                                    </div>
+                                                    <p className="text-sm text-red-300">{proprietarioSelecionado.motivoRestricao}</p>
+                                                    <p className="text-xs text-red-400 mt-1">Vendas bloqueadas para este cliente</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </TabsContent>
+
+                            {/* Conteúdo: Fichas dos Animais */}
+                            <TabsContent value="fichas" className="space-y-6 pt-6">
+                                <div className="flex justify-between items-center">
+                                    <h4 className="text-lg font-semibold text-white">Fichas dos Animais</h4>
+                                    <Badge variant="outline" className="text-white border-red-600/50">
+                                        {fichasAnimais.length} animal{fichasAnimais.length !== 1 ? 's' : ''}
+                                    </Badge>
+                                </div>
+
+                                {fichasAnimais.length === 0 ? (
+                                    <div className="text-center py-12 border border-dashed border-red-600/30 rounded-lg">
+                                        <PawPrint className="h-12 w-12 text-gray-600 mx-auto mb-4" />
+                                        <p className="text-gray-400">Nenhum animal cadastrado para este proprietário</p>
+                                        <Button variant="outline" className="mt-4 border-red-600/50 text-white hover:bg-red-600/20">
+                                            <Plus className="mr-2 h-4 w-4" />
+                                            Cadastrar Animal
+                                        </Button>
+                                    </div>
+                                ) : (
+                                    <div className="overflow-x-auto">
+                                        <Table>
+                                            <TableHeader>
+                                                <TableRow>
+                                                    <TableHead className="text-white">Ficha</TableHead>
+                                                    <TableHead className="text-white">Nome</TableHead>
+                                                    <TableHead className="text-white">Espécie</TableHead>
+                                                    <TableHead className="text-white">Raça</TableHead>
+                                                    <TableHead className="text-white">Status</TableHead>
+                                                    <TableHead className="text-white">Ações</TableHead>
+                                                </TableRow>
+                                            </TableHeader>
+                                            <TableBody>
+                                                {fichasAnimais.map(ficha => (
+                                                    <TableRow key={ficha.id}>
+                                                        <TableCell className="text-white font-mono">{ficha.ficha}</TableCell>
+                                                        <TableCell className="text-white font-medium">{ficha.nome}</TableCell>
+                                                        <TableCell className="text-white">{ficha.especie}</TableCell>
+                                                        <TableCell className="text-white">{ficha.raca}</TableCell>
+                                                        <TableCell className="text-white">
+                                                            <Badge className={ficha.vivo ? "bg-green-900/50 text-green-300" : "bg-red-900/50 text-red-300"}>
+                                                                {ficha.vivo ? 'Vivo' : 'Falecido'}
+                                                            </Badge>
+                                                        </TableCell>
+                                                        <TableCell className="text-white">
+                                                            <Button variant="ghost" size="sm">
+                                                                <Eye className="h-4 w-4" />
+                                                            </Button>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+                                )}
+                            </TabsContent>
+
+                            {/* Conteúdo: Conta Corrente */}
+                            <TabsContent value="conta" className="space-y-6 pt-6">
+                                <div className="flex justify-between items-center">
+                                    <div>
+                                        <h4 className="text-lg font-semibold text-white">Conta Corrente</h4>
+                                        <p className="text-gray-400">Saldo atual:
+                                            <span className={`ml-2 font-bold ${proprietarioSelecionado.saldo < 0 ? 'text-red-400' : 'text-green-400'}`}>
+                                                {formatarMoeda(proprietarioSelecionado.saldo)}
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <Button
+                                            variant="outline"
+                                            onClick={enviarCartaDevedor}
+                                            disabled={proprietarioSelecionado.saldo >= 0}
+                                            className="border-red-600/50 text-white hover:bg-red-600/20 disabled:opacity-50"
+                                        >
+                                            <Mail className="mr-2 h-4 w-4" />
+                                            Carta de Cobrança
+                                        </Button>
+                                        <Button
+                                            onClick={() => setNovoLancamentoOpen(true)}
+                                            className="bg-red-600 hover:bg-red-700"
+                                        >
+                                            <Plus className="mr-2 h-4 w-4" />
+                                            Novo Lançamento
+                                        </Button>
+                                    </div>
+                                </div>
+
+                                {lancamentosConta.length === 0 ? (
+                                    <div className="text-center py-12 border border-dashed border-red-600/30 rounded-lg">
+                                        <DollarSign className="h-12 w-12 text-gray-600 mx-auto mb-4" />
+                                        <p className="text-gray-400">Nenhum lançamento na conta corrente</p>
+                                        <Button
+                                            onClick={() => setNovoLancamentoOpen(true)}
+                                            className="mt-4 bg-red-600 hover:bg-red-700"
+                                        >
+                                            <Plus className="mr-2 h-4 w-4" />
+                                            Adicionar Primeiro Lançamento
+                                        </Button>
+                                    </div>
+                                ) : (
+                                    <div className="overflow-x-auto">
+                                        <Table>
+                                            <TableHeader>
+                                                <TableRow>
+                                                    <TableHead className="text-white">Data</TableHead>
+                                                    <TableHead className="text-white">Operação</TableHead>
+                                                    <TableHead className="text-white">Descrição</TableHead>
+                                                    <TableHead className="text-white">Tipo</TableHead>
+                                                    <TableHead className="text-white text-right">Valor</TableHead>
+                                                </TableRow>
+                                            </TableHeader>
+                                            <TableBody>
+                                                {lancamentosConta.map(lancamento => (
+                                                    <TableRow key={lancamento.id}>
+                                                        <TableCell className="text-white">
+                                                            {formatarData(lancamento.data)}
+                                                        </TableCell>
+                                                        <TableCell className="text-white">{lancamento.operacao}</TableCell>
+                                                        <TableCell className="text-white">{lancamento.descricao}</TableCell>
+                                                        <TableCell className="text-white">
+                                                            <Badge className={
+                                                                lancamento.tipo === 'CREDITO'
+                                                                    ? 'bg-green-900/50 text-green-300'
+                                                                    : 'bg-red-900/50 text-red-300'
+                                                            }>
+                                                                {lancamento.tipo === 'CREDITO' ? 'Crédito' : 'Débito'}
+                                                            </Badge>
+                                                        </TableCell>
+                                                        <TableCell className={`text-right font-bold ${lancamento.tipo === 'CREDITO' ? 'text-green-400' : 'text-red-400'
+                                                            }`}>
+                                                            {lancamento.tipo === 'CREDITO' ? '+' : '-'} {formatarMoeda(lancamento.valor)}
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+                                )}
+                            </TabsContent>
+                        </Tabs>
+                    </CardContent>
+                </Card>
+            )}
+
+            {/* MODAL DE EDIÇÃO */}
+            <Dialog open={editOpen} onOpenChange={setEditOpen}>
+                <DialogContent className="bg-black/95 border-red-600/30 text-white max-w-4xl max-h-[90vh] overflow-y-auto">
+                    <DialogHeader>
+                        <DialogTitle>Editar Proprietário - {editNome}</DialogTitle>
+                    </DialogHeader>
+
+                    <div className="space-y-6 py-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                                <Label className="text-white">Código</Label>
+                                <Input
+                                    value={editCodigo}
+                                    onChange={e => setEditCodigo(e.target.value)}
+                                    className="bg-black/50 border-red-600/50 text-white"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label className="text-white">Nome *</Label>
+                                <Input
+                                    value={editNome}
+                                    onChange={e => setEditNome(e.target.value)}
+                                    className="bg-black/50 border-red-600/50 text-white"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label className="text-white">CPF</Label>
+                                <Input
+                                    value={editCpf}
+                                    onChange={e => setEditCpf(e.target.value)}
+                                    className="bg-black/50 border-red-600/50 text-white"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label className="text-white">RG</Label>
+                                <Input
+                                    value={editRg}
+                                    onChange={e => setEditRg(e.target.value)}
+                                    className="bg-black/50 border-red-600/50 text-white"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label className="text-white">Data Nascimento</Label>
+                                <Input
+                                    type="date"
+                                    value={editDataNascimento}
+                                    onChange={e => setEditDataNascimento(e.target.value)}
+                                    className="bg-black/50 border-red-600/50 text-white"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label className="text-white">E-mail</Label>
+                                <Input
+                                    value={editEmail}
+                                    onChange={e => setEditEmail(e.target.value)}
+                                    className="bg-black/50 border-red-600/50 text-white"
+                                />
+                            </div>
+                            <div className="md:col-span-2 space-y-2">
+                                <Label className="text-white">Endereço</Label>
+                                <Input
+                                    value={editEndereco}
+                                    onChange={e => setEditEndereco(e.target.value)}
+                                    className="bg-black/50 border-red-600/50 text-white"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label className="text-white">Bairro</Label>
+                                <Input
+                                    value={editBairro}
+                                    onChange={e => setEditBairro(e.target.value)}
+                                    className="bg-black/50 border-red-600/50 text-white"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label className="text-white">Cidade</Label>
+                                <Input
+                                    value={editCidade}
+                                    onChange={e => setEditCidade(e.target.value)}
+                                    className="bg-black/50 border-red-600/50 text-white"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label className="text-white">Estado</Label>
+                                <Select value={editEstado} onValueChange={setEditEstado}>
+                                    <SelectTrigger className="bg-black/50 border-red-600/50 text-white">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-black border-red-600/50">
+                                        <SelectItem value="SP">SP</SelectItem>
+                                        <SelectItem value="RJ">RJ</SelectItem>
+                                        <SelectItem value="MG">MG</SelectItem>
+                                        <SelectItem value="RS">RS</SelectItem>
+                                        <SelectItem value="PR">PR</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="space-y-2">
+                                <Label className="text-white">CEP</Label>
+                                <Input
+                                    value={editCep}
+                                    onChange={e => setEditCep(e.target.value)}
+                                    className="bg-black/50 border-red-600/50 text-white"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label className="text-white">Complemento</Label>
+                                <Input
+                                    value={editComplemento}
+                                    onChange={e => setEditComplemento(e.target.value)}
+                                    className="bg-black/50 border-red-600/50 text-white"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label className="text-white">Telefone 1</Label>
+                                <div className="flex gap-2">
+                                    <Input
+                                        value={editDdd}
+                                        onChange={e => setEditDdd(e.target.value)}
+                                        className="w-20 bg-black/50 border-red-600/50 text-white"
+                                        placeholder="DDD"
+                                    />
+                                    <Input
+                                        value={editTelefone1}
+                                        onChange={e => setEditTelefone1(e.target.value)}
+                                        className="flex-1 bg-black/50 border-red-600/50 text-white"
+                                    />
+                                </div>
+                            </div>
+                            <div className="space-y-2">
+                                <Label className="text-white">Telefone 2</Label>
+                                <Input
+                                    value={editTelefone2}
+                                    onChange={e => setEditTelefone2(e.target.value)}
+                                    className="bg-black/50 border-red-600/50 text-white"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label className="text-white">Telefone 3</Label>
+                                <Input
+                                    value={editTelefone3}
+                                    onChange={e => setEditTelefone3(e.target.value)}
+                                    className="bg-black/50 border-red-600/50 text-white"
+                                />
+                            </div>
+                        </div>
+
+                        <Separator className="bg-red-600/30" />
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-4">
+                                <div className="flex items-center space-x-2">
+                                    <Checkbox
+                                        id="edit-marcado"
+                                        checked={editMarcado}
+                                        onCheckedChange={(checked) => setEditMarcado(checked as boolean)}
+                                        className="border-red-600 data-[state=checked]:bg-red-600"
+                                    />
+                                    <Label htmlFor="edit-marcado" className="text-white cursor-pointer">
+                                        Marcado?
+                                    </Label>
+                                </div>
+                                {editMarcado && (
+                                    <div className="space-y-2 ml-6">
+                                        <Label className="text-white">Motivo da Marcação</Label>
+                                        <Input
+                                            value={editMotivoMarcacao}
+                                            onChange={e => setEditMotivoMarcacao(e.target.value)}
+                                            className="bg-black/50 border-red-600/50 text-white"
+                                        />
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="space-y-4">
+                                <div className="flex items-center space-x-2">
+                                    <Checkbox
+                                        id="edit-restricao"
+                                        checked={editRestricao}
+                                        onCheckedChange={(checked) => setEditRestricao(checked as boolean)}
+                                        className="border-red-600 data-[state=checked]:bg-red-600"
+                                    />
+                                    <Label htmlFor="edit-restricao" className="text-white cursor-pointer">
+                                        Restrição? (Bloqueia vendas)
+                                    </Label>
+                                </div>
+                                {editRestricao && (
+                                    <div className="space-y-2 ml-6">
+                                        <Label className="text-white">Motivo da Restrição</Label>
+                                        <Input
+                                            value={editMotivoRestricao}
+                                            onChange={e => setEditMotivoRestricao(e.target.value)}
+                                            className="bg-black/50 border-red-600/50 text-white"
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="flex items-center space-x-2">
+                            <Checkbox
+                                id="edit-ativo"
+                                checked={editAtivo}
+                                onCheckedChange={(checked) => setEditAtivo(checked as boolean)}
+                                className="border-red-600 data-[state=checked]:bg-red-600"
+                            />
+                            <Label htmlFor="edit-ativo" className="text-white cursor-pointer">
+                                Ativo no sistema
+                            </Label>
+                        </div>
+                    </div>
+
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setEditOpen(false)} className="border-red-600/50 text-white">
+                            Cancelar
+                        </Button>
+                        <Button onClick={salvarEdicao} className="bg-red-600 hover:bg-red-700">
+                            Salvar Alterações
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            {/* MODAL DE NOVO LANÇAMENTO */}
+            <Dialog open={novoLancamentoOpen} onOpenChange={setNovoLancamentoOpen}>
+                <DialogContent className="bg-black/95 border-red-600/30 text-white">
+                    <DialogHeader>
+                        <DialogTitle>Novo Lançamento na Conta Corrente</DialogTitle>
+                        <p className="text-gray-400 text-sm mt-1">
+                            {proprietarioSelecionado?.nome} - Saldo atual: {formatarMoeda(proprietarioSelecionado?.saldo || 0)}
+                        </p>
+                    </DialogHeader>
+
+                    <div className="space-y-4 py-4">
+                        <div className="space-y-2">
+                            <Label className="text-white">Tipo de Lançamento</Label>
+                            <Select value={lancamentoTipo} onValueChange={(value: any) => setLancamentoTipo(value)}>
+                                <SelectTrigger className="bg-black/50 border-red-600/50 text-white">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent className="bg-black border-red-600/50">
+                                    <SelectItem value="CREDITO">Crédito (Pagamento/Entrada)</SelectItem>
+                                    <SelectItem value="DEBITO">Débito (Compra/Saída)</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label className="text-white">Valor *</Label>
+                            <Input
+                                type="number"
+                                value={lancamentoValor}
+                                onChange={e => setLancamentoValor(e.target.value)}
+                                className="bg-black/50 border-red-600/50 text-white"
+                                placeholder="0,00"
+                                step="0.01"
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label className="text-white">Descrição *</Label>
+                            <Textarea
+                                value={lancamentoDescricao}
+                                onChange={e => setLancamentoDescricao(e.target.value)}
+                                className="bg-black/50 border-red-600/50 text-white"
+                                placeholder="Ex: Pagamento em dinheiro, Compra de ração, etc."
+                                rows={3}
+                            />
+                        </div>
+                    </div>
+
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setNovoLancamentoOpen(false)} className="border-red-600/50 text-white">
+                            Cancelar
+                        </Button>
+                        <Button onClick={adicionarLancamentoConta} className="bg-red-600 hover:bg-red-700">
+                            <Plus className="mr-2 h-4 w-4" />
+                            Adicionar Lançamento
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+        </div>
+    );
+};
+
+export default TabelaProprietarios;

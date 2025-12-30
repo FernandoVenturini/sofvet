@@ -21,6 +21,10 @@ import NovaConsulta from "@/pages/movimentos/NovaConsulta";
 import TabelaProdutos from "@/pages/tabelas/TabelaProdutos";
 import ListaConsultas from "@/pages/movimentos/ListaConsultas";
 import AgendaCompleta from "@/pages/agenda/AgendaCompleta";
+import TabelaEspecieRacaPelagem from '../pages/tabelas/TabelaEspecieRacaPelagem';
+import Retorno from '../pages/fichas/Retorno';
+import TabelaFuncionarios from '../pages/tabelas/TabelaFuncionarios';
+import TabelaProdutosServicos from '../pages/tabelas/TabelaProdutosServicos';
 
 export default function RoutesAdm() {
   return (
@@ -47,6 +51,10 @@ export default function RoutesAdm() {
         <Route path="tabelas/produtos" element={<PrivateRoute><TabelaProdutos/></PrivateRoute>} />
         <Route path="/movimento/lista" element={<PrivateRoute><ListaConsultas/></PrivateRoute>} />
         <Route path="/agenda/completa" element={<PrivateRoute><AgendaCompleta/></PrivateRoute>} />
+        <Route path="/tabelas/especie-raca" element={<PrivateRoute><TabelaEspecieRacaPelagem /></PrivateRoute>} />
+        <Route path="/fichas/retorno" element={<PrivateRoute><Retorno /></PrivateRoute>} />
+        <Route path="/tabelas/funcionarios" element={<PrivateRoute><TabelaFuncionarios /></PrivateRoute>} />
+        <Route path="/tabelas/produtos" element={<PrivateRoute><TabelaProdutosServicos /></PrivateRoute>} />
         {/* Adicione mais rotas protegidas aqui */}
       </Route>
 

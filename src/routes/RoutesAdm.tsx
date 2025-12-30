@@ -26,6 +26,7 @@ import TabelaFuncionarios from '../pages/tabelas/TabelaFuncionarios';// Ensure t
 import TabelaProprietarios from '../pages/tabelas/TabelaProprietarios';
 import TabelaProdutosServicos from '../pages/tabelas/TabelaProdutosServicos';
 import TabelaFornecedores from '../pages/tabelas/TabelaFornecedores';
+import Medicamentos from "@/pages/Medicamentos";
 
 
 export default function RoutesAdm() {
@@ -58,6 +59,7 @@ export default function RoutesAdm() {
         <Route path="/tabelas/produtos" element={<PrivateRoute><TabelaProdutosServicos /></PrivateRoute>} />
         <Route path="/tabelas/proprietarios" element={<PrivateRoute><TabelaProprietarios/></PrivateRoute>} />
         <Route path="/tabelas/fornecedores" element={<PrivateRoute><TabelaFornecedores /></PrivateRoute>} />
+        <Route path="/medicamentos" element={<PrivateRoute><Medicamentos /></PrivateRoute>} />
         {/* Adicione mais rotas protegidas aqui */}
       </Route>
 

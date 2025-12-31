@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Landing from "../pages/Landing";
 import Login from "../pages/Login";
@@ -27,8 +27,12 @@ import TabelaProprietarios from '../pages/tabelas/TabelaProprietarios';
 import TabelaProdutosServicos from '../pages/tabelas/TabelaProdutosServicos';
 import TabelaFornecedores from '../pages/tabelas/TabelaFornecedores';
 import Medicamentos from "@/pages/Medicamentos";
+<<<<<<< HEAD
 import BackupMedicamentos from '@/pages/medicamentos/BackupMedicamentos';
 import RelatoriosMedicamentos from '@/pages/medicamentos/RelatoriosMedicamentos';
+=======
+import Patologias from "@/pages/tabelas/Patologias";
+>>>>>>> babb723e479375a746737f90f0063a64bcda92e1
 
 export default function RoutesAdm() {
 	return (
@@ -38,6 +42,7 @@ export default function RoutesAdm() {
 			<Route path="/login" element={<Login />} />
 			<Route path="/signup" element={<Signup />} />
 
+<<<<<<< HEAD
 			{/* Rotas protegidas com Layout (sidebar + header) */}
 			<Route element={<Layout />}>
 				<Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
@@ -80,6 +85,36 @@ export default function RoutesAdm() {
 				<Route path="/medicamentos/relatorios" element={<PrivateRoute><RelatoriosMedicamentos /></PrivateRoute>} />
 				{/* Adicione mais rotas protegidas aqui */}
 			</Route>
+=======
+      {/* Rotas protegidas com Layout (sidebar + header) */}
+      <Route element={<Layout />}>
+        <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+        <Route path="/perfil" element={<PrivateRoute><Profile /></PrivateRoute>} />
+        <Route path="/fichas/nova" element={<PrivateRoute><NovaFicha /></PrivateRoute>} />
+        <Route path="/fichas/lista" element={<PrivateRoute><ListaFichas /></PrivateRoute>} />
+        <Route path="/fichas/editar/:id" element={<PrivateRoute><EditarFicha /></PrivateRoute>} />
+        <Route path="/tabelas/vacinas" element={<PrivateRoute><TabelaVacinas /></PrivateRoute>} />
+        <Route path="/agenda/retornos" element={<PrivateRoute><AgendaRetornos /></PrivateRoute>} />
+        <Route path="/movimento" element={<PrivateRoute><Movimento /></PrivateRoute>} />
+        <Route path="/relatorios" element={<PrivateRoute><Relatorios /></PrivateRoute>} />
+        <Route path="/diversos/backup" element={<PrivateRoute><BackupDiario /></PrivateRoute>} />
+        <Route path="/diversos/usuarios" element={<PrivateRoute><Usuarios /></PrivateRoute>} />
+        <Route path="movimento/nova" element={<PrivateRoute><NovaConsulta /></PrivateRoute>} />
+        <Route path="/movimento/lista" element={<PrivateRoute><ListaConsultas/></PrivateRoute>} />
+        <Route path="/agenda/completa" element={<PrivateRoute><AgendaCompleta/></PrivateRoute>} />
+        <Route path="/tabelas/especie-raca" element={<PrivateRoute><TabelaEspecieRacaPelagem /></PrivateRoute>} />
+        <Route path="/fichas/retorno" element={<PrivateRoute><Retorno /></PrivateRoute>} />
+        <Route path="/tabelas/funcionarios" element={<PrivateRoute><TabelaFuncionarios /></PrivateRoute>} />
+        <Route path="/tabelas/produtos" element={<PrivateRoute><TabelaProdutosServicos /></PrivateRoute>} />
+        <Route path="/tabelas/proprietarios" element={<PrivateRoute><TabelaProprietarios/></PrivateRoute>} />
+        <Route path="/tabelas/fornecedores" element={<PrivateRoute><TabelaFornecedores /></PrivateRoute>} />
+        <Route path="/medicamentos" element={<PrivateRoute><Medicamentos /></PrivateRoute>} />
+        <Route path="/tabelas/def" element={<Navigate to="/medicamentos" replace />} />
+        <Route path="/tabelas/agendas" element={<PrivateRoute><AgendaCompleta /></PrivateRoute>} />
+        <Route path="/tabelas/patologias" element={<PrivateRoute><Patologias /></PrivateRoute>} />
+        {/* Adicione mais rotas protegidas aqui */}
+      </Route>
+>>>>>>> babb723e479375a746737f90f0063a64bcda92e1
 
 			{/* Rota 404 */}
 			<Route path="*" element={<NotFound />} />

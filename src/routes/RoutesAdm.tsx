@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Landing from "../pages/Landing";
 import Login from "../pages/Login";
@@ -22,12 +22,12 @@ import ListaConsultas from "@/pages/movimentos/ListaConsultas";
 import AgendaCompleta from "@/pages/agenda/AgendaCompleta";
 import TabelaEspecieRacaPelagem from '../pages/tabelas/TabelaEspecieRacaPelagem';
 import Retorno from '../pages/fichas/Retorno';
-import TabelaFuncionarios from '../pages/tabelas/TabelaFuncionarios';// Ensure this path and file name are correct
+import TabelaFuncionarios from '../pages/tabelas/TabelaFuncionarios';
 import TabelaProprietarios from '../pages/tabelas/TabelaProprietarios';
 import TabelaProdutosServicos from '../pages/tabelas/TabelaProdutosServicos';
 import TabelaFornecedores from '../pages/tabelas/TabelaFornecedores';
 import Medicamentos from "@/pages/Medicamentos";
-
+import Patologias from "@/pages/tabelas/Patologias";
 
 export default function RoutesAdm() {
   return (
@@ -60,6 +60,9 @@ export default function RoutesAdm() {
         <Route path="/tabelas/proprietarios" element={<PrivateRoute><TabelaProprietarios/></PrivateRoute>} />
         <Route path="/tabelas/fornecedores" element={<PrivateRoute><TabelaFornecedores /></PrivateRoute>} />
         <Route path="/medicamentos" element={<PrivateRoute><Medicamentos /></PrivateRoute>} />
+        <Route path="/tabelas/def" element={<Navigate to="/medicamentos" replace />} />
+        <Route path="/tabelas/agendas" element={<PrivateRoute><AgendaCompleta /></PrivateRoute>} />
+        <Route path="/tabelas/patologias" element={<PrivateRoute><Patologias /></PrivateRoute>} />
         {/* Adicione mais rotas protegidas aqui */}
       </Route>
 

@@ -19,6 +19,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { CalendarIcon, Clock, User, Filter, Search, Plus, ChevronLeft, ChevronRight, Menu, X } from 'lucide-react';
+import { useMediaQuery } from '@/hooks/use-media-query';
 import './AgendaCompleta.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
@@ -49,18 +50,16 @@ const veterinarios = ['Dr. João Silva', 'Dra. Maria Oliveira', 'Dr. Pedro Santo
 
 const AgendaCompleta = () => {
   const { toast } = useToast();
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  const isTablet = useMediaQuery('(min-width: 769px) and (max-width: 1024px)');
   const calendarRef = useRef<any>(null);
   
-  // Estado para responsividade
-  const [isMobile, setIsMobile] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
-  
   const [events, setEvents] = useState<AgendaEvent[]>([]);
-  const [currentView, setCurrentView] = useState<View>('week');
+  const [currentView, setCurrentView] = useState<View>(isMobile ? 'agenda' : 'week');
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedSlot, setSelectedSlot] = useState<any>(null);
   const [selectedEvent, setSelectedEvent] = useState<AgendaEvent | null>(null);
-  const [showFilters, setShowFilters] = useState(true);
+  const [showFilters, setShowFilters] = useState(!isMobile);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const [animalBusca, setAnimalBusca] = useState('');
@@ -72,41 +71,14 @@ const AgendaCompleta = () => {
 
   const [animais, setAnimais] = useState<any[]>([]);
 
-  // Detectar tamanho da tela
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      setWindowWidth(width);
-      setIsMobile(width < 768);
-      
-      // Ajustar view baseado no tamanho da tela
-      if (width < 768 && currentView !== 'agenda') {
-        setCurrentView('agenda');
-        setShowFilters(false);
-      } else if (width >= 768 && currentView === 'agenda') {
-        setCurrentView('week');
-        setShowFilters(true);
-      }
-    };
-
-    // Verificação inicial
-    handleResize();
-    
-    // Adicionar listener
-    window.addEventListener('resize', handleResize);
-    
-    // Cleanup
-    return () => window.removeEventListener('resize', handleResize);
-  }, [currentView]);
-
   // Ajustar view baseado no tamanho da tela
   useEffect(() => {
-    if (windowWidth < 768 && currentView !== 'agenda') {
+    if (isMobile && currentView !== 'agenda') {
       setCurrentView('agenda');
-    } else if (windowWidth >= 768 && currentView === 'agenda') {
+    } else if (!isMobile && currentView === 'agenda') {
       setCurrentView('week');
     }
-  }, [windowWidth, currentView]);
+  }, [isMobile, currentView]);
 
   // Carregar dados
   useEffect(() => {
@@ -195,14 +167,14 @@ const AgendaCompleta = () => {
 
     switch (event.tipo) {
       case 'consulta':
-        backgroundColor = event.status === 'atrasada' ? '#dc2626' : '#2563eb';
+        backgroundColor = event.status === 'atrasada' ? '#ef4444' : '#3b82f6';
         break;
       case 'retorno_vacina':
-        backgroundColor = event.status === 'atrasada' ? '#d97706' : '#059669';
+        backgroundColor = event.status === 'atrasada' ? '#f59e0b' : '#10b981';
         break;
       case 'bloqueado':
-        backgroundColor = '#4b5563';
-        color = '#9ca3af';
+        backgroundColor = '#6b7280';
+        color = '#d1d5db';
         break;
     }
 
@@ -226,7 +198,7 @@ const AgendaCompleta = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-2 sm:p-4 md:p-6">
+      <div className="min-h-screen bg-black0 p-2 sm:p-4 md:p-6">
       {/* Header responsivo */}
       <div className="mb-4 md:mb-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -236,17 +208,17 @@ const AgendaCompleta = () => {
                 variant="outline"
                 size="icon"
                 onClick={() => setShowMobileMenu(!showMobileMenu)}
-                className="md:hidden border-red-600/50 text-white hover:bg-red-600/20"
+                className="md:hidden"
               >
                 {showMobileMenu ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
               </Button>
             )}
-            <CalendarIcon className="h-6 w-6 md:h-8 md:w-8 text-red-500" />
+            <CalendarIcon className="h-6 w-6 md:h-8 md:w-8 text-blue-600" />
             <div>
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">
                 Agenda {isMobile ? '' : 'Completa'}
               </h1>
-              <p className="text-gray-400 text-xs sm:text-sm md:text-base">
+              <p className="text-gray-600 text-xs sm:text-sm md:text-base">
                 Controle de agendamentos veterinários
               </p>
             </div>
@@ -256,14 +228,14 @@ const AgendaCompleta = () => {
             <Button
               variant="outline"
               size={isMobile ? "sm" : "default"}
-              className="flex-1 sm:flex-none border-red-600/50 text-white hover:bg-red-600/20"
+              className="flex-1 sm:flex-none"
               onClick={() => navigate('TODAY')}
             >
               Hoje
             </Button>
             <Button
               size={isMobile ? "sm" : "default"}
-              className="flex-1 sm:flex-none bg-red-600 hover:bg-red-700 text-white"
+              className="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-700"
               onClick={() => setSelectedSlot({ start: new Date(), end: addMinutes(new Date(), 30) })}
             >
               <Plus className="mr-2 h-4 w-4" />
@@ -277,37 +249,32 @@ const AgendaCompleta = () => {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
         {/* Filtros - Escondido em mobile, aparece em menu */}
         {(showFilters || !isMobile) && (
-          <div className={`lg:col-span-1 ${isMobile ? 'fixed inset-0 z-50 bg-black p-4 overflow-y-auto' : ''}`}>
+          <div className={`lg:col-span-1 ${isMobile ? 'fixed inset-0 z-50 bg-white p-4 overflow-y-auto' : ''}`}>
             {isMobile && (
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold text-white">Filtros</h2>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  onClick={() => setShowFilters(false)}
-                  className="text-white hover:bg-red-600/20"
-                >
+                <h2 className="text-lg font-semibold">Filtros</h2>
+                <Button variant="ghost" size="icon" onClick={() => setShowFilters(false)}>
                   <X className="h-4 w-4" />
                 </Button>
               </div>
             )}
             
-            <Card className={`${isMobile ? '' : 'sticky top-4'} bg-black/50 border-red-600/30`}>
+            <Card className={isMobile ? '' : 'sticky top-4'}>
               <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2 text-white">
-                  <Filter className="h-5 w-5 text-red-500" />
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Filter className="h-5 w-5" />
                   Filtros
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <Label htmlFor="search" className="text-white">Buscar Animal</Label>
+                  <Label htmlFor="search">Buscar Animal</Label>
                   <div className="relative">
                     <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                     <Input
                       id="search"
                       placeholder="Nome do animal..."
-                      className="pl-10 bg-black/30 border-red-600/50 text-white placeholder-gray-500"
+                      className="pl-10"
                       value={animalBusca}
                       onChange={(e) => setAnimalBusca(e.target.value)}
                     />
@@ -315,38 +282,35 @@ const AgendaCompleta = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="status" className="text-white">Status</Label>
+                  <Label htmlFor="status">Status</Label>
                   <Select value={filterStatus} onValueChange={setFilterStatus}>
-                    <SelectTrigger id="status" className="bg-black/30 border-red-600/50 text-white">
+                    <SelectTrigger id="status">
                       <SelectValue placeholder="Selecione o status" />
                     </SelectTrigger>
-                    <SelectContent className="bg-black border-red-600/30">
-                      <SelectItem value="todos" className="text-white focus:bg-red-600/20">Todos</SelectItem>
-                      <SelectItem value="agendada" className="text-white focus:bg-red-600/20">Agendada</SelectItem>
-                      <SelectItem value="atrasada" className="text-white focus:bg-red-600/20">Atrasada</SelectItem>
+                    <SelectContent>
+                      <SelectItem value="todos">Todos</SelectItem>
+                      <SelectItem value="agendada">Agendada</SelectItem>
+                      <SelectItem value="atrasada">Atrasada</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div>
-                  <Label htmlFor="tipo" className="text-white">Tipo</Label>
+                  <Label htmlFor="tipo">Tipo</Label>
                   <Select value={filterTipo} onValueChange={setFilterTipo}>
-                    <SelectTrigger id="tipo" className="bg-black/30 border-red-600/50 text-white">
+                    <SelectTrigger id="tipo">
                       <SelectValue placeholder="Selecione o tipo" />
                     </SelectTrigger>
-                    <SelectContent className="bg-black border-red-600/30">
-                      <SelectItem value="todos" className="text-white focus:bg-red-600/20">Todos</SelectItem>
-                      <SelectItem value="consulta" className="text-white focus:bg-red-600/20">Consulta</SelectItem>
-                      <SelectItem value="retorno_vacina" className="text-white focus:bg-red-600/20">Retorno/Vacina</SelectItem>
+                    <SelectContent>
+                      <SelectItem value="todos">Todos</SelectItem>
+                      <SelectItem value="consulta">Consulta</SelectItem>
+                      <SelectItem value="retorno_vacina">Retorno/Vacina</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 {isMobile && (
-                  <Button 
-                    className="w-full bg-red-600 hover:bg-red-700 text-white"
-                    onClick={() => setShowFilters(false)}
-                  >
+                  <Button className="w-full" onClick={() => setShowFilters(false)}>
                     Aplicar Filtros
                   </Button>
                 )}
@@ -358,29 +322,29 @@ const AgendaCompleta = () => {
         {/* Calendário - Ocupa mais espaço quando filtros estão escondidos */}
         <div className={`${showFilters && !isMobile ? 'lg:col-span-3' : 'col-span-full'}`}>
           {/* Controles do calendário */}
-          <Card className="mb-4 bg-black/50 border-red-600/30">
+          <Card className="mb-4">
             <CardContent className="p-3 sm:p-4">
               <div className="flex flex-col sm:flex-row justify-between items-center gap-3">
                 <div className="flex items-center gap-2 w-full sm:w-auto">
                   {isMobile ? (
                     <Select value={currentView} onValueChange={(v) => setCurrentView(v as View)}>
-                      <SelectTrigger className="w-full bg-black/30 border-red-600/50 text-white">
+                      <SelectTrigger className="w-full">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent className="bg-black border-red-600/30">
-                        <SelectItem value="agenda" className="text-white focus:bg-red-600/20">Lista</SelectItem>
-                        <SelectItem value="day" className="text-white focus:bg-red-600/20">Dia</SelectItem>
-                        <SelectItem value="week" className="text-white focus:bg-red-600/20">Semana</SelectItem>
-                        <SelectItem value="month" className="text-white focus:bg-red-600/20">Mês</SelectItem>
+                      <SelectContent>
+                        <SelectItem value="agenda">Lista</SelectItem>
+                        <SelectItem value="day">Dia</SelectItem>
+                        <SelectItem value="week">Semana</SelectItem>
+                        <SelectItem value="month">Mês</SelectItem>
                       </SelectContent>
                     </Select>
                   ) : (
                     <Tabs value={currentView} onValueChange={(v) => setCurrentView(v as View)} className="w-full sm:w-auto">
-                      <TabsList className="grid grid-cols-4 w-full sm:w-auto bg-black/30 border border-red-600/30">
-                        <TabsTrigger value="agenda" className="text-white data-[state=active]:bg-red-600/50">Lista</TabsTrigger>
-                        <TabsTrigger value="day" className="text-white data-[state=active]:bg-red-600/50">Dia</TabsTrigger>
-                        <TabsTrigger value="week" className="text-white data-[state=active]:bg-red-600/50">Semana</TabsTrigger>
-                        <TabsTrigger value="month" className="text-white data-[state=active]:bg-red-600/50">Mês</TabsTrigger>
+                      <TabsList className="grid grid-cols-4 w-full sm:w-auto">
+                        <TabsTrigger value="agenda">Lista</TabsTrigger>
+                        <TabsTrigger value="day">Dia</TabsTrigger>
+                        <TabsTrigger value="week">Semana</TabsTrigger>
+                        <TabsTrigger value="month">Mês</TabsTrigger>
                       </TabsList>
                     </Tabs>
                   )}
@@ -392,12 +356,12 @@ const AgendaCompleta = () => {
                       variant="outline"
                       size="icon"
                       onClick={() => navigate('PREV')}
-                      className="h-8 w-8 border-red-600/50 text-white hover:bg-red-600/20"
+                      className="h-8 w-8"
                     >
                       <ChevronLeft className="h-4 w-4" />
                     </Button>
                     
-                    <span className="text-sm font-medium px-2 text-center min-w-[120px] text-white">
+                    <span className="text-sm font-medium px-2 text-center min-w-[120px]">
                       {format(currentDate, isMobile ? 'MMM yyyy' : "MMMM 'de' yyyy", { locale: ptBR })}
                     </span>
                     
@@ -405,7 +369,7 @@ const AgendaCompleta = () => {
                       variant="outline"
                       size="icon"
                       onClick={() => navigate('NEXT')}
-                      className="h-8 w-8 border-red-600/50 text-white hover:bg-red-600/20"
+                      className="h-8 w-8"
                     >
                       <ChevronRight className="h-4 w-4" />
                     </Button>
@@ -416,7 +380,7 @@ const AgendaCompleta = () => {
                       variant="outline"
                       size="icon"
                       onClick={() => setShowFilters(true)}
-                      className="h-8 w-8 border-red-600/50 text-white hover:bg-red-600/20"
+                      className="h-8 w-8"
                     >
                       <Filter className="h-4 w-4" />
                     </Button>
@@ -427,7 +391,7 @@ const AgendaCompleta = () => {
           </Card>
 
           {/* Calendário */}
-          <Card className="bg-black/50 border-red-600/30">
+          <Card>
             <CardContent className="p-0 sm:p-2">
               <div className="h-[500px] sm:h-[600px] md:h-[700px] overflow-hidden">
                 <Calendar
@@ -459,7 +423,7 @@ const AgendaCompleta = () => {
                     noEventsInRange: 'Nenhum agendamento neste período',
                   }}
                   components={{
-                    toolbar: () => null,
+                    toolbar: () => null, // Removemos a toolbar padrão
                   }}
                 />
               </div>
@@ -469,16 +433,16 @@ const AgendaCompleta = () => {
           {/* Stats em mobile */}
           {isMobile && (
             <div className="grid grid-cols-2 gap-2 mt-4">
-              <Card className="bg-black/50 border-red-600/30">
+              <Card>
                 <CardContent className="p-3">
-                  <p className="text-xs text-gray-400">Total</p>
-                  <p className="text-lg font-bold text-white">{filteredEvents.length}</p>
+                  <p className="text-xs text-gray-500">Total</p>
+                  <p className="text-lg font-bold">{filteredEvents.length}</p>
                 </CardContent>
               </Card>
-              <Card className="bg-black/50 border-red-600/30">
+              <Card>
                 <CardContent className="p-3">
-                  <p className="text-xs text-gray-400">Hoje</p>
-                  <p className="text-lg font-bold text-white">
+                  <p className="text-xs text-gray-500">Hoje</p>
+                  <p className="text-lg font-bold">
                     {filteredEvents.filter(e => 
                       format(e.start, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd')
                     ).length}
@@ -492,10 +456,10 @@ const AgendaCompleta = () => {
 
       {/* Modal de detalhes do evento */}
       <Dialog open={!!selectedEvent} onOpenChange={() => setSelectedEvent(null)}>
-        <DialogContent className="max-w-md sm:max-w-lg bg-black/90 border-red-600/30 text-white">
+        <DialogContent className="max-w-md sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-white">
-              <CalendarIcon className="h-5 w-5 text-red-500" />
+            <DialogTitle className="flex items-center gap-2">
+              <CalendarIcon className="h-5 w-5" />
               Detalhes do Agendamento
             </DialogTitle>
           </DialogHeader>
@@ -503,44 +467,40 @@ const AgendaCompleta = () => {
           {selectedEvent && (
             <div className="space-y-4">
               <div>
-                <Label className="text-white">Animal</Label>
-                <p className="font-medium text-white">{selectedEvent.animal}</p>
+                <Label>Animal</Label>
+                <p className="font-medium">{selectedEvent.animal}</p>
               </div>
               
               <div>
-                <Label className="text-white">Proprietário</Label>
-                <p className="font-medium text-white">{selectedEvent.proprietario}</p>
+                <Label>Proprietário</Label>
+                <p className="font-medium">{selectedEvent.proprietario}</p>
               </div>
               
               <div>
-                <Label className="text-white">Data e Hora</Label>
-                <p className="font-medium flex items-center gap-2 text-white">
-                  <Clock className="h-4 w-4 text-red-500" />
+                <Label>Data e Hora</Label>
+                <p className="font-medium flex items-center gap-2">
+                  <Clock className="h-4 w-4" />
                   {format(selectedEvent.start, "dd/MM/yyyy 'às' HH:mm")}
                 </p>
               </div>
               
               <div>
-                <Label className="text-white">Veterinário</Label>
-                <p className="font-medium text-white">{selectedEvent.veterinario}</p>
+                <Label>Veterinário</Label>
+                <p className="font-medium">{selectedEvent.veterinario}</p>
               </div>
               
               {selectedEvent.observacoes && (
                 <div>
-                  <Label className="text-white">Observações</Label>
-                  <p className="text-sm text-gray-400">{selectedEvent.observacoes}</p>
+                  <Label>Observações</Label>
+                  <p className="text-sm text-gray-600">{selectedEvent.observacoes}</p>
                 </div>
               )}
               
               <div className="flex gap-2 pt-4">
-                <Button 
-                  variant="outline" 
-                  className="flex-1 border-red-600/50 text-white hover:bg-red-600/20"
-                  onClick={() => setSelectedEvent(null)}
-                >
+                <Button variant="outline" className="flex-1" onClick={() => setSelectedEvent(null)}>
                   Fechar
                 </Button>
-                <Button className="flex-1 bg-red-600 hover:bg-red-700 text-white">
+                <Button className="flex-1 bg-blue-600 hover:bg-blue-700">
                   Editar
                 </Button>
               </div>
@@ -551,31 +511,27 @@ const AgendaCompleta = () => {
 
       {/* Modal de novo agendamento */}
       <Dialog open={!!selectedSlot} onOpenChange={() => setSelectedSlot(null)}>
-        <DialogContent className="max-w-md sm:max-w-lg bg-black/90 border-red-600/30 text-white">
+        <DialogContent className="max-w-md sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-white">
-              <Plus className="h-5 w-5 text-red-500" />
+            <DialogTitle className="flex items-center gap-2">
+              <Plus className="h-5 w-5" />
               Novo Agendamento
             </DialogTitle>
           </DialogHeader>
           
           <div className="space-y-4">
             <div>
-              <Label htmlFor="animal" className="text-white">Animal</Label>
+              <Label htmlFor="animal">Animal</Label>
               <Select value={animalSelecionado?.id || ''} onValueChange={(id) => {
                 const animal = animais.find(a => a.id === id);
                 setAnimalSelecionado(animal);
               }}>
-                <SelectTrigger id="animal" className="bg-black/30 border-red-600/50 text-white">
+                <SelectTrigger id="animal">
                   <SelectValue placeholder="Selecione um animal" />
                 </SelectTrigger>
-                <SelectContent className="bg-black border-red-600/30">
+                <SelectContent>
                   {animais.map(animal => (
-                    <SelectItem 
-                      key={animal.id} 
-                      value={animal.id}
-                      className="text-white focus:bg-red-600/20"
-                    >
+                    <SelectItem key={animal.id} value={animal.id}>
                       {animal.nomeAnimal} - {animal.nomeProprietario}
                     </SelectItem>
                   ))}
@@ -584,46 +540,35 @@ const AgendaCompleta = () => {
             </div>
             
             <div>
-              <Label htmlFor="veterinario" className="text-white">Veterinário</Label>
+              <Label htmlFor="veterinario">Veterinário</Label>
               <Select value={veterinario} onValueChange={setVeterinario}>
-                <SelectTrigger id="veterinario" className="bg-black/30 border-red-600/50 text-white">
+                <SelectTrigger id="veterinario">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-black border-red-600/30">
+                <SelectContent>
                   {veterinarios.map((vet, index) => (
-                    <SelectItem 
-                      key={index} 
-                      value={vet}
-                      className="text-white focus:bg-red-600/20"
-                    >
-                      {vet}
-                    </SelectItem>
+                    <SelectItem key={index} value={vet}>{vet}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             
             <div>
-              <Label htmlFor="observacoes" className="text-white">Observações</Label>
+              <Label htmlFor="observacoes">Observações</Label>
               <Textarea
                 id="observacoes"
                 placeholder="Observações importantes..."
                 value={observacoes}
                 onChange={(e) => setObservacoes(e.target.value)}
                 rows={3}
-                className="bg-black/30 border-red-600/50 text-white placeholder-gray-500"
               />
             </div>
             
             <div className="flex gap-2 pt-4">
-              <Button 
-                variant="outline" 
-                className="flex-1 border-red-600/50 text-white hover:bg-red-600/20"
-                onClick={() => setSelectedSlot(null)}
-              >
+              <Button variant="outline" className="flex-1" onClick={() => setSelectedSlot(null)}>
                 Cancelar
               </Button>
-              <Button className="flex-1 bg-red-600 hover:bg-red-700 text-white">
+              <Button className="flex-1 bg-blue-600 hover:bg-blue-700">
                 Agendar
               </Button>
             </div>
@@ -634,4 +579,4 @@ const AgendaCompleta = () => {
   );
 };
 
-export default AgendaCompleta;
+export default AgendaCompleta

@@ -864,10 +864,10 @@ const Patologias = () => {
 	};
 
 	return (
-		<div className="min-h-screen bg-black text-white p-4 md:p-6">
-			<div className="max-w-full mx-auto">
+		<div className="min-h-screen bg-black text-white p-2 sm:p-4 md:p-6 overflow-x-hidden">
+			<div className="w-full overflow-hidden">
 				{/* Header */}
-				<div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+				<div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 md:mb-8 gap-3 md:gap-4 flex-wrap">
 					<div>
 						<div className="flex items-center gap-3 mb-2">
 							<Biohazard  className="h-8 w-8 text-red-500" />
@@ -911,7 +911,7 @@ const Patologias = () => {
 						</div>
 					</div>
 
-					<div className="flex flex-wrap gap-2">
+					<div className="flex flex-wrap gap-1 sm:gap-2 w-full md:w-auto">
 						<Button
 							variant="outline"
 							className="border-red-600/50 text-white hover:bg-red-600/20"
@@ -942,8 +942,7 @@ const Patologias = () => {
 						</Button>
 					</div>
 				</div>
-
-				{/* Sistema de IA */}
+				
 				<Card className="mb-6 bg-gradient-to-r from-black/50 to-purple-900/20 border-purple-600/30">
 					<CardContent className="p-4 md:p-6">
 						<div className="flex flex-col md:flex-row justify-between items-center gap-4">
@@ -983,7 +982,7 @@ const Patologias = () => {
 				</Card>
 
 				{/* Stats Cards */}
-				<div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6">
+				<div className="rid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 md:mb-6">
 					<Card className="bg-black/50 border-red-600/30">
 						<CardContent className="p-4">
 							<div className="flex items-center justify-between">
@@ -1052,7 +1051,7 @@ const Patologias = () => {
 				{/* Filtros e Busca */}
 				<Card className="mb-6 bg-black/50 border-red-600/30">
 					<CardContent className="p-4 md:p-6">
-						<div className="flex flex-col lg:flex-row gap-4">
+						<div className="flex flex-col md:flex-row gap-3 md:gap-4">
 							<div className="relative flex-1">
 								<Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
 								<Input
@@ -1068,7 +1067,7 @@ const Patologias = () => {
 							</div>
 							<div className="flex flex-col sm:flex-row gap-2">
 								<Select value={filterEspecie} onValueChange={setFilterEspecie}>
-									<SelectTrigger className="w-full sm:w-[150px] bg-black/30 border-red-600/50 text-white">
+									<SelectTrigger className="w-full min-w-[120px] bg-black/30 border-red-600/50 text-white">
 										<SelectValue placeholder="Espécie" />
 									</SelectTrigger>
 									<SelectContent className="bg-black border-red-600/30">
@@ -1091,7 +1090,7 @@ const Patologias = () => {
 								</Select>
 
 								<Select value={filterSistema} onValueChange={setFilterSistema}>
-									<SelectTrigger className="w-full sm:w-[180px] bg-black/30 border-red-600/50 text-white">
+									<SelectTrigger className="w-full min-w-[140px] bg-black/30 border-red-600/50 text-white">
 										<SelectValue placeholder="Sistema" />
 									</SelectTrigger>
 									<SelectContent className="bg-black border-red-600/30">
@@ -1117,7 +1116,7 @@ const Patologias = () => {
 									value={filterGravidade}
 									onValueChange={setFilterGravidade}
 								>
-									<SelectTrigger className="w-full sm:w-[140px] bg-black/30 border-red-600/50 text-white">
+									<SelectTrigger className="w-full min-w-[120px] bg-black/30 border-red-600/50 text-white">
 										<SelectValue placeholder="Gravidade" />
 									</SelectTrigger>
 									<SelectContent className="bg-black border-red-600/30">
@@ -1166,7 +1165,7 @@ const Patologias = () => {
 									value={filterZoonotica}
 									onValueChange={setFilterZoonotica}
 								>
-									<SelectTrigger className="w-[100px] bg-black/30 border-red-600/50 text-white">
+									<SelectTrigger className="w-full min-w-[80px] bg-black/30 border-red-600/50 text-white">
 										<SelectValue placeholder="Todos" />
 									</SelectTrigger>
 									<SelectContent className="bg-black border-red-600/30">
@@ -1272,9 +1271,9 @@ const Patologias = () => {
 								</div>
 							</div>
 						) : (
-							<div className="overflow-x-auto">
-								<div className="min-w-full inline-block align-middle">
-									<Table className="min-w-full">
+							<div className="w-full overflow-x-auto">
+										<div className="w-full min-w-0">
+									<Table className="w-full">
 										<TableHeader>
 											<TableRow className="border-red-600/30">
 												<TableHead className="text-white bg-black/30">
@@ -1703,7 +1702,7 @@ const Patologias = () => {
 													<h4 className="text-sm font-semibold text-gray-400 mb-2">
 														Espécies Afetadas
 													</h4>
-													<div className="flex flex-wrap gap-2">
+													<div className="flex flex-wrap gap-1 sm:gap-2 w-full md:w-auto">
 														{selectedPatologia.especies.map((especie, idx) => (
 															<Badge
 																key={idx}
@@ -1720,7 +1719,7 @@ const Patologias = () => {
 													<h4 className="text-sm font-semibold text-gray-400 mb-2">
 														Sistemas Afetados
 													</h4>
-													<div className="flex flex-wrap gap-2">
+													<div className="flex flex-wrap gap-1 sm:gap-2 w-full md:w-auto">
 														{selectedPatologia.sistemasAfetados.map(
 															(sistema, idx) => (
 																<Badge
@@ -2127,7 +2126,7 @@ const Patologias = () => {
 											<Label className="text-white mb-2 block">
 												Espécies Afetadas
 											</Label>
-											<div className="flex flex-wrap gap-2">
+											<div className="flex flex-wrap gap-1 sm:gap-2 w-full md:w-auto">
 												{especies.slice(0, -1).map((especie) => (
 													<Badge
 														key={especie}
@@ -2164,7 +2163,7 @@ const Patologias = () => {
 											<Label className="text-white mb-2 block">
 												Sistemas Afetados
 											</Label>
-											<div className="flex flex-wrap gap-2">
+											<div className="flex flex-wrap gap-1 sm:gap-2 w-full md:w-auto">
 												{sistemasCorporais.map((sistema) => (
 													<Badge
 														key={sistema}

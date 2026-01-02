@@ -65,7 +65,7 @@ const TabelaProprietarios = () => {
     const [filtroRestricao, setFiltroRestricao] = useState<'todos' | 'com-restricao' | 'sem-restricao'>('todos');
     const [filtroSaldo, setFiltroSaldo] = useState<'todos' | 'devedores' | 'credores'>('todos');
 
-    // Formulário de cadastro - COMPLETO como no SISVET
+    // Formulário de cadastro - COMPLETO como no SOFVET
     const [codigo, setCodigo] = useState('');
     const [nome, setNome] = useState('');
     const [endereco, setEndereco] = useState('');
@@ -446,9 +446,9 @@ const TabelaProprietarios = () => {
     return (
         <div className="max-w-7xl mx-auto py-8 px-4">
             <h1 className="text-4xl font-bold text-white text-center mb-2">
-                Tabela de Proprietários - SISVET
+                Tabela de Proprietários - SOFVET
             </h1>
-            <p className="text-gray-400 text-center mb-10">Gerencie os proprietários de animais conforme manual SISVET</p>
+            <p className="text-gray-400 text-center mb-10">Gerencie os proprietários de animais conforme manual SOFVET</p>
 
             {/* ABA: LISTA DE PROPRIETÁRIOS */}
             {abaAtiva === 'lista' && (
@@ -691,7 +691,7 @@ const TabelaProprietarios = () => {
                             <div>
                                 <CardTitle className="text-white">Cadastrar Novo Proprietário</CardTitle>
                                 <CardDescription className="text-gray-400">
-                                    Preencha todos os campos conforme manual do SISVET
+                                    Preencha todos os campos conforme manual do SOFVET
                                 </CardDescription>
                             </div>
                             <Button

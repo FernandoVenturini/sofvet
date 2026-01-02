@@ -30,6 +30,10 @@ import Patologias from "@/pages/tabelas/Patologias";
 import BackupMedicamentos from '@/pages/medicamentos/BackupMedicamentos';
 import RelatoriosMedicamentos from '@/pages/medicamentos/RelatoriosMedicamentos';
 import Medicamentos from '@/pages/Medicamentos';
+import Mensagens from '@/pages/diversos/Mensagens';
+import Configuracoes from '@/pages/diversos/Configuracoes';
+import Utilitarios from '@/pages/Utilitarios';
+import Ajuda from "@/pages/Ajuda";
 
 
 export default function RoutesAdm() {
@@ -65,9 +69,19 @@ export default function RoutesAdm() {
 				{/* Relatórios */}
 				<Route path="/relatorios" element={<PrivateRoute><Relatorios /></PrivateRoute>} />
 
+				{/* Utilitários */}
+				<Route path="/utilitarios" element={<PrivateRoute><Utilitarios /></PrivateRoute>} />
+
+				{/* Ajuda */}
+				<Route path="/ajuda" element={<PrivateRoute><Ajuda /></PrivateRoute>} />
+
 				{/* Diversos */}
 				<Route path="/diversos/backup" element={<PrivateRoute><BackupDiario /></PrivateRoute>} />
 				<Route path="/diversos/usuarios" element={<PrivateRoute><Usuarios /></PrivateRoute>} />
+				<Route path="/diversos/mensagens" element={<PrivateRoute><Mensagens /></PrivateRoute>} />
+				<Route path="/config" element={<PrivateRoute><Configuracoes /></PrivateRoute>} />
+				{/* Redirecionamento para compatibilidade */}
+				<Route path="/mensagens" element={<Navigate to="/diversos/mensagens" replace />} />
 
 				{/* Tabelas */}
 				<Route path="/tabelas/vacinas" element={<PrivateRoute><TabelaVacinas /></PrivateRoute>} />

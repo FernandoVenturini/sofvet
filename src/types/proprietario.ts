@@ -1,7 +1,7 @@
-// src/types/proprietario.ts
+
 export interface Proprietario {
   id: string;
-  codigo: string; // Código SISVET (ex: 4.631)
+  codigo: string; 
   nome: string;
   endereco: string;
   bairro: string;

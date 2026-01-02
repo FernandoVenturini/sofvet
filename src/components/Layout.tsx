@@ -167,7 +167,7 @@ const Layout = () => {
 								Diversos
 							</AccordionTrigger>
 							<AccordionContent className="space-y-1 pl-6">
-								<Link to="/mensagens" className="block py-2 text-gray-400 hover:text-white">
+								<Link to="/diversos/mensagens" className="block py-2 text-gray-400 hover:text-white">
 									Mensagens
 								</Link>
 								<Link to="/diversos/backup" className="block py-2 text-gray-400 hover:text-white">

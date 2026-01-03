@@ -19,7 +19,7 @@ import {
   Search, Trash2, Edit, Eye, Filter, Download, MoreVertical, 
   Users, Dog, Cat, Calendar, AlertCircle, CheckCircle, Clock,
   User, Phone, MapPin, Plus, ChevronDown, ChevronUp, 
-  FileText, Shield, Thermometer, Heart, Sparkles
+  FileText, Shield, Thermometer, Heart, Sparkles, Scale
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';

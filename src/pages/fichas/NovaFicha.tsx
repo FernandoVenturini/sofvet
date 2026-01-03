@@ -14,15 +14,18 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Loader2, Upload, Camera, Dog, Cat, User, Phone, MapPin, 
+import { ScrollArea } from '@/components/ui/scroll-area';
+import {
+  Loader2, Upload, Camera, Dog, Cat, User, Phone, MapPin,
   Calendar, Syringe, Shield, FileText, AlertCircle, CheckCircle,
-  Plus, Trash2, Edit, History, Thermometer, Heart, Tag, 
-  Droplets, Palette, Ruler, Scale, Stethoscope
+  Plus, Trash2, Edit, History, Thermometer, Heart, Tag,
+  Droplets, Palette, Ruler, Scale, Stethoscope, ArrowLeft,
+  PawPrint, DollarSign, Eye, Mail, Ban, AlertTriangle
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const NovaFicha = () => {
+  const [codigo, setCodigo] = useState('');
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -53,7 +56,7 @@ const NovaFicha = () => {
   });
 
   // Estados para vacinas
-  const [vacinasTabela, setVacinasTabela] = useState<Array<{id: string, nome: string, doses: number, intervaloDias: number}>>([]);
+  const [vacinasTabela, setVacinasTabela] = useState<Array<{ id: string, nome: string, doses: number, intervaloDias: number }>>([]);
   const [vacinaSelecionada, setVacinaSelecionada] = useState('');
   const [doseAtual, setDoseAtual] = useState(1);
   const [dataDose, setDataDose] = useState('');
@@ -63,6 +66,28 @@ const NovaFicha = () => {
     dataAplicacao: string;
     proximaData?: string;
   }>>([]);
+
+  // Estados para proprietários (simplificados)
+  const [abaAtiva, setAbaAtiva] = useState('dados');
+  const [nome, setNome] = useState('');
+  const [cpf, setCpf] = useState('');
+  const [rg, setRg] = useState('');
+  const [dataNascimentoProp, setDataNascimentoProp] = useState('');
+  const [email, setEmail] = useState('');
+  const [endereco, setEndereco] = useState('');
+  const [bairro, setBairro] = useState('');
+  const [cidade, setCidade] = useState('');
+  const [estado, setEstado] = useState('');
+  const [cep, setCep] = useState('');
+  const [complemento, setComplemento] = useState('');
+  const [ddd, setDdd] = useState('');
+  const [telefone1, setTelefone1] = useState('');
+  const [telefone2, setTelefone2] = useState('');
+  const [telefone3, setTelefone3] = useState('');
+  const [marcado, setMarcado] = useState(false);
+  const [motivoMarcacao, setMotivoMarcacao] = useState('');
+  const [restricao, setRestricao] = useState(false);
+  const [motivoRestricao, setMotivoRestricao] = useState('');
 
   // Carrega vacinas da tabela
   useEffect(() => {
@@ -180,6 +205,11 @@ const NovaFicha = () => {
     }
   };
 
+  const gerarCodigoAutomatico = () => {
+    const randomCodigo = `AN-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+    setCodigo(randomCodigo);
+  };
+
   const especies = [
     { value: 'canino', label: 'Canino', icon: Dog },
     { value: 'felino', label: 'Felino', icon: Cat },
@@ -209,19 +239,19 @@ const NovaFicha = () => {
             Preencha os dados para criar uma nova ficha de paciente
           </p>
         </div>
-        
+
         <div className="flex items-center gap-3">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className="border-gray-800 text-gray-400 hover:text-white hover:bg-gray-800/30 gap-2"
             onClick={() => navigate('/fichas/lista')}
           >
             <History className="h-4 w-4" />
             Ver Todas
           </Button>
-          <Button 
+          <Button
             className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 gap-2"
-            onClick={() => handleSubmit({ preventDefault: () => {} } as React.FormEvent)}
+            onClick={(e) => handleSubmit(e)}
             disabled={loading}
           >
             {loading ? (
@@ -279,9 +309,9 @@ const NovaFicha = () => {
               <CardContent className="flex flex-col items-center space-y-4">
                 <div className="relative w-full aspect-square rounded-xl overflow-hidden border-2 border-gray-800/50 bg-gradient-to-br from-gray-900/50 to-black/50">
                   {imagemUrl ? (
-                    <img 
-                      src={imagemUrl} 
-                      alt="Animal" 
+                    <img
+                      src={imagemUrl}
+                      alt="Animal"
                       className="w-full h-full object-cover"
                     />
                   ) : (
@@ -292,16 +322,16 @@ const NovaFicha = () => {
                   )}
                 </div>
                 <label className="w-full">
-                  <input 
-                    type="file" 
-                    accept="image/*" 
-                    onChange={handleImageUpload} 
-                    className="hidden" 
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
                     id="foto-animal"
                   />
-                  <Button 
-                    type="button" 
-                    variant="outline" 
+                  <Button
+                    type="button"
+                    variant="outline"
                     disabled={uploadingImage}
                     className="w-full gap-2 border-gray-800 text-gray-400 hover:text-white hover:bg-gray-800/30"
                     onClick={() => document.getElementById('foto-animal')?.click()}
@@ -526,20 +556,20 @@ const NovaFicha = () => {
                     type="email"
                   />
                 </div>
-              </div>
 
-              <div className="space-y-2">
-                <Label className="text-white">Endereço</Label>
-                <div className="relative">
-                  <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
-                  <Textarea
-                    name="enderecoProprietario"
-                    value={formData.enderecoProprietario}
-                    onChange={handleChange}
-                    rows={3}
-                    className="bg-gray-900/50 border-gray-700/50 text-white pl-10"
-                    placeholder="Rua, número, bairro, cidade - Estado"
-                  />
+                <div className="space-y-2">
+                  <Label className="text-white">Endereço</Label>
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
+                    <Textarea
+                      name="enderecoProprietario"
+                      value={formData.enderecoProprietario}
+                      onChange={handleChange}
+                      rows={3}
+                      className="bg-gray-900/50 border-gray-700/50 text-white pl-10"
+                      placeholder="Rua, número, bairro, cidade - Estado"
+                    />
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -603,9 +633,9 @@ const NovaFicha = () => {
                   </div>
                 </div>
                 <div className="flex items-end">
-                  <Button 
-                    onClick={adicionarVacina} 
-                    type="button" 
+                  <Button
+                    onClick={adicionarVacina}
+                    type="button"
                     disabled={!vacinaSelecionada || !dataDose}
                     className="w-full gap-2 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700"
                   >
@@ -662,7 +692,7 @@ const NovaFicha = () => {
                             <TableCell>
                               <Badge className={cn(
                                 "bg-gradient-to-r border",
-                                v.proximaData 
+                                v.proximaData
                                   ? "from-amber-600/20 to-orange-600/20 text-amber-400 border-amber-500/30"
                                   : "from-emerald-600/20 to-green-600/20 text-emerald-400 border-emerald-500/30"
                               )}>
@@ -777,11 +807,11 @@ const NovaFicha = () => {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="aspect-square rounded-xl border-2 border-dashed border-gray-800/50 bg-gradient-to-br from-gray-900/30 to-black/30 flex flex-col items-center justify-center hover:border-purple-500/30 transition-colors cursor-pointer">
-                  <input 
-                    type="file" 
-                    accept="image/*" 
-                    onChange={handleImageUpload} 
-                    className="hidden" 
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
                     id="main-photo"
                   />
                   <label htmlFor="main-photo" className="cursor-pointer text-center p-4">
@@ -790,18 +820,18 @@ const NovaFicha = () => {
                     <p className="text-sm text-gray-500">ou arraste uma imagem</p>
                   </label>
                 </div>
-                
+
                 {imagemUrl && (
                   <div className="aspect-square rounded-xl overflow-hidden border border-gray-800/50 relative group">
-                    <img 
-                      src={imagemUrl} 
-                      alt="Animal" 
+                    <img
+                      src={imagemUrl}
+                      alt="Animal"
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
+                      <Button
+                        size="sm"
+                        variant="outline"
                         className="border-gray-700 text-white hover:bg-gray-800/30"
                       >
                         <Edit className="h-4 w-4 mr-2" />
@@ -825,7 +855,7 @@ const NovaFicha = () => {
         >
           Cancelar
         </Button>
-        
+
         <div className="flex items-center gap-3">
           <Button
             variant="outline"

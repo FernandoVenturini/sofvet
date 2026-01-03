@@ -91,8 +91,16 @@ const Dashboard = () => {
 						Backup
 					</Button>
 					<Button className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 gap-2">
-						<PlusCircle className="h-4 w-4" />
-						Nova Consulta
+						<Link to="/movimento/nova" className="flex items-center gap-2">
+							<PlusCircle className="h-4 w-4" />
+							Nova Consulta
+						</Link>
+					</Button>
+					<Button className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 gap-2">
+						<Link to="/fichas/nova" className="flex items-center gap-2">
+							<PlusCircle className="h-4 w-4" />
+							Nova Ficha
+						</Link>
 					</Button>
 				</div>
 			</div>

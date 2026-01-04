@@ -72,7 +72,7 @@ const Dashboard = () => {
 						<div className="p-2 rounded-xl bg-gradient-to-br from-red-600/20 to-pink-600/20 border border-red-500/30">
 							<Sparkles className="h-6 w-6 text-red-400" />
 						</div>
-						<Badge className="bg-gradient-to-r from-red-600/20 to-pink-600/20 text-red-300 border border-red-500/30">
+						<Badge className="bg-gradient-to-r from-red-600/20 to-pink-600/20 text-red-100 border border-red-500/30">
 							<Coffee className="h-3 w-3 mr-1" />
 							Bem-vindo de volta!
 						</Badge>

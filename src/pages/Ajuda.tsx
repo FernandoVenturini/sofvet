@@ -615,7 +615,7 @@ export default function Ajuda() {
 									<div className="space-y-2">
 										<div className="flex justify-between">
 											<span className="text-sm text-gray-400">Versão atual:</span>
-											<Badge className="bg-gradient-to-r from-red-600/20 to-pink-600/20 text-red-400 border border-red-500/30">2.0.0</Badge>
+											<Badge className="bg-gradient-to-r from-white-600/20 to-pink-600/20 text-red-400 border border-red-500/30">2.0.0</Badge>
 										</div>
 										<div className="flex justify-between">
 											<span className="text-sm text-gray-400">Última atualização:</span>

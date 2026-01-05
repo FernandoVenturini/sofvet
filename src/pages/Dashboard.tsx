@@ -8,7 +8,7 @@ import {
 	Bell, Download, Settings, HelpCircle, PlusCircle,
 	ArrowUpRight, ArrowDownRight, Thermometer, Stethoscope,
 	Sparkles, Target, Crown, Star, Award, Coffee,
-	Database, Package // CORREÇÃO AQUI: Adicionando Database e Package
+	Database, Package
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -239,8 +239,8 @@ const Dashboard = () => {
 											<div key={consult.id} className="flex items-center justify-between p-3 rounded-lg bg-gradient-to-r from-gray-800/30 to-transparent hover:from-gray-800/50 transition-colors group">
 												<div className="flex items-center gap-3">
 													<div className={`p-2 rounded-lg ${consult.status === 'Concluída' ? 'bg-gradient-to-br from-emerald-600/20 to-green-600/20' :
-															consult.status === 'Em andamento' ? 'bg-gradient-to-br from-amber-600/20 to-orange-600/20' :
-																'bg-gradient-to-br from-gray-600/20 to-gray-700/20'
+														consult.status === 'Em andamento' ? 'bg-gradient-to-br from-amber-600/20 to-orange-600/20' :
+															'bg-gradient-to-br from-gray-600/20 to-gray-700/20'
 														}`}>
 														{consult.status === 'Concluída' ? <CheckCircle className="h-4 w-4 text-emerald-400" /> :
 															consult.status === 'Em andamento' ? <Clock className="h-4 w-4 text-amber-400" /> :
@@ -255,8 +255,8 @@ const Dashboard = () => {
 													<p className="font-medium text-white">{consult.time}</p>
 													<div className="flex items-center gap-2">
 														<Badge className={`text-xs ${consult.status === 'Concluída' ? 'bg-gradient-to-r from-emerald-600/20 to-green-600/20 text-emerald-400' :
-																consult.status === 'Em andamento' ? 'bg-gradient-to-r from-amber-600/20 to-orange-600/20 text-amber-400' :
-																	'bg-gradient-to-r from-gray-600/20 to-gray-700/20 text-gray-400'
+															consult.status === 'Em andamento' ? 'bg-gradient-to-r from-amber-600/20 to-orange-600/20 text-amber-400' :
+																'bg-gradient-to-r from-gray-600/20 to-gray-700/20 text-gray-400'
 															}`}>
 															{consult.status}
 														</Badge>
@@ -268,9 +268,11 @@ const Dashboard = () => {
 									</div>
 								</CardContent>
 								<CardFooter>
-									<Button variant="ghost" className="w-full text-gray-400 hover:text-white hover:bg-gray-800/30">
-										Ver agenda completa
-									</Button>
+									<Link to="/agenda/completa" className="w-full">
+										<Button variant="ghost" className="w-full text-gray-400 hover:text-white hover:bg-gray-800/30">
+											Ver agenda completa
+										</Button>
+									</Link>
 								</CardFooter>
 							</Card>
 						</TabsContent>
@@ -310,12 +312,12 @@ const Dashboard = () => {
 									<div key={vaccine.id} className="flex items-center justify-between p-3 rounded-lg bg-gradient-to-r from-gray-800/30 to-transparent hover:from-gray-800/50 transition-colors">
 										<div className="flex items-center gap-3">
 											<div className={`p-2 rounded-lg ${vaccine.status === 'urgent' ? 'bg-gradient-to-br from-red-600/20 to-pink-600/20' :
-													vaccine.status === 'pending' ? 'bg-gradient-to-br from-amber-600/20 to-orange-600/20' :
-														'bg-gradient-to-br from-cyan-600/20 to-blue-600/20'
+												vaccine.status === 'pending' ? 'bg-gradient-to-br from-amber-600/20 to-orange-600/20' :
+													'bg-gradient-to-br from-cyan-600/20 to-blue-600/20'
 												}`}>
 												<Pill className={`h-4 w-4 ${vaccine.status === 'urgent' ? 'text-red-400' :
-														vaccine.status === 'pending' ? 'text-amber-400' :
-															'text-cyan-400'
+													vaccine.status === 'pending' ? 'text-amber-400' :
+														'text-cyan-400'
 													}`} />
 											</div>
 											<div>
@@ -325,14 +327,14 @@ const Dashboard = () => {
 										</div>
 										<div className="text-right">
 											<p className={`font-medium ${vaccine.status === 'urgent' ? 'text-red-400' :
-													vaccine.status === 'pending' ? 'text-amber-400' :
-														'text-cyan-400'
+												vaccine.status === 'pending' ? 'text-amber-400' :
+													'text-cyan-400'
 												}`}>
 												{vaccine.date}
 											</p>
 											<Badge className={`text-xs ${vaccine.status === 'urgent' ? 'bg-gradient-to-r from-red-600/20 to-pink-600/20 text-red-400' :
-													vaccine.status === 'pending' ? 'bg-gradient-to-r from-amber-600/20 to-orange-600/20 text-amber-400' :
-														'bg-gradient-to-r from-cyan-600/20 to-blue-600/20 text-cyan-400'
+												vaccine.status === 'pending' ? 'bg-gradient-to-r from-amber-600/20 to-orange-600/20 text-amber-400' :
+													'bg-gradient-to-r from-cyan-600/20 to-blue-600/20 text-cyan-400'
 												}`}>
 												{vaccine.status === 'urgent' ? 'Urgente' :
 													vaccine.status === 'pending' ? 'Amanhã' : 'Agendado'}
@@ -343,10 +345,12 @@ const Dashboard = () => {
 							</div>
 						</CardContent>
 						<CardFooter>
-							<Button variant="ghost" className="w-full text-gray-400 hover:text-white hover:bg-gray-800/30 gap-2">
-								<Calendar className="h-4 w-4" />
-								Agendar todas as vacinações
-							</Button>
+							<Link to="/agenda/retornos" className="w-full">
+								<Button variant="ghost" className="w-full text-gray-400 hover:text-white hover:bg-gray-800/30 gap-2">
+									<Calendar className="h-4 w-4" />
+									Agendar todas as vacinações
+								</Button>
+							</Link>
 						</CardFooter>
 					</Card>
 				</div>
@@ -365,7 +369,7 @@ const Dashboard = () => {
 						<CardContent>
 							<div className="grid grid-cols-2 gap-3">
 								{quickActions.map((action) => (
-									<Link key={action.title} to={action.path}>
+									<Link key={action.title} to={action.path} className="block">
 										<Button className="w-full h-auto p-4 flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-gray-800/30 to-gray-900/30 hover:from-gray-800/50 hover:to-gray-900/50 border border-gray-800/50 hover:border-red-500/30 transition-all duration-300">
 											<div className={`p-3 rounded-lg bg-gradient-to-br ${action.color}`}>
 												<action.icon className="h-6 w-6 text-white" />
@@ -432,9 +436,11 @@ const Dashboard = () => {
 										<p className="text-sm text-gray-400">3 pendentes</p>
 									</div>
 								</div>
-								<Button size="sm" variant="outline" className="border-gray-700 text-gray-400 hover:text-white hover:border-gray-600">
-									Ver
-								</Button>
+								<Link to="/diversos/mensagens">
+									<Button size="sm" variant="outline" className="border-gray-700 text-gray-400 hover:text-white hover:border-gray-600">
+										Ver
+									</Button>
+								</Link>
 							</div>
 						</CardContent>
 					</Card>

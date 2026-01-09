@@ -15,7 +15,6 @@ const Landing = () => {
             <Hero />
             <Features />
             <PricingSection />
-            {/* Se Testimonials der erro, comente temporariamente */}
             <Testimonials />
             <About />
             <Contact />

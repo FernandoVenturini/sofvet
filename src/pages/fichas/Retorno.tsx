@@ -224,10 +224,10 @@ const Retorno = () => {
             </Badge>
           </div>
           <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
-            Agendamento de Retornos
+            Fichas - Alterar Retorno
           </h1>
           <p className="text-gray-400 mt-2">
-            Agende retornos para vacinação e consultas de acompanhamento
+            Altere retornos para vacinação e consultas de acompanhamento
           </p>
         </div>
       </div>

@@ -35,7 +35,6 @@ import Configuracoes from '@/pages/diversos/Configuracoes';
 import Utilitarios from '@/pages/Utilitarios';
 import Ajuda from "@/pages/Ajuda";
 
-
 export default function RoutesAdm() {
 	return (
 		<Routes>

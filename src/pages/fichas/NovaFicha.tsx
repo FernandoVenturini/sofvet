@@ -233,7 +233,7 @@ const NovaFicha = () => {
             </Badge>
           </div>
           <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
-            Cadastrar Novo Animal
+            Fichas - Novo Ficha(Cadastrar)
           </h1>
           <p className="text-gray-400 mt-2">
             Preencha os dados para criar uma nova ficha de paciente

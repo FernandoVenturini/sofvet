@@ -1,642 +1,679 @@
-import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '@/context/AuthContext';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
-	FileText, Table, Activity, CalendarCheck,
-	ClipboardList, BarChart3, File,
-	Users, Stethoscope, Bell, Settings,
-	ChevronRight, Sparkles, Clock, TrendingUp,
-	CheckCircle, AlertCircle, Package, Database,
-	Shield, Heart, Calendar, DollarSign, AlertTriangle,
-	UserCheck, Pill, Thermometer, Smartphone, MessageSquare,
-	HelpCircle, Syringe, Download, Cloud, Home, BookOpen
-} from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
+	Calendar,
+	Users,
+	Stethoscope,
+	FileText,
+	FilePlus,
+	Search,
+	CalendarDays,
+	Table,
+	Dog,
+	Syringe,
+	UserCog,
+	ShoppingBag,
+	Pill,
+	ClipboardList,
+	Truck,
+	TrendingUp,
+	ChevronRight,
+	Clock,
+	MoreVertical,
+	Heart,
+	PawPrint,
+	Activity,
+	Shield,
+	Zap,
+	Star
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
-	const { user, clinicName: contextClinicName } = useContext(AuthContext);
 	const navigate = useNavigate();
-	const [clinicName, setClinicName] = useState(contextClinicName);
 
-	// Estatísticas
-	const [stats, setStats] = useState({
-		totalPatients: 124,
-		consultationsToday: 8,
-		pendingConsultations: 3,
-		monthlyRevenue: 45280.50,
-		satisfactionRate: 94,
-		vaccinationRate: 87,
-		openAppointments: 12,
-		monthlyGrowth: 15
-	});
+	const mainModules = [
+		// Fichas - Tons de Azul/Ciano
+		{
+			title: "Nova Ficha",
+			description: "Criar nova ficha",
+			icon: <FilePlus className="h-6 w-6" />,
+			href: "/fichas/nova",
+			category: "Fichas",
+			gradient: "from-cyan-600 via-blue-500 to-cyan-500",
+			iconBg: "bg-gradient-to-br from-cyan-600 to-blue-500",
+			textColor: "text-blue-300",
+			borderColor: "border-cyan-500/30",
+			hoverGlow: "hover:shadow-[0_0_30px_rgba(34,211,238,0.3)]"
+		},
+		{
+			title: "Lista / Busca",
+			description: "Buscar fichas existentes",
+			icon: <Search className="h-6 w-6" />,
+			href: "/fichas/busca",
+			category: "Fichas",
+			gradient: "from-indigo-600 via-purple-500 to-indigo-500",
+			iconBg: "bg-gradient-to-br from-indigo-600 to-purple-500",
+			textColor: "text-purple-300",
+			borderColor: "border-indigo-500/30",
+			hoverGlow: "hover:shadow-[0_0_30px_rgba(129,140,248,0.3)]"
+		},
+		{
+			title: "Alterar Retorno",
+			description: "Modificar datas de retorno",
+			icon: <CalendarDays className="h-6 w-6" />,
+			href: "/fichas/retorno/alterar",
+			category: "Fichas",
+			gradient: "from-purple-600 via-pink-500 to-purple-500",
+			iconBg: "bg-gradient-to-br from-purple-600 to-pink-500",
+			textColor: "text-pink-300",
+			borderColor: "border-purple-500/30",
+			hoverGlow: "hover:shadow-[0_0_30px_rgba(192,132,252,0.3)]"
+		},
+		{
+			title: "Agenda de Retornos",
+			description: "Visualizar retornos agendados",
+			icon: <Calendar className="h-6 w-6" />,
+			href: "/fichas/retornos/agenda",
+			category: "Fichas",
+			gradient: "from-violet-600 via-purple-500 to-violet-500",
+			iconBg: "bg-gradient-to-br from-violet-600 to-purple-500",
+			textColor: "text-violet-300",
+			borderColor: "border-violet-500/30",
+			hoverGlow: "hover:shadow-[0_0_30px_rgba(167,139,250,0.3)]"
+		},
 
-	// CARDS DO DASHBOARD COM ROTAS REAIS
-	const dashboardCards = [
+		// Tabelas - Tons de Verde/Esmeralda
+		{
+			title: "Espécie/Raça",
+			description: "Cadastro de espécies e raças",
+			icon: <Dog className="h-6 w-6" />,
+			href: "/tabelas/especies-racas",
+			category: "Tabelas",
+			gradient: "from-emerald-600 via-green-500 to-emerald-500",
+			iconBg: "bg-gradient-to-br from-emerald-600 to-green-500",
+			textColor: "text-emerald-300",
+			borderColor: "border-emerald-500/30",
+			hoverGlow: "hover:shadow-[0_0_30px_rgba(16,185,129,0.3)]"
+		},
+		{
+			title: "Vacinas",
+			description: "Cadastro de vacinas",
+			icon: <Syringe className="h-6 w-6" />,
+			href: "/tabelas/vacinas",
+			category: "Tabelas",
+			gradient: "from-green-600 via-teal-500 to-green-500",
+			iconBg: "bg-gradient-to-br from-green-600 to-teal-500",
+			textColor: "text-green-300",
+			borderColor: "border-green-500/30",
+			hoverGlow: "hover:shadow-[0_0_30px_rgba(34,197,94,0.3)]"
+		},
+		{
+			title: "Funcionários",
+			description: "Cadastro de funcionários",
+			icon: <UserCog className="h-6 w-6" />,
+			href: "/tabelas/funcionarios",
+			category: "Tabelas",
+			gradient: "from-teal-600 via-cyan-500 to-teal-500",
+			iconBg: "bg-gradient-to-br from-teal-600 to-cyan-500",
+			textColor: "text-teal-300",
+			borderColor: "border-teal-500/30",
+			hoverGlow: "hover:shadow-[0_0_30px_rgba(45,212,191,0.3)]"
+		},
+		{
+			title: "Produtos e Serviços",
+			description: "Cadastro de produtos e serviços",
+			icon: <ShoppingBag className="h-6 w-6" />,
+			href: "/tabelas/produtos-servicos",
+			category: "Tabelas",
+			gradient: "from-lime-600 via-green-500 to-lime-500",
+			iconBg: "bg-gradient-to-br from-lime-600 to-green-500",
+			textColor: "text-lime-300",
+			borderColor: "border-lime-500/30",
+			hoverGlow: "hover:shadow-[0_0_30px_rgba(132,204,22,0.3)]"
+		},
+		{
+			title: "Medicamentos",
+			description: "Cadastro de medicamentos",
+			icon: <Pill className="h-6 w-6" />,
+			href: "/tabelas/medicamentos",
+			category: "Tabelas",
+			gradient: "from-sky-600 via-blue-500 to-sky-500",
+			iconBg: "bg-gradient-to-br from-sky-600 to-blue-500",
+			textColor: "text-sky-300",
+			borderColor: "border-sky-500/30",
+			hoverGlow: "hover:shadow-[0_0_30px_rgba(14,165,233,0.3)]"
+		},
+		{
+			title: "Agendas",
+			description: "Gerenciar agendas",
+			icon: <Calendar className="h-6 w-6" />,
+			href: "/tabelas/agendas",
+			category: "Tabelas",
+			gradient: "from-fuchsia-600 via-pink-500 to-fuchsia-500",
+			iconBg: "bg-gradient-to-br from-fuchsia-600 to-pink-500",
+			textColor: "text-fuchsia-300",
+			borderColor: "border-fuchsia-500/30",
+			hoverGlow: "hover:shadow-[0_0_30px_rgba(217,70,239,0.3)]"
+		},
+		{
+			title: "Fornecedores",
+			description: "Cadastro de fornecedores",
+			icon: <Truck className="h-6 w-6" />,
+			href: "/tabelas/fornecedores",
+			category: "Tabelas",
+			gradient: "from-amber-600 via-orange-500 to-amber-500",
+			iconBg: "bg-gradient-to-br from-amber-600 to-orange-500",
+			textColor: "text-amber-300",
+			borderColor: "border-amber-500/30",
+			hoverGlow: "hover:shadow-[0_0_30px_rgba(251,191,36,0.3)]"
+		},
+		{
+			title: "Proprietários",
+			description: "Cadastro de proprietários",
+			icon: <Users className="h-6 w-6" />,
+			href: "/tabelas/proprietarios",
+			category: "Tabelas",
+			gradient: "from-rose-600 via-pink-500 to-rose-500",
+			iconBg: "bg-gradient-to-br from-rose-600 to-pink-500",
+			textColor: "text-rose-300",
+			borderColor: "border-rose-500/30",
+			hoverGlow: "hover:shadow-[0_0_30px_rgba(244,63,94,0.3)]"
+		},
+
+		// Movimento - Tons de Laranja/Vermelho
+		{
+			title: "Nova Consulta",
+			description: "Registrar nova consulta",
+			icon: <Stethoscope className="h-6 w-6" />,
+			href: "/movimento/consulta/nova",
+			category: "Movimento",
+			gradient: "from-orange-600 via-red-500 to-orange-500",
+			iconBg: "bg-gradient-to-br from-orange-600 to-red-500",
+			textColor: "text-orange-300",
+			borderColor: "border-orange-500/30",
+			hoverGlow: "hover:shadow-[0_0_30px_rgba(251,146,60,0.3)]"
+		},
+		{
+			title: "Lista de Consultas",
+			description: "Visualizar todas as consultas",
+			icon: <ClipboardList className="h-6 w-6" />,
+			href: "/movimento/consultas",
+			category: "Movimento",
+			gradient: "from-red-600 via-orange-500 to-red-500",
+			iconBg: "bg-gradient-to-br from-red-600 to-orange-500",
+			textColor: "text-red-300",
+			borderColor: "border-red-500/30",
+			hoverGlow: "hover:shadow-[0_0_30px_rgba(239,68,68,0.3)]"
+		},
+		{
+			title: "Relatórios",
+			description: "Gerar relatórios",
+			icon: <TrendingUp className="h-6 w-6" />,
+			href: "/movimento/relatorios",
+			category: "Movimento",
+			gradient: "from-pink-600 via-rose-500 to-pink-500",
+			iconBg: "bg-gradient-to-br from-pink-600 to-rose-500",
+			textColor: "text-pink-300",
+			borderColor: "border-pink-500/30",
+			hoverGlow: "hover:shadow-[0_0_30px_rgba(236,72,153,0.3)]"
+		}
+	];
+
+	const todayAppointments = [
 		{
 			id: 1,
-			title: 'Fichas',
-			description: 'Gerenciar fichas dos pacientes',
-			icon: FileText,
-			color: 'bg-gradient-to-br from-blue-500 to-cyan-500',
-			iconBg: 'bg-blue-500/20',
-			iconColor: 'text-blue-400',
-			// Rotas reais das fichas
-			link: '/fichas/lista',
-			badge: '24 novas',
-			badgeColor: 'bg-blue-500/20 text-blue-400'
+			time: "09:00",
+			patient: "Rex",
+			owner: "Carlos Silva",
+			type: "Consulta de rotina",
+			status: "confirmado",
+			animalType: "Cachorro"
 		},
 		{
 			id: 2,
-			title: 'Tabelas',
-			description: 'Tabelas e configurações',
-			icon: Table,
-			color: 'bg-gradient-to-br from-emerald-500 to-green-500',
-			iconBg: 'bg-emerald-500/20',
-			iconColor: 'text-emerald-400',
-			// Redireciona para tabelas de vacinas (página inicial das tabelas)
-			link: '/tabelas/vacinas',
-			badge: 'Atualizado',
-			badgeColor: 'bg-emerald-500/20 text-emerald-400'
+			time: "10:30",
+			patient: "Luna",
+			owner: "Ana Oliveira",
+			type: "Vacinação anual",
+			status: "confirmado",
+			animalType: "Gato"
 		},
 		{
 			id: 3,
-			title: 'Movimento',
-			description: 'Controle financeiro e consultas',
-			icon: Activity,
-			color: 'bg-gradient-to-br from-purple-500 to-pink-500',
-			iconBg: 'bg-purple-500/20',
-			iconColor: 'text-purple-400',
-			link: '/movimento',
-			badge: 'R$ 2.850,00',
-			badgeColor: 'bg-purple-500/20 text-purple-400'
+			time: "14:00",
+			patient: "Thor",
+			owner: "Pedro Santos",
+			type: "Retorno pós-cirúrgico",
+			status: "pendente",
+			animalType: "Cachorro"
 		},
 		{
 			id: 4,
-			title: 'Nova Consulta',
-			description: 'Agendar nova consulta',
-			icon: CalendarCheck,
-			color: 'bg-gradient-to-br from-amber-500 to-orange-500',
-			iconBg: 'bg-amber-500/20',
-			iconColor: 'text-amber-400',
-			link: '/movimento/nova',
-			badge: 'Rápido',
-			badgeColor: 'bg-amber-500/20 text-amber-400'
+			time: "16:15",
+			patient: "Mimi",
+			owner: "Juliana Costa",
+			type: "Exame de rotina",
+			status: "cancelado",
+			animalType: "Gato"
 		},
 		{
 			id: 5,
-			title: 'Lista de Consultas',
-			description: 'Ver todas as consultas',
-			icon: ClipboardList,
-			color: 'bg-gradient-to-br from-red-500 to-rose-500',
-			iconBg: 'bg-red-500/20',
-			iconColor: 'text-red-400',
-			link: '/movimento/lista',
-			badge: `${stats.consultationsToday} hoje`,
-			badgeColor: 'bg-red-500/20 text-red-400'
-		},
-		{
-			id: 6,
-			title: 'Relatórios',
-			description: 'Relatórios e estatísticas',
-			icon: BarChart3,
-			color: 'bg-gradient-to-br from-indigo-500 to-violet-500',
-			iconBg: 'bg-indigo-500/20',
-			iconColor: 'text-indigo-400',
-			link: '/relatorios',
-			badge: '5 novos',
-			badgeColor: 'bg-indigo-500/20 text-indigo-400'
-		},
-		{
-			id: 7,
-			title: 'Prontuário',
-			description: 'Prontuários eletrônicos',
-			icon: File,
-			color: 'bg-gradient-to-br from-teal-500 to-emerald-500',
-			iconBg: 'bg-teal-500/20',
-			iconColor: 'text-teal-400',
-			// Usando retorno como prontuário
-			link: '/fichas/retorno',
-			badge: '12 atualizações',
-			badgeColor: 'bg-teal-500/20 text-teal-400'
-		},
-		{
-			id: 8,
-			title: 'Medicamentos',
-			description: 'Controle de medicamentos',
-			icon: Pill,
-			color: 'bg-gradient-to-br from-cyan-500 to-blue-500',
-			iconBg: 'bg-cyan-500/20',
-			iconColor: 'text-cyan-400',
-			link: '/medicamentos',
-			badge: 'Estoque OK',
-			badgeColor: 'bg-cyan-500/20 text-cyan-400'
+			time: "17:30",
+			patient: "Bob",
+			owner: "Marcos Almeida",
+			type: "Castração",
+			status: "confirmado",
+			animalType: "Cachorro"
 		}
 	];
 
-	// CARDS ADICIONAIS - OUTRAS FUNCIONALIDADES
-	const additionalCards = [
-		{
-			id: 9,
-			title: 'Agenda',
-			description: 'Agenda completa e retornos',
-			icon: Calendar,
-			color: 'bg-gradient-to-br from-pink-500 to-rose-500',
-			iconBg: 'bg-pink-500/20',
-			iconColor: 'text-pink-400',
-			link: '/agenda/completa',
-			badge: '12 agend.',
-			badgeColor: 'bg-pink-500/20 text-pink-400'
-		},
-		{
-			id: 10,
-			title: 'Utilitários',
-			description: 'Ferramentas e utilitários',
-			icon: Settings,
-			color: 'bg-gradient-to-br from-gray-500 to-gray-700',
-			iconBg: 'bg-gray-500/20',
-			iconColor: 'text-gray-400',
-			link: '/utilitarios',
-			badge: 'Tools',
-			badgeColor: 'bg-gray-500/20 text-gray-400'
-		},
-		{
-			id: 11,
-			title: 'Backup',
-			description: 'Backup do sistema',
-			icon: Cloud, // Usando Cloud no lugar de Backup
-			color: 'bg-gradient-to-br from-amber-500 to-yellow-500',
-			iconBg: 'bg-amber-500/20',
-			iconColor: 'text-amber-400',
-			link: '/diversos/backup',
-			badge: 'Diário',
-			badgeColor: 'bg-amber-500/20 text-amber-400'
-		},
-		{
-			id: 12,
-			title: 'Ajuda',
-			description: 'Central de ajuda',
-			icon: HelpCircle,
-			color: 'bg-gradient-to-br from-violet-500 to-purple-500',
-			iconBg: 'bg-violet-500/20',
-			iconColor: 'text-violet-400',
-			link: '/ajuda',
-			badge: 'Suporte',
-			badgeColor: 'bg-violet-500/20 text-violet-400'
-		}
-	];
-
-	// Estatísticas em cards
-	const statCards = [
-		{
-			id: 1,
-			title: 'Pacientes Ativos',
-			value: stats.totalPatients,
-			icon: Users,
-			color: 'from-blue-500 to-cyan-500',
-			change: '+12%',
-			changeColor: 'text-emerald-400',
-			link: '/fichas/lista'
-		},
-		{
-			id: 2,
-			title: 'Consultas Hoje',
-			value: stats.consultationsToday,
-			icon: Calendar,
-			color: 'from-purple-500 to-pink-500',
-			change: `${stats.pendingConsultations} pendentes`,
-			changeColor: 'text-amber-400',
-			link: '/movimento/lista'
-		},
-		{
-			id: 3,
-			title: 'Faturamento Mensal',
-			value: `R$ ${stats.monthlyRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).split(',')[0]}`,
-			icon: DollarSign,
-			color: 'from-emerald-500 to-green-500',
-			change: '+24%',
-			changeColor: 'text-emerald-400',
-			link: '/movimento'
-		},
-		{
-			id: 4,
-			title: 'Vacinação',
-			value: `${stats.vaccinationRate}%`,
-			icon: Syringe,
-			color: 'from-rose-500 to-red-500',
-			change: 'Em dia',
-			changeColor: 'text-emerald-400',
-			link: '/tabelas/vacinas'
-		}
-	];
-
-	// Ações rápidas com rotas reais
-	const quickActions = [
-		{
-			title: 'Nova Ficha',
-			icon: FileText,
-			color: 'text-blue-400',
-			bg: 'bg-blue-500/20',
-			link: '/fichas/nova',
-			description: 'Cadastrar novo paciente'
-		},
-		{
-			title: 'Agendar Consulta',
-			icon: CalendarCheck,
-			color: 'text-amber-400',
-			bg: 'bg-amber-500/20',
-			link: '/movimento/nova',
-			description: 'Nova consulta'
-		},
-		{
-			title: 'Ver Agenda',
-			icon: Calendar,
-			color: 'text-red-400',
-			bg: 'bg-red-500/20',
-			link: '/agenda/completa',
-			description: 'Agenda completa'
-		},
-		{
-			title: 'Enviar Mensagem',
-			icon: MessageSquare,
-			color: 'text-purple-400',
-			bg: 'bg-purple-500/20',
-			link: '/diversos/mensagens',
-			description: 'Contatar clientes'
-		}
-	];
-
-	// Consultas recentes
-	const recentConsultations = [
-		{ id: 1, animal: 'Rex', owner: 'Carlos Silva', type: 'Consulta', time: '10:30', status: 'concluída' },
-		{ id: 2, animal: 'Luna', owner: 'Ana Santos', type: 'Vacinação', time: '14:00', status: 'agendada' },
-		{ id: 3, animal: 'Thor', owner: 'Pedro Costa', type: 'Cirurgia', time: '11:45', status: 'andamento' },
-		{ id: 4, animal: 'Mel', owner: 'Mariana Lima', type: 'Check-up', time: '16:30', status: 'pendente' },
-	];
-
-	// Alertas importantes
-	const alerts = [
-		{
-			id: 1,
-			title: 'Vacinas vencendo',
-			description: '3 vacinas vencem esta semana',
-			icon: AlertTriangle,
-			color: 'text-amber-400',
-			bg: 'bg-amber-500/20',
-			link: '/tabelas/vacinas'
-		},
-		{
-			id: 2,
-			title: 'Estoque baixo',
-			description: '5 medicamentos com estoque crítico',
-			icon: Package,
-			color: 'text-red-400',
-			bg: 'bg-red-500/20',
-			link: '/medicamentos'
-		},
-		{
-			id: 3,
-			title: 'Retornos pendentes',
-			description: '8 pacientes aguardam retorno',
-			icon: Clock,
-			color: 'text-blue-400',
-			bg: 'bg-blue-500/20',
-			link: '/agenda/retornos'
-		},
-	];
-
-	useEffect(() => {
-		setClinicName(contextClinicName || localStorage.getItem('clinic-name') || '');
-	}, [contextClinicName]);
-
-	const getStatusColor = (status) => {
+	const getStatusBadge = (status: string) => {
 		switch (status) {
-			case 'concluída': return 'bg-emerald-500/20 text-emerald-400';
-			case 'agendada': return 'bg-blue-500/20 text-blue-400';
-			case 'andamento': return 'bg-amber-500/20 text-amber-400';
-			case 'pendente': return 'bg-gray-500/20 text-gray-400';
-			default: return 'bg-gray-500/20 text-gray-400';
+			case "confirmado":
+				return <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30">Confirmado</Badge>;
+			case "pendente":
+				return <Badge className="bg-amber-500/20 text-amber-300 border-amber-500/30">Pendente</Badge>;
+			case "cancelado":
+				return <Badge className="bg-rose-500/20 text-rose-300 border-rose-500/30">Cancelado</Badge>;
+			default:
+				return <Badge>Agendado</Badge>;
 		}
 	};
 
-	// Função para navegação - DEBUG
-	const handleNavigation = (link) => {
-		console.log('Navegando para:', link);
-		navigate(link);
+	// Cores para títulos de categoria
+	const categoryColors = {
+		"Fichas": {
+			text: "text-cyan-400",
+			bg: "bg-cyan-500/10",
+			border: "border-cyan-500/30",
+			icon: <Zap className="h-5 w-5 text-cyan-400" />
+		},
+		"Tabelas": {
+			text: "text-emerald-400",
+			bg: "bg-emerald-500/10",
+			border: "border-emerald-500/30",
+			icon: <Table className="h-5 w-5 text-emerald-400" />
+		},
+		"Movimento": {
+			text: "text-orange-400",
+			bg: "bg-orange-500/10",
+			border: "border-orange-500/30",
+			icon: <Activity className="h-5 w-5 text-orange-400" />
+		}
 	};
 
 	return (
-		<div className="flex flex-col space-y-6 p-4 md:p-6">
+		<div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6">
 			{/* Header */}
-			<div className="flex flex-col space-y-4">
-				<div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-					<div className="flex flex-col space-y-2">
-						<div className="flex items-center gap-3">
-							<div className="p-2 rounded-xl bg-gradient-to-br from-red-600/20 to-pink-600/20 border border-red-500/30">
-								<Sparkles className="h-6 w-6 text-red-400" />
-							</div>
-							<Badge className="bg-gradient-to-r from-red-600/20 to-pink-600/20 text-red-100 border border-red-500/30">
-								<Heart className="h-3 w-3 mr-1" />
-								Dashboard Principal
-							</Badge>
-						</div>
-						<h1 className="text-3xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
-							Olá, {user?.displayName?.split(' ')[0] || 'Veterinário'}!
+			<div className="mb-10">
+				<div className="flex justify-between items-center">
+					<div>
+						<h1 className="text-4xl font-bold text-green-400">
+							🏥 Dashboard Veterinário
 						</h1>
-						<p className="text-gray-400">
-							Bem-vindo ao sistema da <span className="text-red-400 font-medium">{clinicName || 'Clínica Veterinária'}</span>
+						<p className="text-lg text-gray-300 mt-3 font-medium">
+							Bem-vindo de volta, <span className="text-orange-400 font-bold">Dr. Veterinário</span>
 						</p>
 					</div>
 
-					<div className="flex items-center gap-3">
+					<div className="flex items-center space-x-4">
 						<Button
-							variant="outline"
-							className="border-gray-800 text-gray-400 hover:text-white hover:bg-gray-800/30 gap-2"
-							onClick={() => handleNavigation('/diversos/mensagens')}
+							variant="default"
+							className="bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 hover:from-blue-700 hover:via-cyan-600 hover:to-blue-600 text-white px-7 py-3 text-lg font-bold shadow-lg hover:shadow-xl transition-all duration-300 border-0"
+							onClick={() => navigate("/novo-cadastro")}
 						>
-							<Bell className="h-4 w-4" />
-							Notificações
+							<FilePlus className="mr-2 h-5 w-5" />
+							Novo Cadastro
 						</Button>
 						<Button
-							className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 gap-2"
-							onClick={() => handleNavigation('/config')}
+							variant="default"
+							className="bg-gradient-to-r from-orange-600 via-red-500 to-orange-500 hover:from-orange-700 hover:via-red-600 hover:to-orange-600 text-white px-7 py-3 text-lg font-bold shadow-lg hover:shadow-xl transition-all duration-300 border-0"
+							onClick={() => navigate("/consulta")}
 						>
-							<Settings className="h-4 w-4" />
-							Configurações
+							<Stethoscope className="mr-2 h-5 w-5" />
+							Consulta
 						</Button>
 					</div>
 				</div>
 			</div>
 
-			{/* Estatísticas em linha - Também clicáveis */}
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-				{statCards.map((stat) => (
-					<div
-						key={stat.id}
-						className="cursor-pointer group"
-						onClick={() => handleNavigation(stat.link)}
-					>
-						<Card className="bg-gradient-to-br from-gray-900/80 to-black/80 border border-gray-800/50 hover:border-gray-700/50 transition-colors">
-							<CardContent className="p-6">
-								<div className="flex items-center justify-between">
-									<div>
-										<p className="text-sm text-gray-400 mb-1">{stat.title}</p>
-										<p className="text-2xl font-bold text-white group-hover:text-blue-400 transition-colors">
-											{stat.value}
-										</p>
-										<p className={`text-sm mt-2 ${stat.changeColor}`}>
-											{stat.change}
-										</p>
-									</div>
-									<div className={`p-3 rounded-lg bg-gradient-to-br ${stat.color} bg-opacity-20`}>
-										<stat.icon className="h-6 w-6 text-white" />
-									</div>
-								</div>
-							</CardContent>
-						</Card>
-					</div>
-				))}
-			</div>
-
-			{/* Conteúdo Principal - Layout Flex Column */}
-			<div className="flex flex-col space-y-6">
-
-				{/* Seção 1: Módulos do Sistema (Principais) */}
-				<div className="space-y-4">
-					<div className="flex items-center justify-between">
-						<h2 className="text-xl font-bold text-white">Módulos Principais</h2>
-						<Badge className="bg-gradient-to-r from-gray-800/50 to-black/50 text-gray-400 border border-gray-700">
-							{dashboardCards.length} módulos
-						</Badge>
-					</div>
-
-					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-						{dashboardCards.map((card) => (
-							<div
-								key={card.id}
-								className="group cursor-pointer"
-								onClick={() => handleNavigation(card.link)}
-							>
-								<Card className="h-full bg-gradient-to-br from-gray-900/80 to-black/80 border border-gray-800/50 hover:border-opacity-50 hover:scale-[1.02] transition-all duration-300">
-									<CardHeader className="pb-3">
-										<div className="flex justify-between items-start">
-											<div className={`p-3 rounded-xl ${card.color} ${card.iconBg}`}>
-												<card.icon className={`h-6 w-6 ${card.iconColor}`} />
-											</div>
-											<Badge className={card.badgeColor}>
-												{card.badge}
-											</Badge>
-										</div>
-										<CardTitle className="text-lg font-semibold text-white mt-4 group-hover:text-blue-400 transition-colors">
-											{card.title}
-										</CardTitle>
-										<CardDescription className="text-gray-400 text-sm">
-											{card.description}
-										</CardDescription>
-									</CardHeader>
-									<CardFooter className="pt-0">
-										<div className="flex items-center justify-between w-full">
-											<span className="text-sm text-gray-500">Clique para acessar</span>
-											<ChevronRight className="h-4 w-4 text-gray-500 group-hover:text-blue-400 group-hover:translate-x-1 transition-all" />
-										</div>
-									</CardFooter>
-								</Card>
+			{/* Main Content */}
+			<div className="flex flex-col gap-8">
+				{/* Módulos Principais */}
+				<Card className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-xl border border-gray-700/50 shadow-2xl">
+					<CardHeader className="pb-8">
+						<div className="flex items-center gap-3 mb-3">
+							<div className="p-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl">
+								<Star className="h-6 w-6 text-white" />
 							</div>
-						))}
-					</div>
-				</div>
-
-				{/* Seção 2: Outras Funcionalidades */}
-				<div className="space-y-4">
-					<h2 className="text-xl font-bold text-white">Outras Funcionalidades</h2>
-					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-						{additionalCards.map((card) => (
-							<div
-								key={card.id}
-								className="group cursor-pointer"
-								onClick={() => handleNavigation(card.link)}
-							>
-								<Card className="h-full bg-gradient-to-br from-gray-900/80 to-black/80 border border-gray-800/50 hover:border-opacity-50 hover:scale-[1.02] transition-all duration-300">
-									<CardHeader className="pb-3">
-										<div className="flex justify-between items-start">
-											<div className={`p-3 rounded-xl ${card.color} ${card.iconBg}`}>
-												<card.icon className={`h-6 w-6 ${card.iconColor}`} />
-											</div>
-											<Badge className={card.badgeColor}>
-												{card.badge}
-											</Badge>
-										</div>
-										<CardTitle className="text-lg font-semibold text-white mt-4 group-hover:text-blue-400 transition-colors">
-											{card.title}
-										</CardTitle>
-										<CardDescription className="text-gray-400 text-sm">
-											{card.description}
-										</CardDescription>
-									</CardHeader>
-									<CardFooter className="pt-0">
-										<div className="flex items-center justify-between w-full">
-											<span className="text-sm text-gray-500">Clique para acessar</span>
-											<ChevronRight className="h-4 w-4 text-gray-500 group-hover:text-blue-400 group-hover:translate-x-1 transition-all" />
-										</div>
-									</CardFooter>
-								</Card>
+							<div>
+								<CardTitle className="text-3xl text-white font-bold">
+									Módulos Principais
+								</CardTitle>
+								<CardDescription className="text-lg text-gray-300 font-medium">
+									Acesse todas as funcionalidades do sistema
+								</CardDescription>
 							</div>
-						))}
-					</div>
-				</div>
+						</div>
+					</CardHeader>
 
-				{/* Seção 3: Ações Rápidas e Alertas */}
-				<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-					{/* Ações Rápidas */}
-					<div className="lg:col-span-2">
-						<Card className="h-full bg-gradient-to-br from-gray-900/80 to-black/80 border border-gray-800/50">
-							<CardHeader>
-								<CardTitle className="flex items-center gap-2">
-									<Activity className="h-5 w-5 text-amber-400" />
-									Ações Rápidas
-								</CardTitle>
-								<CardDescription>Atalhos para tarefas frequentes</CardDescription>
-							</CardHeader>
-							<CardContent>
-								<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-									{quickActions.map((action, index) => (
-										<div
-											key={index}
-											className="group cursor-pointer"
-											onClick={() => handleNavigation(action.link)}
-										>
-											<div className="flex items-center gap-3 p-4 rounded-lg bg-gradient-to-r from-gray-800/30 to-transparent hover:from-gray-800/50 border border-gray-800/50 hover:border-gray-700/50 transition-all">
-												<div className={`p-3 rounded-lg ${action.bg}`}>
-													<action.icon className={`h-5 w-5 ${action.color}`} />
-												</div>
-												<div className="flex-1">
-													<p className="font-medium text-white group-hover:text-blue-400 transition-colors">
-														{action.title}
-													</p>
-													<p className="text-sm text-gray-400">{action.description}</p>
-												</div>
-												<ChevronRight className="h-4 w-4 text-gray-500 group-hover:text-blue-400 group-hover:translate-x-1 transition-all" />
-											</div>
-										</div>
-									))}
-								</div>
-							</CardContent>
-						</Card>
-					</div>
-
-					{/* Alertas - Também clicáveis */}
-					<div>
-						<Card className="h-full bg-gradient-to-br from-gray-900/80 to-black/80 border border-gray-800/50">
-							<CardHeader>
-								<CardTitle className="flex items-center gap-2">
-									<AlertTriangle className="h-5 w-5 text-amber-400" />
-									Alertas Importantes
-								</CardTitle>
-								<CardDescription>Atenção necessária</CardDescription>
-							</CardHeader>
-							<CardContent className="space-y-4">
-								{alerts.map((alert) => (
-									<div
-										key={alert.id}
-										className="group cursor-pointer"
-										onClick={() => handleNavigation(alert.link)}
+					<CardContent className="space-y-12">
+						{/* Categoria: Fichas */}
+						<div>
+							<div className={`inline-flex items-center gap-3 px-5 py-3 rounded-xl ${categoryColors["Fichas"].bg} ${categoryColors["Fichas"].border} border mb-6`}>
+								{categoryColors["Fichas"].icon}
+								<h3 className={`text-xl font-bold ${categoryColors["Fichas"].text}`}>
+									Fichas
+								</h3>
+							</div>
+							<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+								{mainModules.filter(m => m.category === "Fichas").map((module, index) => (
+									<button
+										key={index}
+										className={`flex flex-col items-start p-6 rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 border ${module.borderColor} shadow-lg hover:scale-[1.03] transition-all duration-300 group ${module.hoverGlow}`}
+										onClick={() => navigate(module.href)}
 									>
-										<div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-gray-800/30 to-transparent hover:from-gray-800/50 border border-gray-800/50 hover:border-gray-700/50 transition-all">
-											<div className={`p-2 rounded-lg ${alert.bg}`}>
-												<alert.icon className={`h-4 w-4 ${alert.color}`} />
+										<div className="flex items-center justify-between w-full mb-6">
+											<div className={`p-4 rounded-xl ${module.iconBg} shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+												<div className="text-white">
+													{module.icon}
+												</div>
 											</div>
-											<div className="flex-1">
-												<p className="font-medium text-white group-hover:text-blue-400 transition-colors">
-													{alert.title}
-												</p>
-												<p className="text-sm text-gray-400">{alert.description}</p>
+											<ChevronRight className={`h-6 w-6 ${module.textColor} group-hover:translate-x-2 transition-transform duration-300`} />
+										</div>
+
+										<h3 className={`font-bold text-xl ${module.textColor} text-left mb-2`}>
+											{module.title}
+										</h3>
+										<p className="text-gray-400 text-left font-medium">
+											{module.description}
+										</p>
+									</button>
+								))}
+							</div>
+						</div>
+
+						{/* Categoria: Tabelas */}
+						<div>
+							<div className={`inline-flex items-center gap-3 px-5 py-3 rounded-xl ${categoryColors["Tabelas"].bg} ${categoryColors["Tabelas"].border} border mb-6`}>
+								{categoryColors["Tabelas"].icon}
+								<h3 className={`text-xl font-bold ${categoryColors["Tabelas"].text}`}>
+									Tabelas
+								</h3>
+							</div>
+							<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+								{mainModules.filter(m => m.category === "Tabelas").map((module, index) => (
+									<button
+										key={index}
+										className={`flex flex-col items-start p-6 rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 border ${module.borderColor} shadow-lg hover:scale-[1.03] transition-all duration-300 group ${module.hoverGlow}`}
+										onClick={() => navigate(module.href)}
+									>
+										<div className="flex items-center justify-between w-full mb-6">
+											<div className={`p-4 rounded-xl ${module.iconBg} shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+												<div className="text-white">
+													{module.icon}
+												</div>
 											</div>
-											<ChevronRight className="h-4 w-4 text-gray-500 group-hover:text-blue-400 group-hover:translate-x-1 transition-all" />
+											<ChevronRight className={`h-6 w-6 ${module.textColor} group-hover:translate-x-2 transition-transform duration-300`} />
+										</div>
+
+										<h3 className={`font-bold text-xl ${module.textColor} text-left mb-2`}>
+											{module.title}
+										</h3>
+										<p className="text-gray-400 text-left font-medium">
+											{module.description}
+										</p>
+									</button>
+								))}
+							</div>
+						</div>
+
+						{/* Categoria: Movimento */}
+						<div>
+							<div className={`inline-flex items-center gap-3 px-5 py-3 rounded-xl ${categoryColors["Movimento"].bg} ${categoryColors["Movimento"].border} border mb-6`}>
+								{categoryColors["Movimento"].icon}
+								<h3 className={`text-xl font-bold ${categoryColors["Movimento"].text}`}>
+									Movimento
+								</h3>
+							</div>
+							<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+								{mainModules.filter(m => m.category === "Movimento").map((module, index) => (
+									<button
+										key={index}
+										className={`flex flex-col items-start p-6 rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 border ${module.borderColor} shadow-lg hover:scale-[1.03] transition-all duration-300 group ${module.hoverGlow}`}
+										onClick={() => navigate(module.href)}
+									>
+										<div className="flex items-center justify-between w-full mb-6">
+											<div className={`p-4 rounded-xl ${module.iconBg} shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+												<div className="text-white">
+													{module.icon}
+												</div>
+											</div>
+											<ChevronRight className={`h-6 w-6 ${module.textColor} group-hover:translate-x-2 transition-transform duration-300`} />
+										</div>
+
+										<h3 className={`font-bold text-xl ${module.textColor} text-left mb-2`}>
+											{module.title}
+										</h3>
+										<p className="text-gray-400 text-left font-medium">
+											{module.description}
+										</p>
+									</button>
+								))}
+							</div>
+						</div>
+					</CardContent>
+				</Card>
+
+				{/* Consultas de Hoje */}
+				<Card className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-xl border border-gray-700/50 shadow-2xl">
+					<CardHeader className="pb-8">
+						<div className="flex items-center justify-between">
+							<div className="flex items-center gap-4">
+								<div className="p-3 bg-gradient-to-r from-purple-600 to-pink-500 rounded-xl">
+									<Calendar className="h-7 w-7 text-white" />
+								</div>
+								<div>
+									<CardTitle className="text-3xl text-white font-bold">
+										Consultas de Hoje
+									</CardTitle>
+									<CardDescription className="text-lg text-gray-300 font-medium">
+										Agenda diária de consultas e procedimentos
+									</CardDescription>
+								</div>
+							</div>
+							<Badge className="text-sm bg-gradient-to-r from-purple-600 to-pink-500 text-white border-0 px-5 py-2 font-bold">
+								{new Date().toLocaleDateString('pt-BR', {
+									weekday: 'long',
+									day: '2-digit',
+									month: 'long',
+									year: 'numeric'
+								})}
+							</Badge>
+						</div>
+					</CardHeader>
+
+					<CardContent>
+						<div className="overflow-hidden rounded-2xl border border-gray-700 bg-gray-800/50 shadow-lg">
+							<div className="grid grid-cols-12 bg-gradient-to-r from-purple-600/20 to-pink-500/20 text-gray-300 text-sm font-bold py-5 px-7 border-b border-gray-700">
+								<div className="col-span-2">Horário</div>
+								<div className="col-span-3">Paciente</div>
+								<div className="col-span-3">Proprietário</div>
+								<div className="col-span-2">Tipo</div>
+								<div className="col-span-2 text-right">Status</div>
+							</div>
+
+							<div className="divide-y divide-gray-700/50">
+								{todayAppointments.map((appointment) => (
+									<div
+										key={appointment.id}
+										className="grid grid-cols-12 items-center py-6 px-7 hover:bg-gray-700/30 transition-colors group"
+									>
+										<div className="col-span-2 flex items-center gap-4">
+											<div className="p-2 bg-blue-500/20 rounded-lg">
+												<Clock className="h-5 w-5 text-blue-400" />
+											</div>
+											<span className="font-bold text-blue-300 text-lg">{appointment.time}</span>
+										</div>
+
+										<div className="col-span-3">
+											<div className="font-bold text-white text-lg flex items-center gap-3">
+												<div className="p-1 bg-amber-500/20 rounded">
+													<PawPrint className="h-4 w-4 text-amber-400" />
+												</div>
+												{appointment.patient}
+											</div>
+											<div className="text-sm text-gray-400 font-medium mt-1">{appointment.animalType}</div>
+										</div>
+
+										<div className="col-span-3">
+											<div className="text-white font-semibold text-lg">{appointment.owner}</div>
+										</div>
+
+										<div className="col-span-2">
+											<div className="text-gray-300 font-medium">{appointment.type}</div>
+										</div>
+
+										<div className="col-span-2 flex items-center justify-end gap-4">
+											{getStatusBadge(appointment.status)}
+											<button className="p-2 hover:bg-gray-600/50 rounded-lg text-gray-400 hover:text-white transition-colors">
+												<MoreVertical className="h-5 w-5" />
+											</button>
 										</div>
 									</div>
 								))}
-							</CardContent>
-						</Card>
-					</div>
-				</div>
+							</div>
+						</div>
 
-				{/* Seção 4: Consultas Recentes */}
-				<Card className="bg-gradient-to-br from-gray-900/80 to-black/80 border border-gray-800/50">
-					<CardHeader>
-						<CardTitle className="flex items-center gap-2">
-							<Clock className="h-5 w-5 text-red-400" />
-							Consultas de Hoje
-						</CardTitle>
-						<CardDescription>Atendimentos agendados para hoje</CardDescription>
-					</CardHeader>
-					<CardContent>
-						<div className="space-y-3">
-							{recentConsultations.map((consult) => (
-								<div key={consult.id} className="flex items-center justify-between p-4 rounded-lg bg-gradient-to-r from-gray-800/30 to-transparent hover:from-gray-800/50 transition-colors">
-									<div className="flex items-center gap-4">
-										<div className={`p-3 rounded-lg ${getStatusColor(consult.status)}`}>
-											{consult.status === 'concluída' ? <CheckCircle className="h-5 w-5" /> :
-												consult.status === 'andamento' ? <Clock className="h-5 w-5" /> :
-													<AlertCircle className="h-5 w-5" />}
-										</div>
-										<div>
-											<p className="font-medium text-white">{consult.animal}</p>
-											<div className="flex items-center gap-3 mt-1">
-												<p className="text-sm text-gray-400">{consult.owner}</p>
-												<span className="text-xs text-gray-500">•</span>
-												<p className="text-sm text-gray-400">{consult.type}</p>
-											</div>
-										</div>
-									</div>
-									<div className="text-right">
-										<p className="text-lg font-semibold text-white">{consult.time}</p>
-										<Badge className={`mt-1 ${getStatusColor(consult.status)}`}>
-											{consult.status}
-										</Badge>
-									</div>
+						<div className="mt-10 flex justify-between items-center bg-gradient-to-r from-gray-800/50 to-gray-900/50 p-6 rounded-2xl border border-gray-700/50">
+							<div className="flex items-center gap-4">
+								<div className="p-3 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl">
+									<Heart className="h-6 w-6 text-white" />
 								</div>
-							))}
+								<div>
+									<p className="text-xl text-white font-bold">
+										Total de {todayAppointments.filter(a => a.status !== 'cancelado').length} consultas agendadas para hoje
+									</p>
+									<p className="text-sm text-gray-400">
+										{todayAppointments.filter(a => a.status === 'confirmado').length} confirmadas • {todayAppointments.filter(a => a.status === 'pendente').length} pendentes
+									</p>
+								</div>
+							</div>
+							<Button
+								onClick={() => navigate("/agenda")}
+								className="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white font-bold px-8 py-4 gap-3 shadow-lg hover:shadow-xl transition-all duration-300"
+							>
+								<Calendar className="h-5 w-5" />
+								Ver agenda completa
+							</Button>
 						</div>
 					</CardContent>
-					<CardFooter>
-						<Button
-							variant="ghost"
-							className="w-full text-gray-400 hover:text-white hover:bg-gray-800/30"
-							onClick={() => handleNavigation('/movimento/lista')}
-						>
-							Ver todas as consultas
-						</Button>
-					</CardFooter>
 				</Card>
 			</div>
 
-			{/* Botão de Debug para testar navegação */}
-			<div className="mt-6 p-4 bg-gray-900/50 rounded-lg border border-gray-800">
-				<div className="flex items-center justify-between">
-					<div>
-						<p className="text-sm text-gray-400">Problemas com navegação?</p>
-						<p className="text-xs text-gray-500">Verifique o console (F12) para logs de navegação</p>
+			{/* Stats Footer com gradientes */}
+			<div className="mt-10 grid grid-cols-1 md:grid-cols-4 gap-6">
+				{/* Consultas Hoje */}
+				<div className="relative overflow-hidden rounded-2xl p-6 shadow-2xl hover:scale-[1.03] transition-all duration-300 group">
+					<div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-cyan-500 to-blue-500 opacity-90 group-hover:opacity-100 transition-opacity"></div>
+					<div className="relative z-10">
+						<div className="flex items-center justify-between">
+							<div>
+								<p className="text-sm font-medium text-blue-100">Consultas Hoje</p>
+								<p className="text-4xl font-bold mt-2 text-white">
+									{todayAppointments.filter(a => a.status !== 'cancelado').length}
+								</p>
+							</div>
+							<div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl">
+								<Stethoscope className="h-8 w-8 text-white" />
+							</div>
+						</div>
+						<div className="mt-6 text-sm font-medium text-blue-100">
+							🟢 {todayAppointments.filter(a => a.status === 'confirmado').length} confirmadas
+						</div>
 					</div>
-					<Button
-						variant="outline"
-						size="sm"
-						onClick={() => {
-							console.log('=== TESTE DE ROTAS ===');
-							dashboardCards.forEach(card => {
-								console.log(`Card "${card.title}": ${card.link}`);
-							});
-							alert('Rotas listadas no console. Verifique (F12)');
-						}}
-					>
-						Testar Rotas
-					</Button>
+				</div>
+
+				{/* Pacientes Ativos */}
+				<div className="relative overflow-hidden rounded-2xl p-6 shadow-2xl hover:scale-[1.03] transition-all duration-300 group">
+					<div className="absolute inset-0 bg-gradient-to-br from-emerald-600 via-green-500 to-emerald-500 opacity-90 group-hover:opacity-100 transition-opacity"></div>
+					<div className="relative z-10">
+						<div className="flex items-center justify-between">
+							<div>
+								<p className="text-sm font-medium text-emerald-100">Pacientes Ativos</p>
+								<p className="text-4xl font-bold mt-2 text-white">124</p>
+							</div>
+							<div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl">
+								<Users className="h-8 w-8 text-white" />
+							</div>
+						</div>
+						<div className="mt-6 text-sm font-medium text-emerald-100">
+							🐶 89 cães • 🐱 35 gatos
+						</div>
+					</div>
+				</div>
+
+				{/* Próxima Consulta */}
+				<div className="relative overflow-hidden rounded-2xl p-6 shadow-2xl hover:scale-[1.03] transition-all duration-300 group">
+					<div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-pink-500 to-purple-500 opacity-90 group-hover:opacity-100 transition-opacity"></div>
+					<div className="relative z-10">
+						<div className="flex items-center justify-between">
+							<div>
+								<p className="text-sm font-medium text-purple-100">Próxima Consulta</p>
+								<p className="text-4xl font-bold mt-2 text-white">09:00</p>
+							</div>
+							<div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl">
+								<Clock className="h-8 w-8 text-white" />
+							</div>
+						</div>
+						<div className="mt-6 text-sm font-medium text-purple-100">
+							👤 Com Rex (Carlos Silva)
+						</div>
+					</div>
+				</div>
+
+				{/* Pendências */}
+				<div className="relative overflow-hidden rounded-2xl p-6 shadow-2xl hover:scale-[1.03] transition-all duration-300 group">
+					<div className="absolute inset-0 bg-gradient-to-br from-amber-600 via-orange-500 to-amber-500 opacity-90 group-hover:opacity-100 transition-opacity"></div>
+					<div className="relative z-10">
+						<div className="flex items-center justify-between">
+							<div>
+								<p className="text-sm font-medium text-amber-100">Pendências</p>
+								<p className="text-4xl font-bold mt-2 text-white">3</p>
+							</div>
+							<div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl">
+								<Shield className="h-8 w-8 text-white" />
+							</div>
+						</div>
+						<div className="mt-6 text-sm font-medium text-amber-100">
+							📋 1 confirmação • 📄 2 laudos
+						</div>
+					</div>
 				</div>
 			</div>
+
+			{/* Estilos CSS para animação de gradiente */}
+			<style jsx>{`
+        @keyframes gradient {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+        .animate-gradient {
+          background-size: 200% 200%;
+          animation: gradient 3s ease infinite;
+        }
+      `}</style>
 		</div>
 	);
 };
 
-export default Dashboard;
+export default Dashboard;	

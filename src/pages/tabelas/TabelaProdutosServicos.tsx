@@ -660,7 +660,7 @@ const TabelaProdutosServicos = () => {
     }
 
     return (
-        <div className="space-y-6 p-4 md:p-6">
+        <div className="space-y-6 p-4 md:p-6 max-w-full overflow-x-hidden">
             {/* Header */}
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 <div>
@@ -836,15 +836,15 @@ const TabelaProdutosServicos = () => {
             {lancamentos.length > 0 && (
                 <Card className="bg-gradient-to-br from-gray-900/80 to-black/80 border border-gray-800/50">
                     <CardHeader>
-                        <CardTitle className="text-white flex flex-col sm:flex-row sm:items-center gap-2 justify-between">
-                            <div className="flex items-center gap-2">
-                                <ShoppingCart className="h-5 w-5 text-emerald-400" />
-                                Comanda Ativa - #{comandaAtual?.numero}
-                                <Badge className="ml-2 bg-gradient-to-r from-emerald-600/20 to-green-600/20 text-emerald-400 border-emerald-500/30">
+                        <CardTitle className="text-white flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div className="flex items-center gap-2 flex-1 min-w-0">
+                                <ShoppingCart className="h-5 w-5 text-emerald-400 shrink-0" />
+                                <span className="truncate">Comanda Ativa - #{comandaAtual?.numero}</span>
+                                <Badge className="ml-2 bg-gradient-to-r from-emerald-600/20 to-green-600/20 text-emerald-400 border-emerald-500/30 shrink-0">
                                     {lancamentos.length} itens
                                 </Badge>
                             </div>
-                            <div className="text-sm text-gray-400 mt-1 sm:mt-0">
+                            <div className="text-sm text-gray-400 truncate">
                                 Cliente: {clienteNome || 'Não informado'}
                             </div>
                         </CardTitle>
@@ -853,13 +853,13 @@ const TabelaProdutosServicos = () => {
                         <div className="space-y-4">
                             {/* Cliente e Desconto */}
                             <div className="flex flex-col sm:flex-row gap-4">
-                                <div className="flex-1">
+                                <div className="flex-1 min-w-0">
                                     <Label className="text-white mb-2 block">Cliente</Label>
                                     <Input
                                         value={clienteNome}
                                         onChange={e => setClienteNome(e.target.value)}
                                         placeholder="Nome do cliente"
-                                        className="bg-gray-900/50 border-gray-700/50 text-white"
+                                        className="bg-gray-900/50 border-gray-700/50 text-white w-full"
                                     />
                                 </div>
                                 <div className="w-full sm:w-48">
@@ -871,12 +871,12 @@ const TabelaProdutosServicos = () => {
                                             max="100"
                                             value={descontoPercentual}
                                             onChange={e => setDescontoPercentual(e.target.value)}
-                                            className="bg-gray-900/50 border-gray-700/50 text-white"
+                                            className="bg-gray-900/50 border-gray-700/50 text-white flex-1"
                                         />
                                         <Button
                                             variant="outline"
                                             onClick={() => setDescontoPercentual('0')}
-                                            className="border-gray-700 text-gray-400"
+                                            className="border-gray-700 text-gray-400 shrink-0"
                                         >
                                             <RefreshCw className="h-4 w-4" />
                                         </Button>
@@ -885,28 +885,28 @@ const TabelaProdutosServicos = () => {
                             </div>
 
                             {/* Lista de Lançamentos */}
-                            <div className="border border-gray-800/50 rounded-lg overflow-x-auto">
-                                <div className="min-w-[600px]">
+                            <div className="border border-gray-800/50 rounded-lg overflow-hidden w-full">
+                                <div className="max-h-[600px] overflow-y-auto">
                                     <Table>
                                         <TableHeader>
                                             <TableRow className="border-gray-800/50">
-                                                <TableHead className="text-gray-400">Item</TableHead>
-                                                <TableHead className="text-gray-400">Quantidade</TableHead>
-                                                <TableHead className="text-gray-400">Preço Unit.</TableHead>
-                                                <TableHead className="text-gray-400">Desconto</TableHead>
-                                                <TableHead className="text-gray-400">Subtotal</TableHead>
-                                                <TableHead className="text-gray-400 text-right">Ações</TableHead>
+                                                <TableHead className="text-gray-400 w-[250px]">Item</TableHead>
+                                                <TableHead className="text-gray-400 w-[120px]">Quantidade</TableHead>
+                                                <TableHead className="text-gray-400 w-[100px]">Preço Unit.</TableHead>
+                                                <TableHead className="text-gray-400 w-[100px]">Desconto</TableHead>
+                                                <TableHead className="text-gray-400 w-[120px]">Subtotal</TableHead>
+                                                <TableHead className="text-gray-400 text-right w-[80px]">Ações</TableHead>
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
                                             {lancamentos.map(l => (
                                                 <TableRow key={l.id} className="border-gray-800/30 hover:bg-gray-800/20">
-                                                    <TableCell>
-                                                        <div className="flex items-center gap-3">
-                                                            <div className={`p-2 rounded-lg ${l.produtoTipo === 'servico' ? 'bg-gradient-to-br from-blue-600/20 to-cyan-600/20' :
-                                                                    l.produtoTipo === 'cirurgia' ? 'bg-gradient-to-br from-amber-600/20 to-orange-600/20' :
-                                                                        l.produtoTipo === 'medicamento' ? 'bg-gradient-to-br from-purple-600/20 to-pink-600/20' :
-                                                                            'bg-gradient-to-br from-emerald-600/20 to-green-600/20'
+                                                    <TableCell className="whitespace-nowrap">
+                                                        <div className="flex items-center gap-3 min-w-0">
+                                                            <div className={`p-2 rounded-lg shrink-0 ${l.produtoTipo === 'servico' ? 'bg-gradient-to-br from-blue-600/20 to-cyan-600/20' :
+                                                                l.produtoTipo === 'cirurgia' ? 'bg-gradient-to-br from-amber-600/20 to-orange-600/20' :
+                                                                    l.produtoTipo === 'medicamento' ? 'bg-gradient-to-br from-purple-600/20 to-pink-600/20' :
+                                                                        'bg-gradient-to-br from-emerald-600/20 to-green-600/20'
                                                                 }`}>
                                                                 {l.produtoTipo === 'servico' ? <Stethoscope className="h-4 w-4" /> :
                                                                     l.produtoTipo === 'cirurgia' ? <Activity className="h-4 w-4" /> :
@@ -1287,15 +1287,16 @@ const TabelaProdutosServicos = () => {
                                     </p>
                                 </div>
                             ) : (
-                                <div className="border border-gray-800/50 rounded-lg overflow-x-auto">
-                                    <div className="min-w-[800px]">
+                                <div className="border border-gray-800/50 rounded-lg">
+                                    {/* CORREÇÃO PRINCIPAL: Container com altura máxima e scroll */}
+                                    <div className="max-h-[600px] overflow-y-auto">
                                         <Table>
-                                            <TableHeader>
+                                            <TableHeader className="sticky top-0 bg-gray-950 z-10">
                                                 <TableRow className="border-gray-800/50">
                                                     <TableHead className="text-gray-400">Item</TableHead>
                                                     <TableHead className="text-gray-400">Tipo</TableHead>
                                                     <TableHead className="text-gray-400">Categoria</TableHead>
-                                                    <TableHead className="text-gray-400">Preço</TableHead>
+                                                    <TableHead className="text-gray-400">Preço Unit.</TableHead>
                                                     <TableHead className="text-gray-400">Estoque</TableHead>
                                                     <TableHead className="text-gray-400 text-right">Ações</TableHead>
                                                 </TableRow>
@@ -1326,13 +1327,13 @@ const TabelaProdutosServicos = () => {
 
                                                     return (
                                                         <TableRow key={p.id} className="border-gray-800/30 hover:bg-gray-800/20">
-                                                            <TableCell>
+                                                            <TableCell className="py-3">
                                                                 <div className="flex items-center gap-3">
                                                                     <div className={`p-2 rounded-lg ${p.tipo === 'servico' ? 'bg-gradient-to-br from-blue-600/20 to-cyan-600/20' :
-                                                                            p.tipo === 'cirurgia' ? 'bg-gradient-to-br from-amber-600/20 to-orange-600/20' :
-                                                                                p.tipo === 'procedimento' ? 'bg-gradient-to-br from-cyan-600/20 to-blue-600/20' :
-                                                                                    p.tipo === 'medicamento' ? 'bg-gradient-to-br from-purple-600/20 to-pink-600/20' :
-                                                                                        'bg-gradient-to-br from-emerald-600/20 to-green-600/20'
+                                                                        p.tipo === 'cirurgia' ? 'bg-gradient-to-br from-amber-600/20 to-orange-600/20' :
+                                                                            p.tipo === 'procedimento' ? 'bg-gradient-to-br from-cyan-600/20 to-blue-600/20' :
+                                                                                p.tipo === 'medicamento' ? 'bg-gradient-to-br from-purple-600/20 to-pink-600/20' :
+                                                                                    'bg-gradient-to-br from-emerald-600/20 to-green-600/20'
                                                                         }`}>
                                                                         {getTipoIcon(p.tipo)}
                                                                     </div>
@@ -1344,7 +1345,7 @@ const TabelaProdutosServicos = () => {
                                                                     </div>
                                                                 </div>
                                                             </TableCell>
-                                                            <TableCell>
+                                                            <TableCell className="py-3">
                                                                 <Badge variant="outline" className={`border ${getTipoColor(p.tipo)}`}>
                                                                     {p.tipo === 'servico' ? 'Serviço' :
                                                                         p.tipo === 'cirurgia' ? 'Cirurgia' :
@@ -1352,16 +1353,16 @@ const TabelaProdutosServicos = () => {
                                                                                 p.tipo === 'medicamento' ? 'Medicamento' : 'Produto'}
                                                                 </Badge>
                                                             </TableCell>
-                                                            <TableCell>
+                                                            <TableCell className="py-3">
                                                                 <span className="text-gray-300">{p.categoria}</span>
                                                             </TableCell>
-                                                            <TableCell>
+                                                            <TableCell className="py-3">
                                                                 <div className="flex items-center gap-2">
                                                                     <DollarSign className="h-4 w-4 text-emerald-400" />
                                                                     <span className="font-medium text-white">R$ {p.preco.toFixed(2)}</span>
                                                                 </div>
                                                             </TableCell>
-                                                            <TableCell>
+                                                            <TableCell className="py-3">
                                                                 {p.estoque !== undefined ? (
                                                                     <Badge className={
                                                                         p.estoque > 20 ? "bg-gradient-to-r from-emerald-600/20 to-green-600/20 text-emerald-400 border-emerald-500/30" :
@@ -1374,7 +1375,7 @@ const TabelaProdutosServicos = () => {
                                                                     <span className="text-gray-500">—</span>
                                                                 )}
                                                             </TableCell>
-                                                            <TableCell>
+                                                            <TableCell className="py-3">
                                                                 <div className="flex justify-end gap-1">
                                                                     <Button
                                                                         size="sm"
@@ -1534,10 +1535,10 @@ const TabelaProdutosServicos = () => {
                             <div className="p-4 rounded-lg bg-gray-900/50 border border-gray-700/50">
                                 <div className="flex items-center gap-3 mb-3">
                                     <div className={`p-2 rounded-lg ${produtoSelecionado.tipo === 'servico' ? 'bg-gradient-to-br from-blue-600/20 to-cyan-600/20' :
-                                            produtoSelecionado.tipo === 'cirurgia' ? 'bg-gradient-to-br from-amber-600/20 to-orange-600/20' :
-                                                produtoSelecionado.tipo === 'procedimento' ? 'bg-gradient-to-br from-cyan-600/20 to-blue-600/20' :
-                                                    produtoSelecionado.tipo === 'medicamento' ? 'bg-gradient-to-br from-purple-600/20 to-pink-600/20' :
-                                                        'bg-gradient-to-br from-emerald-600/20 to-green-600/20'
+                                        produtoSelecionado.tipo === 'cirurgia' ? 'bg-gradient-to-br from-amber-600/20 to-orange-600/20' :
+                                            produtoSelecionado.tipo === 'procedimento' ? 'bg-gradient-to-br from-cyan-600/20 to-blue-600/20' :
+                                                produtoSelecionado.tipo === 'medicamento' ? 'bg-gradient-to-br from-purple-600/20 to-pink-600/20' :
+                                                    'bg-gradient-to-br from-emerald-600/20 to-green-600/20'
                                         }`}>
                                         {produtoSelecionado.tipo === 'servico' ? <Stethoscope className="h-5 w-5" /> :
                                             produtoSelecionado.tipo === 'cirurgia' ? <Activity className="h-5 w-5" /> :
@@ -1574,7 +1575,7 @@ const TabelaProdutosServicos = () => {
                                         <div className="text-right">
                                             <p className="text-sm text-gray-400">Estoque disponível</p>
                                             <p className={`text-lg font-bold ${produtoSelecionado.estoque > 10 ? 'text-emerald-400' :
-                                                    produtoSelecionado.estoque > 0 ? 'text-amber-400' : 'text-red-400'
+                                                produtoSelecionado.estoque > 0 ? 'text-amber-400' : 'text-red-400'
                                                 }`}>
                                                 {produtoSelecionado.estoque} unidades
                                             </p>

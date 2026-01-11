@@ -51,7 +51,7 @@ const Dashboard = () => {
 			title: "Lista / Busca",
 			description: "Buscar fichas existentes",
 			icon: <Search className="h-6 w-6" />,
-			href: "/fichas/busca",
+			href: "/fichas/lista",
 			category: "Fichas",
 			gradient: "from-indigo-600 via-purple-500 to-indigo-500",
 			iconBg: "bg-gradient-to-br from-indigo-600 to-purple-500",
@@ -63,7 +63,7 @@ const Dashboard = () => {
 			title: "Alterar Retorno",
 			description: "Modificar datas de retorno",
 			icon: <CalendarDays className="h-6 w-6" />,
-			href: "/fichas/retorno/alterar",
+			href: "/fichas/retorno",
 			category: "Fichas",
 			gradient: "from-purple-600 via-pink-500 to-purple-500",
 			iconBg: "bg-gradient-to-br from-purple-600 to-pink-500",
@@ -75,7 +75,7 @@ const Dashboard = () => {
 			title: "Agenda de Retornos",
 			description: "Visualizar retornos agendados",
 			icon: <Calendar className="h-6 w-6" />,
-			href: "/fichas/retornos/agenda",
+			href: "/agenda/retornos",
 			category: "Fichas",
 			gradient: "from-violet-600 via-purple-500 to-violet-500",
 			iconBg: "bg-gradient-to-br from-violet-600 to-purple-500",
@@ -89,7 +89,7 @@ const Dashboard = () => {
 			title: "Espécie/Raça",
 			description: "Cadastro de espécies e raças",
 			icon: <Dog className="h-6 w-6" />,
-			href: "/tabelas/especies-racas",
+			href: "/tabelas/especie-raca",
 			category: "Tabelas",
 			gradient: "from-emerald-600 via-green-500 to-emerald-500",
 			iconBg: "bg-gradient-to-br from-emerald-600 to-green-500",
@@ -125,7 +125,7 @@ const Dashboard = () => {
 			title: "Produtos e Serviços",
 			description: "Cadastro de produtos e serviços",
 			icon: <ShoppingBag className="h-6 w-6" />,
-			href: "/tabelas/produtos-servicos",
+			href: "/tabelas/produtos",
 			category: "Tabelas",
 			gradient: "from-lime-600 via-green-500 to-lime-500",
 			iconBg: "bg-gradient-to-br from-lime-600 to-green-500",
@@ -137,7 +137,7 @@ const Dashboard = () => {
 			title: "Medicamentos",
 			description: "Cadastro de medicamentos",
 			icon: <Pill className="h-6 w-6" />,
-			href: "/tabelas/medicamentos",
+			href: "/medicamentos",
 			category: "Tabelas",
 			gradient: "from-sky-600 via-blue-500 to-sky-500",
 			iconBg: "bg-gradient-to-br from-sky-600 to-blue-500",
@@ -187,7 +187,7 @@ const Dashboard = () => {
 			title: "Nova Consulta",
 			description: "Registrar nova consulta",
 			icon: <Stethoscope className="h-6 w-6" />,
-			href: "/movimento/consulta/nova",
+			href: "/fichas/nova",
 			category: "Movimento",
 			gradient: "from-orange-600 via-red-500 to-orange-500",
 			iconBg: "bg-gradient-to-br from-orange-600 to-red-500",
@@ -199,7 +199,7 @@ const Dashboard = () => {
 			title: "Lista de Consultas",
 			description: "Visualizar todas as consultas",
 			icon: <ClipboardList className="h-6 w-6" />,
-			href: "/movimento/consultas",
+			href: "/fichas/lista",
 			category: "Movimento",
 			gradient: "from-red-600 via-orange-500 to-red-500",
 			iconBg: "bg-gradient-to-br from-red-600 to-orange-500",
@@ -211,7 +211,7 @@ const Dashboard = () => {
 			title: "Relatórios",
 			description: "Gerar relatórios",
 			icon: <TrendingUp className="h-6 w-6" />,
-			href: "/movimento/relatorios",
+			href: "/relatorios",
 			category: "Movimento",
 			gradient: "from-pink-600 via-rose-500 to-pink-500",
 			iconBg: "bg-gradient-to-br from-pink-600 to-rose-500",
@@ -321,19 +321,22 @@ const Dashboard = () => {
 					<div className="flex items-center space-x-4">
 						<Button
 							variant="default"
-							className="bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 hover:from-blue-700 hover:via-cyan-600 hover:to-blue-600 text-white px-7 py-3 text-lg font-bold shadow-lg hover:shadow-xl transition-all duration-300 border-0"
-							onClick={() => navigate("/novo-cadastro")}
+							className="bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 
+hover:from-blue-700 hover:via-cyan-600 hover:to-blue-600 text-white px-7 py-3 text-lg font-bold shadow-lg hover:shadow-xl transition-all duration-300 border-0"
+							onClick={() => navigate("/fichas/nova")}
 						>
 							<FilePlus className="mr-2 h-5 w-5" />
-							Novo Cadastro
+							Cadastrar Paciente
 						</Button>
+
 						<Button
 							variant="default"
-							className="bg-gradient-to-r from-orange-600 via-red-500 to-orange-500 hover:from-orange-700 hover:via-red-600 hover:to-orange-600 text-white px-7 py-3 text-lg font-bold shadow-lg hover:shadow-xl transition-all duration-300 border-0"
-							onClick={() => navigate("/consulta")}
+							className="bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-500
+hover:from-emerald-700 hover:via-teal-600 hover:to-cyan-600 text-white px-7 py-3 text-lg font-bold shadow-lg hover:shadow-xl transition-all duration-300 border-0"
+							onClick={() => navigate("/tabelas/proprietarios")}
 						>
-							<Stethoscope className="mr-2 h-5 w-5" />
-							Consulta
+							<FilePlus className="mr-2 h-5 w-5" />
+							Cadastrar Proprietário
 						</Button>
 					</div>
 				</div>
@@ -403,7 +406,7 @@ const Dashboard = () => {
 									Tabelas
 								</h3>
 							</div>
-							<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+							<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
 								{mainModules.filter(m => m.category === "Tabelas").map((module, index) => (
 									<button
 										key={index}

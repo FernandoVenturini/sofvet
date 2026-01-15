@@ -319,6 +319,7 @@ const Dashboard = () => {
 					</div>
 
 					<div className="flex items-center space-x-4">
+						{/*}
 						<Button
 							variant="default"
 							className="bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 
@@ -338,6 +339,7 @@ hover:from-emerald-700 hover:via-teal-600 hover:to-cyan-600 text-white px-7 py-3
 							<FilePlus className="mr-2 h-5 w-5" />
 							Cadastrar Proprietário
 						</Button>
+						*/}
 					</div>
 				</div>
 			</div>

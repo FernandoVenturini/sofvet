@@ -109,7 +109,7 @@ const Dashboard = () => {
 			borderColor: "border-green-500/30",
 			hoverGlow: "hover:shadow-[0_0_30px_rgba(34,197,94,0.3)]"
 		},
-		{
+		{/*{
 			title: "Funcionários",
 			description: "Cadastro de funcionários",
 			icon: <UserCog className="h-6 w-6" />,
@@ -120,7 +120,7 @@ const Dashboard = () => {
 			textColor: "text-teal-300",
 			borderColor: "border-teal-500/30",
 			hoverGlow: "hover:shadow-[0_0_30px_rgba(45,212,191,0.3)]"
-		},
+		}*/},
 		{
 			title: "Produtos e Serviços",
 			description: "Cadastro de produtos e serviços",
@@ -157,7 +157,7 @@ const Dashboard = () => {
 			borderColor: "border-fuchsia-500/30",
 			hoverGlow: "hover:shadow-[0_0_30px_rgba(217,70,239,0.3)]"
 		},
-		{
+		{/*{
 			title: "Fornecedores",
 			description: "Cadastro de fornecedores",
 			icon: <Truck className="h-6 w-6" />,
@@ -168,7 +168,7 @@ const Dashboard = () => {
 			textColor: "text-amber-300",
 			borderColor: "border-amber-500/30",
 			hoverGlow: "hover:shadow-[0_0_30px_rgba(251,191,36,0.3)]"
-		},
+		}*/},
 		{
 			title: "Proprietários",
 			description: "Cadastro de proprietários",
@@ -366,13 +366,13 @@ hover:from-emerald-700 hover:via-teal-600 hover:to-cyan-600 text-white px-7 py-3
 
 					<CardContent className="space-y-12">
 						{/* Categoria: Fichas */}
-						<div>
+						<div>{/*}
 							<div className={`inline-flex items-center gap-3 px-5 py-3 rounded-xl ${categoryColors["Fichas"].bg} ${categoryColors["Fichas"].border} border mb-6`}>
 								{categoryColors["Fichas"].icon}
 								<h3 className={`text-xl font-bold ${categoryColors["Fichas"].text}`}>
 									Fichas
 								</h3>
-							</div>
+							</div>*/}
 							<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 								{mainModules.filter(m => m.category === "Fichas").map((module, index) => (
 									<button
@@ -402,13 +402,13 @@ hover:from-emerald-700 hover:via-teal-600 hover:to-cyan-600 text-white px-7 py-3
 
 						{/* Categoria: Tabelas */}
 						<div>
-							<div className={`inline-flex items-center gap-3 px-5 py-3 rounded-xl ${categoryColors["Tabelas"].bg} ${categoryColors["Tabelas"].border} border mb-6`}>
+							{/*<div className={`inline-flex items-center gap-3 px-5 py-3 rounded-xl ${categoryColors["Tabelas"].bg} ${categoryColors["Tabelas"].border} border mb-6`}>
 								{categoryColors["Tabelas"].icon}
 								<h3 className={`text-xl font-bold ${categoryColors["Tabelas"].text}`}>
 									Tabelas
 								</h3>
-							</div>
-							<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+							</div>*/}
+							<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3">
 								{mainModules.filter(m => m.category === "Tabelas").map((module, index) => (
 									<button
 										key={index}
@@ -433,17 +433,17 @@ hover:from-emerald-700 hover:via-teal-600 hover:to-cyan-600 text-white px-7 py-3
 									</button>
 								))}
 							</div>
-						</div>
+						
 
 						{/* Categoria: Movimento */}
-						<div>
-							<div className={`inline-flex items-center gap-3 px-5 py-3 rounded-xl ${categoryColors["Movimento"].bg} ${categoryColors["Movimento"].border} border mb-6`}>
+						
+							{/*<div className={`inline-flex items-center gap-3 px-5 py-3 rounded-xl ${categoryColors["Movimento"].bg} ${categoryColors["Movimento"].border} border mb-6`}>
 								{categoryColors["Movimento"].icon}
 								<h3 className={`text-xl font-bold ${categoryColors["Movimento"].text}`}>
 									Movimento
 								</h3>
-							</div>
-							<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+							</div>*/}
+							<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 mt-3">
 								{mainModules.filter(m => m.category === "Movimento").map((module, index) => (
 									<button
 										key={index}

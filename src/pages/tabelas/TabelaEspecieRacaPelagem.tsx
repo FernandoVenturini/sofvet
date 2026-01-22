@@ -246,7 +246,7 @@ const TabelaEspecieRacaPelagem = () => {
                             Catálogo de Características
                         </Badge>
                     </div>
-                    <h1 className="text-3xl lg:text-4xl font-bold text-white">
+                    <h1 className="text-4xl font-bold text-green-400">
                         Espécies, Raças e Pelagens
                     </h1>
                     <p className="text-gray-400 mt-2">

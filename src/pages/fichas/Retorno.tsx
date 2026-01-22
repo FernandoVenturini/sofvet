@@ -210,7 +210,7 @@ const Retorno = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6">
       {/* Header */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
         <div>
@@ -223,7 +223,7 @@ const Retorno = () => {
               Gerenciamento de Retornos
             </Badge>
           </div>
-          <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold text-green-400">
             Fichas - Alterar Retorno
           </h1>
           <p className="text-gray-400 mt-2">

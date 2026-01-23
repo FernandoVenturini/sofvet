@@ -236,7 +236,7 @@ const NovaFicha = () => {
 						Fichas - Nova Ficha(Cadastrar)
 					</h1>
 					<p className="text-gray-400 mt-2">
-						Preencha os dados para criar uma nova ficha de paciente
+						Preencha os dados para criar uma nova ficha de paciegitnte
 					</p>
 				</div>
 

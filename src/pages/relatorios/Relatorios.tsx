@@ -581,7 +581,7 @@ const Relatorios = () => {
     };
 
     return (
-        <div className="space-y-6 p-4 md:p-6">
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6">
             {/* Header */}
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 <div>
@@ -589,15 +589,15 @@ const Relatorios = () => {
                         <div className="p-2 rounded-xl bg-gradient-to-br from-red-600/20 to-pink-600/20 border border-red-500/30">
                             <FileBarChart className="h-6 w-6 text-red-400" />
                         </div>
-                        <Badge className="bg-gradient-to-r from-red-600/20 to-pink-600/20 text-red-300 border border-red-500/30">
+                        <Badge className="bg-gradient-to-r from-red-600/20 to-pink-600/20 text-white-300 border border-red-500/30">
                             <Sparkles className="h-3 w-3 mr-1" />
                             Relatórios SofVet
                         </Badge>
                     </div>
-                    <h1 className="text-3xl lg:text-4xl font-bold text-white">
+                    <h1 className="text-4xl font-bold text-green-400 mt-5">
                         Relatórios e Estatísticas
                     </h1>
-                    <p className="text-gray-400 mt-2">
+                    <p className="text-gray-400 mt-2 mb-5">
                         Análises detalhadas e relatórios do sistema veterinário
                     </p>
                 </div>
@@ -606,7 +606,7 @@ const Relatorios = () => {
                         variant="outline"
                         onClick={exportarParaCSV}
                         disabled={dados.length === 0}
-                        className="border-gray-700 text-gray-400 hover:text-white hover:bg-gray-800/30"
+                        className="border-gray-700 text-gray-400 hover:text-white hover:bg-gray-800/30 hover:border-green-300"
                     >
                         <Download className="h-4 w-4 mr-2" />
                         Exportar CSV
@@ -623,7 +623,7 @@ const Relatorios = () => {
             </div>
 
             {/* Stats Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-5">
                 <Card className="bg-gradient-to-br from-gray-900/80 to-black/80 border border-gray-800/50">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-medium text-gray-400">Faturamento Total</CardTitle>
@@ -722,7 +722,7 @@ const Relatorios = () => {
             </div>
 
             {/* Filtros */}
-            <Card className="bg-gradient-to-br from-gray-900/80 to-black/80 border border-gray-800/50">
+            <Card className="bg-gradient-to-br from-gray-900/80 to-black/80 border border-gray-800/50 mb-5">
                 <CardHeader>
                     <CardTitle className="text-white flex items-center gap-2">
                         <Filter className="h-5 w-5 text-red-400" />

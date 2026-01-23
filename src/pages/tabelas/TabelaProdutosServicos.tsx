@@ -660,7 +660,7 @@ const TabelaProdutosServicos = () => {
     }
 
     return (
-        <div className="space-y-6 p-4 md:p-6 max-w-full overflow-x-hidden">
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6">
             {/* Header */}
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 <div>
@@ -673,7 +673,7 @@ const TabelaProdutosServicos = () => {
                             Catálogo Completo da Clínica
                         </Badge>
                     </div>
-                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white">
+                    <h1 className="text-4xl font-bold text-green-400">
                         Produtos e Serviços
                     </h1>
                     <p className="text-gray-400 mt-2 text-sm md:text-base">

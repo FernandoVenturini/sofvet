@@ -233,30 +233,30 @@ export default function Utilitarios() {
     };
 
     return (
-        <div className="space-y-6 p-4 md:p-6">
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6">
             {/* Header */}
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 <div>
-                    <div className="flex items-center gap-3 mb-2">
+                    <div className="flex items-center gap-3 mb-5">
                         <div className="p-2 rounded-xl bg-gradient-to-br from-red-600/20 to-pink-600/20 border border-red-500/30">
                             <Settings className="h-6 w-6 text-red-400" />
                         </div>
-                        <Badge className="bg-gradient-to-r from-red-600/20 to-pink-600/20 text-red-300 border border-red-500/30">
+                        <Badge className="bg-gradient-to-r from-red-600/20 to-pink-600/20 text-white-300 border border-red-500/30">
                             <Sparkles className="h-3 w-3 mr-1" />
                             Utilitários SofVet
                         </Badge>
                     </div>
-                    <h1 className="text-3xl lg:text-4xl font-bold text-white">
+                    <h1 className="text-3xl lg:text-4xl font-bold text-4xl font-bold text-green-400">
                         Utilitários do Sistema
                     </h1>
-                    <p className="text-gray-400 mt-2">
+                    <p className="text-gray-400 mt-2 mb-5">
                         Ferramentas avançadas e utilitários do sistema veterinário
                     </p>
                 </div>
                 <div className="flex items-center gap-3">
                     <Button
                         variant="outline"
-                        className="border-gray-700 text-gray-400 hover:text-white hover:bg-gray-800/30"
+                        className="border-gray-700 text-gray-400 hover:text-white hover:bg-green-800/30 hover:border-green-500"
                         onClick={() => {}}
                     >
                         <RefreshCw className="h-4 w-4 mr-2" />
@@ -270,7 +270,7 @@ export default function Utilitarios() {
             </div>
 
             {/* Stats Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
                 <Card className="bg-gradient-to-br from-gray-900/80 to-black/80 border border-gray-800/50">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-medium text-gray-400">Versão do Sistema</CardTitle>
@@ -363,7 +363,7 @@ export default function Utilitarios() {
 
                 {/* ABA 1: CONVERSOR EXCEL */}
                 <TabsContent value="conversor">
-                    <Card className="bg-gradient-to-br from-gray-900/80 to-black/80 border border-gray-800/50">
+                    <Card className="bg-gradient-to-br from-gray-700/80 to-black/10 border border-gray-800/50">
                         <CardHeader>
                             <CardTitle className="text-white flex items-center gap-2">
                                 <FileSpreadsheet className="h-5 w-5 text-red-400" />
@@ -1437,7 +1437,7 @@ Cód: 001.001"
                         <p>Utilitários baseados no manual do SofVet</p>
                         <p className="text-xs mt-1">Conversão Excel • Cálculos • Usuários • Entretenimento</p>
                     </div>
-                    <Badge className="bg-gradient-to-r from-red-600/20 to-pink-600/20 text-red-400 border border-red-500/30">
+                    <Badge className="bg-gradient-to-r from-red-600/20 to-pink-600/20 text-white-400 border border-red-500/30">
                         <Clock className="h-3 w-3 mr-1" />
                         Sistema: {connectedUsers.filter(u => u.status === 'ativo').length}/10 conectados
                     </Badge>

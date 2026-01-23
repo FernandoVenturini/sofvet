@@ -479,7 +479,7 @@ const NovaConsulta = () => {
     };
 
     return (
-        <div className="space-y-6 p-4 md:p-6">
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6">
             {/* Header */}
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 <div>
@@ -487,12 +487,12 @@ const NovaConsulta = () => {
                         <div className="p-2 rounded-xl bg-gradient-to-br from-red-600/20 to-pink-600/20 border border-red-500/30">
                             <Stethoscope className="h-6 w-6 text-red-400" />
                         </div>
-                        <Badge className="bg-gradient-to-r from-red-600/20 to-pink-600/20 text-red-300 border border-red-500/30">
+                        <Badge className="bg-gradient-to-r from-red-600/20 to-pink-600/20 text-white-300 border border-red-500/30">
                             <Sparkles className="h-3 w-3 mr-1" />
                             NOVA CONSULTA - SofVet
                         </Badge>
                     </div>
-                    <h1 className="text-3xl lg:text-4xl font-bold text-white">
+                    <h1 className="text-4xl font-bold text-green-400">
                         Manutenção de Operações
                     </h1>
                     <p className="text-gray-400 mt-2">
@@ -500,7 +500,7 @@ const NovaConsulta = () => {
                     </p>
                 </div>
                 <div className="flex items-center gap-3">
-                    <Badge className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 text-purple-400 border border-purple-500/30">
+                    <Badge className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 text-white-100 border border-purple-500/30">
                         <ClipboardCheck className="h-3 w-3 mr-1" />
                         Operação: {operacaoNumero}
                     </Badge>

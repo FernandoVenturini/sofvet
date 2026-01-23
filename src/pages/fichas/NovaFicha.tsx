@@ -219,7 +219,7 @@ const NovaFicha = () => {
 	];
 
 	return (
-		<div className="space-y-6">
+		<div className="space-y-6 min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6">
 			{/* Header */}
 			<div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
 				<div>
@@ -232,8 +232,8 @@ const NovaFicha = () => {
 							Nova Ficha
 						</Badge>
 					</div>
-					<h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
-						Fichas - Nova Ficha(Cadastrar)
+					<h1 className="text-4xl font-bold text-green-400">
+						Cadastrar Nova Ficha
 					</h1>
 					<p className="text-gray-400 mt-2">
 						Preencha os dados para criar uma nova ficha de paciegitnte
@@ -243,14 +243,14 @@ const NovaFicha = () => {
 				<div className="flex items-center gap-3">
 					<Button
 						variant="outline"
-						className="border-gray-800 text-gray-400 hover:text-white hover:bg-gray-800/30 gap-2"
+						className="border-blue-800 text-blue-400 hover:text-white hover:bg-gray-800/30 gap-2"
 						onClick={() => navigate('/fichas/lista')}
 					>
 						<History className="h-4 w-4" />
 						Ver Todas
 					</Button>
 					<Button
-						className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 gap-2"
+						className="bg-gradient-to-r from-red-600 to-orange-600 hover:from-green-700 hover:to-green-400 gap-2"
 						onClick={(e) => handleSubmit(e)}
 						disabled={loading}
 					>

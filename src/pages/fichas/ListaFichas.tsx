@@ -210,7 +210,7 @@ const ListaFichas = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6">
       {/* Header */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
         <div>
@@ -223,8 +223,8 @@ const ListaFichas = () => {
               Gerenciamento de Pacientes
             </Badge>
           </div>
-          <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
-            Fichas - Lista/Busca(Paciente)
+          <h1 className="text-4xl font-bold text-green-400">
+            Lista - Busca Paciente
           </h1>
           <p className="text-gray-400 mt-2">
             Gerencie todas as fichas de pacientes cadastradas
@@ -233,7 +233,7 @@ const ListaFichas = () => {
         
         <div className="flex items-center gap-3">
           <Link to="/fichas/nova">
-            <Button className="gap-2 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700">
+            <Button className="gap-2 bg-gradient-to-r from-red-600 to-pink-600 hover:from-green-700 hover:to-green-700">
               <Plus className="h-4 w-4" />
               Novo Paciente
             </Button>

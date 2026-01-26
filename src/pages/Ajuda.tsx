@@ -111,7 +111,7 @@ export default function Ajuda() {
 	const faqItems = [
 		{
 			question: 'Como fazer backup do sistema?',
-			answer: 'Acesse Diversos → Backup Diário. Para versões Windows 7 ou superior, copie a pasta SOFVETW para um pendrive. Para Windows 98 ou inferior, use a rotina interna de backup.',
+			answer: 'Acesse Diversos → Backup Diário. Para versões Windows 10 ou superior, copie a pasta SOFVETW para um pendrive. Para Windows 98 ou inferior, use a rotina interna de backup.',
 			category: 'backup',
 			views: 1248,
 			helpful: 95
@@ -526,7 +526,7 @@ export default function Ajuda() {
 												<Settings className="h-5 w-5 text-gray-400" />
 												<div>
 													<p className="font-medium text-white">Sistema Operacional</p>
-													<p className="text-sm text-gray-400">Windows 7 ou superior</p>
+													<p className="text-sm text-gray-400">Windows 10 ou superior</p>
 												</div>
 											</div>
 											<Badge className="bg-gradient-to-r from-emerald-600/20 to-green-600/20 text-emerald-400 border border-emerald-500/30">Recomendado</Badge>
@@ -750,9 +750,19 @@ export default function Ajuda() {
 							<div className="space-y-4">
 								<h3 className="font-medium text-lg text-white">Não encontrou sua dúvida?</h3>
 								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-									<Button variant="outline" className="gap-2 border-gray-700 text-gray-400 hover:text-white hover:bg-gray-800/30">
+									<Button 
+										asChild
+										variant="outline" 
+										className="gap-2 border-gray-700 text-gray-400 hover:text-white hover:bg-gray-800/30"
+									>
+										<a 
+											href="https://wa.me/447747843073"
+											target='_blank'
+											rel="noopener noreferrer"
+										>
 										<MessageSquare className="h-4 w-4" />
 										Chat Online
+										</a>
 									</Button>
 									<Button className="gap-2 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700">
 										<Mail className="h-4 w-4" />
@@ -1120,7 +1130,7 @@ export default function Ajuda() {
 															<li>Selecione diretório SOFVETW</li>
 															<li>Selecione Tudo → OK</li>
 														</ol>
-														<p className="font-medium text-white mt-4">Para Windows 7 ou superior:</p>
+														<p className="font-medium text-white mt-4">Para Windows 10 ou superior:</p>
 														<ol className="list-decimal pl-5 space-y-1 text-sm text-gray-300">
 															<li>Abra o disco local (C:)</li>
 															<li>Localize a pasta sofvetw</li>

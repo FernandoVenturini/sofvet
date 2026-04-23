@@ -166,20 +166,20 @@ const Layout = () => {
   const isActive = (path: string) => location.pathname.startsWith(path);
 
   return (
-    <div className="flex h-screen bg-gray-950 text-gray-100 overflow-hidden">
+    <div className="flex h-screen bg-red-950 text-gray-100 overflow-hidden">
       {/* Sidebar Desktop */}
-      <div className="hidden lg:flex flex-col w-64 bg-gray-900 border-r border-gray-800">
+      <div className="hidden lg:flex flex-col w-64 bg-blue-500 border-r border-white-800">
         {/* Logo */}
-        <div className="p-6 border-b border-gray-800">
+        <div className="p-6 border-b border-white-800">
           <div className="flex items-center space-x-3">
             <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center">
               <Heart className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-red-400 to-red-300 bg-clip-text text-transparent">
+              <h1 className="text-xl font-bold bg-gradient-to-r from-red-800 to-red-500 bg-clip-text text-transparent">
                 SofVet
               </h1>
-              <p className="text-xs text-gray-400">Sistema Veterinário</p>
+              <p className="text-xs text-white-900">Software Veterinário</p>
             </div>
           </div>
         </div>
@@ -196,8 +196,8 @@ const Layout = () => {
                       <AccordionItem value={item.title} className="border-none">
                         <AccordionTrigger
                           className={cn(
-                            "flex items-center justify-between w-full px-3 py-2.5 rounded-lg hover:bg-gray-800 transition-colors",
-                            active && "bg-gray-800"
+                            "flex items-center justify-between w-full px-3 py-2.5 rounded-lg hover:bg-blue-800 transition-colors",
+                            active && "bg-blue-800"
                           )}
                         >
                           <div className="flex items-center space-x-3">
@@ -211,7 +211,7 @@ const Layout = () => {
                               <Link
                                 key={subItem.path}
                                 to={subItem.path}
-                                className="block py-2 px-3 rounded-lg text-sm text-gray-300 hover:text-white hover:bg-gray-800 transition-colors"
+                                className="block py-2 px-3 rounded-lg text-sm text-gray-300 hover:text-white hover:bg-blue-800 transition-colors"
                               >
                                 {subItem.title}
                               </Link>
@@ -224,7 +224,7 @@ const Layout = () => {
                     <Link
                       to={item.path}
                       className={cn(
-                        "flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 transition-colors",
+                        "flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-blue-800 transition-colors",
                         active && "bg-gray-800"
                       )}
                     >
@@ -254,9 +254,9 @@ const Layout = () => {
         </div>
 
         {/* User Profile */}
-        <div className="p-4 border-t border-gray-800">
+        <div className="p-4 border-t border-white-800">
           <div className="flex items-center space-x-3">
-            <Avatar className="h-10 w-10 border-2 border-gray-700">
+            <Avatar className="h-10 w-10 border-2 border-white-700">
               <AvatarImage src={user?.photoURL || ''} />
               <AvatarFallback className="bg-gray-700">
                 {user?.displayName?.[0] || user?.email?.[0] || 'U'}
@@ -281,7 +281,7 @@ const Layout = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="sticky top-0 z-40 bg-gray-900 border-b border-gray-800">
+        <header className="sticky top-0 z-40 bg-blue-500 border-b border-white-800">
           <div className="flex items-center justify-between px-4 py-3">
             {/* Left: Menu toggle and title */}
             <div className="flex items-center space-x-4">
@@ -308,7 +308,7 @@ const Layout = () => {
                   placeholder="Buscar pacientes, consultas, medicamentos..."
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  className="pl-10 bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  className="pl-10 bg-white-800 border-gray-700 text-white placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 />
                 {searchResults.length > 0 && (
                   <div className="absolute top-full mt-1 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-lg overflow-hidden z-50">

@@ -139,10 +139,17 @@ const EditarFicha = () => {
 			await uploadBytes(storageRef, file);
 			const url = await getDownloadURL(storageRef);
 			setImagemUrl(url);
-			alert('Imagem atualizada com sucesso!');
+			toast({
+				title: 'Sucesso',
+				description: 'Imagem atualizada com sucesso!',
+			});
 		} catch (error) {
 			console.error('Erro no upload da imagem:', error);
-			alert('Erro ao atualizar a imagem.');
+			toast({
+				title: 'Erro',
+				description: 'Erro ao atualizar a imagem.',
+				variant: 'destructive',
+			});
 		} finally {
 			setUploadingImage(false);
 		}
@@ -151,7 +158,11 @@ const EditarFicha = () => {
 	// Função corrigida para programação automática
 	const adicionarVacina = () => {
 		if (!vacinaSelecionada || !dataDose) {
-			alert('Selecione a vacina e a data da dose');
+			toast({
+				title: 'Atenção',
+				description: 'Selecione a vacina e a data da dose',
+				variant: 'destructive',
+			});
 			return;
 		}
 
@@ -188,7 +199,10 @@ const EditarFicha = () => {
 		setVacinaSelecionada('');
 		setDoseAtual(1);
 		setDataDose('');
-		alert('Dose aplicada e próximas programadas com sucesso!');
+		toast({
+			title: 'Sucesso',
+			description: 'Dose aplicada e próximas programadas com sucesso!',
+		});
 	};
 
 	// Funções para o DEF
@@ -307,34 +321,47 @@ const EditarFicha = () => {
 	};
 
 	if (loading) {
-		return <div className="text-white text-center py-20">Carregando ficha...</div>;
+		return (
+			<div className="flex items-center justify-center py-20">
+				<Loader2 className="h-8 w-8 animate-spin text-primary" />
+				<span className="ml-2 text-muted-foreground">Carregando ficha...</span>
+			</div>
+		);
 	}
 
 	return (
-		<div className="max-w-6xl mx-auto py-8 px-4">
-			<h1 className="text-4xl font-bold text-white text-center mb-10">Editar Ficha</h1>
+		<div className="max-w-6xl mx-auto py-8 px-4 animate-fade-up">
+			<h1 className="text-4xl font-bold text-gradient text-center mb-10">Editar Ficha</h1>
 
 			<Tabs defaultValue="dados" className="space-y-6">
-				<TabsList className="grid grid-cols-4 w-full max-w-xl mx-auto">
-					<TabsTrigger value="dados">Dados</TabsTrigger>
-					<TabsTrigger value="vacinas">Vacinas</TabsTrigger>
-					<TabsTrigger value="medicamentos">Medicamentos</TabsTrigger>
-					<TabsTrigger value="observacoes">Observações</TabsTrigger>
+				<TabsList className="grid grid-cols-4 w-full max-w-xl mx-auto bg-muted border border-border">
+					<TabsTrigger value="dados" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+						Dados
+					</TabsTrigger>
+					<TabsTrigger value="vacinas" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+						Vacinas
+					</TabsTrigger>
+					<TabsTrigger value="medicamentos" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+						Medicamentos
+					</TabsTrigger>
+					<TabsTrigger value="observacoes" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+						Observações
+					</TabsTrigger>
 				</TabsList>
 
 				<form onSubmit={handleSubmit}>
 					{/* Aba: Dados do Animal e Proprietário */}
 					<TabsContent value="dados" className="space-y-6">
 						{/* Foto do Animal */}
-						<Card className="bg-black/50 border-red-600/30">
+						<Card className="bg-card border border-primary/20 shadow-md">
 							<CardHeader>
-								<CardTitle className="text-white">Foto do Animal</CardTitle>
+								<CardTitle className="text-card-foreground">Foto do Animal</CardTitle>
 							</CardHeader>
 							<CardContent className="flex flex-col items-center space-y-4">
 								{imagemUrl ? (
-									<img src={imagemUrl} alt="Animal" className="h-64 w-64 object-cover rounded-lg" />
+									<img src={imagemUrl} alt="Animal" className="h-64 w-64 object-cover rounded-lg shadow-md" />
 								) : (
-									<div className="h-64 w-64 bg-gray-800 rounded-lg flex items-center justify-center text-gray-500">
+									<div className="h-64 w-64 bg-muted rounded-lg flex items-center justify-center text-muted-foreground">
 										Sem imagem
 									</div>
 								)}
@@ -355,26 +382,26 @@ const EditarFicha = () => {
 						</Card>
 
 						{/* Dados do Animal */}
-						<Card className="bg-black/50 border-red-600/30">
+						<Card className="bg-card border border-primary/20 shadow-md">
 							<CardHeader>
-								<CardTitle className="text-white">Dados do Animal</CardTitle>
+								<CardTitle className="text-card-foreground">Dados do Animal</CardTitle>
 							</CardHeader>
 							<CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
 								<div className="space-y-2">
-									<Label className="text-white">Nome do Animal *</Label>
+									<Label className="text-card-foreground">Nome do Animal *</Label>
 									<Input
 										name="nomeAnimal"
 										value={formData.nomeAnimal}
 										onChange={handleChange}
 										required
-										className="bg-black/50 border-red-600/50 text-white"
+										className="bg-background border-input focus:border-primary focus:ring-primary"
 									/>
 								</div>
 
 								<div className="space-y-2">
-									<Label className="text-white">Espécie</Label>
+									<Label className="text-card-foreground">Espécie</Label>
 									<Select onValueChange={handleSelectChange('especie')} value={formData.especie}>
-										<SelectTrigger className="bg-black/50 border-red-600/50 text-white">
+										<SelectTrigger className="bg-background border-input">
 											<SelectValue placeholder="Selecione" />
 										</SelectTrigger>
 										<SelectContent>
@@ -389,29 +416,29 @@ const EditarFicha = () => {
 								</div>
 
 								<div className="space-y-2">
-									<Label className="text-white">Raça</Label>
+									<Label className="text-card-foreground">Raça</Label>
 									<Input
 										name="raca"
 										value={formData.raca}
 										onChange={handleChange}
-										className="bg-black/50 border-red-600/50 text-white"
+										className="bg-background border-input focus:border-primary focus:ring-primary"
 									/>
 								</div>
 
 								<div className="space-y-2">
-									<Label className="text-white">Pelagem</Label>
+									<Label className="text-card-foreground">Pelagem</Label>
 									<Input
 										name="pelagem"
 										value={formData.pelagem}
 										onChange={handleChange}
-										className="bg-black/50 border-red-600/50 text-white"
+										className="bg-background border-input focus:border-primary focus:ring-primary"
 									/>
 								</div>
 
 								<div className="space-y-2">
-									<Label className="text-white">Sexo</Label>
+									<Label className="text-card-foreground">Sexo</Label>
 									<Select onValueChange={handleSelectChange('sexo')} value={formData.sexo}>
-										<SelectTrigger className="bg-black/50 border-red-600/50 text-white">
+										<SelectTrigger className="bg-background border-input">
 											<SelectValue placeholder="Selecione" />
 										</SelectTrigger>
 										<SelectContent>
@@ -422,28 +449,28 @@ const EditarFicha = () => {
 								</div>
 
 								<div className="space-y-2">
-									<Label className="text-white">Data de Nascimento</Label>
+									<Label className="text-card-foreground">Data de Nascimento</Label>
 									<Input
 										type="date"
 										name="dataNascimento"
 										value={formData.dataNascimento}
 										onChange={handleChange}
-										className="bg-black/50 border-red-600/50 text-white"
+										className="bg-background border-input focus:border-primary focus:ring-primary"
 									/>
 								</div>
 
 								<div className="space-y-2">
-									<Label className="text-white">Cor</Label>
+									<Label className="text-card-foreground">Cor</Label>
 									<Input
 										name="cor"
 										value={formData.cor}
 										onChange={handleChange}
-										className="bg-black/50 border-red-600/50 text-white"
+										className="bg-background border-input focus:border-primary focus:ring-primary"
 									/>
 								</div>
 
 								<div className="space-y-2">
-									<Label className="text-white">Peso (kg) *</Label>
+									<Label className="text-card-foreground">Peso (kg) *</Label>
 									<Input
 										name="peso"
 										type="number"
@@ -451,7 +478,7 @@ const EditarFicha = () => {
 										value={formData.peso}
 										onChange={handleChange}
 										required
-										className="bg-black/50 border-red-600/50 text-white"
+										className="bg-background border-input focus:border-primary focus:ring-primary"
 										placeholder="Ex: 5.5"
 									/>
 								</div>
@@ -459,40 +486,40 @@ const EditarFicha = () => {
 						</Card>
 
 						{/* Dados do Proprietário */}
-						<Card className="bg-black/50 border-red-600/30">
+						<Card className="bg-card border border-primary/20 shadow-md">
 							<CardHeader>
-								<CardTitle className="text-white">Dados do Proprietário</CardTitle>
+								<CardTitle className="text-card-foreground">Dados do Proprietário</CardTitle>
 							</CardHeader>
 							<CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
 								<div className="space-y-2">
-									<Label className="text-white">Nome *</Label>
+									<Label className="text-card-foreground">Nome *</Label>
 									<Input
 										name="nomeProprietario"
 										value={formData.nomeProprietario}
 										onChange={handleChange}
 										required
-										className="bg-black/50 border-red-600/50 text-white"
+										className="bg-background border-input focus:border-primary focus:ring-primary"
 									/>
 								</div>
 
 								<div className="space-y-2">
-									<Label className="text-white">Telefone</Label>
+									<Label className="text-card-foreground">Telefone</Label>
 									<Input
 										name="telefoneProprietario"
 										value={formData.telefoneProprietario}
 										onChange={handleChange}
-										className="bg-black/50 border-red-600/50 text-white"
+										className="bg-background border-input focus:border-primary focus:ring-primary"
 									/>
 								</div>
 
 								<div className="md:col-span-2 space-y-2">
-									<Label className="text-white">Endereço</Label>
+									<Label className="text-card-foreground">Endereço</Label>
 									<Textarea
 										name="enderecoProprietario"
 										value={formData.enderecoProprietario}
 										onChange={handleChange}
 										rows={3}
-										className="bg-black/50 border-red-600/50 text-white"
+										className="bg-background border-input focus:border-primary focus:ring-primary"
 									/>
 								</div>
 							</CardContent>
@@ -501,16 +528,16 @@ const EditarFicha = () => {
 
 					{/* Aba: Vacinas */}
 					<TabsContent value="vacinas">
-						<Card className="bg-black/50 border-red-600/30">
+						<Card className="bg-card border border-primary/20 shadow-md">
 							<CardHeader>
-								<CardTitle className="text-white">Vacinas</CardTitle>
+								<CardTitle className="text-card-foreground">Vacinas</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-6">
 								<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 									<div>
-										<Label className="text-white">Vacina</Label>
+										<Label className="text-card-foreground">Vacina</Label>
 										<Select onValueChange={(value) => setVacinaSelecionada(value)} value={vacinaSelecionada}>
-											<SelectTrigger className="bg-black/50 border-red-600/50 text-white">
+											<SelectTrigger className="bg-background border-input">
 												<SelectValue placeholder="Selecione uma vacina" />
 											</SelectTrigger>
 											<SelectContent>
@@ -523,9 +550,9 @@ const EditarFicha = () => {
 										</Select>
 									</div>
 									<div>
-										<Label className="text-white">Dose Atual</Label>
+										<Label className="text-card-foreground">Dose Atual</Label>
 										<Select onValueChange={(value) => setDoseAtual(Number(value))} value={doseAtual.toString()}>
-											<SelectTrigger className="bg-black/50 border-red-600/50 text-white">
+											<SelectTrigger className="bg-background border-input">
 												<SelectValue placeholder="Dose" />
 											</SelectTrigger>
 											<SelectContent>
@@ -537,16 +564,16 @@ const EditarFicha = () => {
 										</Select>
 									</div>
 									<div>
-										<Label className="text-white">Data da Dose</Label>
+										<Label className="text-card-foreground">Data da Dose</Label>
 										<Input
 											type="date"
 											value={dataDose}
 											onChange={(e) => setDataDose(e.target.value)}
-											className="bg-black/50 border-red-600/50 text-white"
+											className="bg-background border-input focus:border-primary focus:ring-primary"
 										/>
 									</div>
 									<div className="flex items-end">
-										<Button onClick={adicionarVacina} type="button" className="bg-red-600 hover:bg-red-700 w-full">
+										<Button onClick={adicionarVacina} type="button" className="bg-primary hover:bg-primary/90 w-full">
 											Aplicar Dose
 										</Button>
 									</div>
@@ -555,25 +582,25 @@ const EditarFicha = () => {
 								{/* Lista de vacinas aplicadas e programadas */}
 								{vacinasAplicadas.length > 0 && (
 									<div>
-										<h3 className="text-lg font-semibold text-white mb-4">Vacinas e Próximas Doses</h3>
+										<h3 className="text-lg font-semibold text-card-foreground mb-4">Vacinas e Próximas Doses</h3>
 										<Table>
 											<TableHeader>
-												<TableRow>
-													<TableHead className="text-white">Vacina</TableHead>
-													<TableHead className="text-white">Dose</TableHead>
-													<TableHead className="text-white">Data Aplicação</TableHead>
-													<TableHead className="text-white">Próxima Dose</TableHead>
-													<TableHead className="text-white">Status</TableHead>
+												<TableRow className="border-border">
+													<TableHead className="text-card-foreground">Vacina</TableHead>
+													<TableHead className="text-card-foreground">Dose</TableHead>
+													<TableHead className="text-card-foreground">Data Aplicação</TableHead>
+													<TableHead className="text-card-foreground">Próxima Dose</TableHead>
+													<TableHead className="text-card-foreground">Status</TableHead>
 												</TableRow>
 											</TableHeader>
 											<TableBody>
 												{vacinasAplicadas.map((v, index) => (
-													<TableRow key={index}>
-														<TableCell className="text-white">{v.nomeVacina}</TableCell>
-														<TableCell className="text-white">{v.dose}ª dose</TableCell>
-														<TableCell className="text-white">{v.dataAplicacao || '-'}</TableCell>
-														<TableCell className="text-white">{v.proximaData || '-'}</TableCell>
-														<TableCell className={v.proximaData ? 'text-yellow-400' : 'text-green-400'}>
+													<TableRow key={index} className="border-border">
+														<TableCell className="text-card-foreground">{v.nomeVacina}</TableCell>
+														<TableCell className="text-card-foreground">{v.dose}ª dose</TableCell>
+														<TableCell className="text-card-foreground">{v.dataAplicacao || '-'}</TableCell>
+														<TableCell className="text-card-foreground">{v.proximaData || '-'}</TableCell>
+														<TableCell className={v.proximaData ? 'text-amber-500' : 'text-emerald-500'}>
 															{v.proximaData ? 'Programada' : 'Completa'}
 														</TableCell>
 													</TableRow>
@@ -588,21 +615,21 @@ const EditarFicha = () => {
 
 					{/* Aba: Medicamentos (DEF) */}
 					<TabsContent value="medicamentos">
-						<Card className="bg-black/50 border-red-600/30">
+						<Card className="bg-card border border-primary/20 shadow-md">
 							<CardHeader>
 								<div className="flex justify-between items-center">
-									<CardTitle className="text-white">Medicamentos (DEF)</CardTitle>
+									<CardTitle className="text-card-foreground">Medicamentos (DEF)</CardTitle>
 									<Dialog open={isDEFDialogOpen} onOpenChange={setIsDEFDialogOpen}>
 										<DialogTrigger asChild>
-											<Button className="bg-blue-600 hover:bg-blue-700">
+											<Button className="bg-accent hover:bg-accent/90">
 												<Pill className="mr-2 h-4 w-4" />
 												Consultar DEF
 											</Button>
 										</DialogTrigger>
-										<DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+										<DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto bg-card border border-primary/20">
 											<DialogHeader>
-												<DialogTitle>Dicionário de Especialidades Farmacêuticas</DialogTitle>
-												<DialogDescription>
+												<DialogTitle className="text-card-foreground">Dicionário de Especialidades Farmacêuticas</DialogTitle>
+												<DialogDescription className="text-muted-foreground">
 													Consulte medicamentos e calcule doses automaticamente
 												</DialogDescription>
 											</DialogHeader>
@@ -622,12 +649,13 @@ const EditarFicha = () => {
 																);
 																if (found) setSelectedMedicamento(found);
 															}}
+															className="bg-background border-input focus:border-primary focus:ring-primary"
 														/>
 													</div>
 
-													<div className="border rounded-lg p-4 max-h-[400px] overflow-y-auto">
+													<div className="border border-border rounded-lg p-4 max-h-[400px] overflow-y-auto bg-background">
 														{medicamentos.length === 0 ? (
-															<div className="text-center py-8 text-gray-500">
+															<div className="text-center py-8 text-muted-foreground">
 																Nenhum medicamento cadastrado
 															</div>
 														) : (
@@ -635,15 +663,15 @@ const EditarFicha = () => {
 																{medicamentos.map(med => (
 																	<Card
 																		key={med.id}
-																		className={`cursor-pointer hover:bg-gray-50 transition-colors ${selectedMedicamento?.id === med.id ? 'bg-blue-50 border-blue-200' : ''
+																		className={`cursor-pointer hover:shadow-md transition-all duration-300 ${selectedMedicamento?.id === med.id ? 'border-primary bg-primary/5' : 'border-border'
 																			}`}
 																		onClick={() => setSelectedMedicamento(med)}
 																	>
 																		<CardContent className="p-4">
 																			<div className="flex justify-between items-start">
 																				<div>
-																					<h4 className="font-semibold">{med.nomeComercial}</h4>
-																					<p className="text-sm text-gray-600">{med.nomeQuimico}</p>
+																					<h4 className="font-semibold text-card-foreground">{med.nomeComercial}</h4>
+																					<p className="text-sm text-muted-foreground">{med.nomeQuimico}</p>
 																					<div className="flex flex-wrap gap-1 mt-2">
 																						<Badge variant="secondary" className="text-xs">
 																							{med.isVeterinario ? 'Veterinário' : 'Humano'}
@@ -659,7 +687,7 @@ const EditarFicha = () => {
 																					<AlertTriangle className="h-4 w-4 text-amber-500" />
 																				)}
 																			</div>
-																			<p className="text-sm mt-2 text-gray-700 line-clamp-2">{med.indicacao}</p>
+																			<p className="text-sm mt-2 text-muted-foreground line-clamp-2">{med.indicacao}</p>
 																		</CardContent>
 																	</Card>
 																))}
@@ -673,51 +701,51 @@ const EditarFicha = () => {
 													{selectedMedicamento ? (
 														<>
 															<div>
-																<h3 className="font-semibold mb-2">Detalhes do Medicamento</h3>
+																<h3 className="font-semibold text-card-foreground mb-2">Detalhes do Medicamento</h3>
 																<div className="space-y-3">
 																	<div>
-																		<Label>Nome Comercial</Label>
-																		<p className="font-medium">{selectedMedicamento.nomeComercial}</p>
+																		<Label className="text-card-foreground">Nome Comercial</Label>
+																		<p className="font-medium text-card-foreground">{selectedMedicamento.nomeComercial}</p>
 																	</div>
 																	<div>
-																		<Label>Nome Químico</Label>
-																		<p>{selectedMedicamento.nomeQuimico}</p>
+																		<Label className="text-card-foreground">Nome Químico</Label>
+																		<p className="text-muted-foreground">{selectedMedicamento.nomeQuimico}</p>
 																	</div>
 																	<div>
-																		<Label>Apresentação</Label>
-																		<p className="text-sm">{selectedMedicamento.apresentacao}</p>
+																		<Label className="text-card-foreground">Apresentação</Label>
+																		<p className="text-sm text-muted-foreground">{selectedMedicamento.apresentacao}</p>
 																	</div>
 																	<div>
-																		<Label>Posologia Geral</Label>
-																		<p className="text-sm">{selectedMedicamento.posologia}</p>
+																		<Label className="text-card-foreground">Posologia Geral</Label>
+																		<p className="text-sm text-muted-foreground">{selectedMedicamento.posologia}</p>
 																	</div>
 																	{selectedMedicamento.atencao && (
-																		<div className="bg-red-50 border border-red-200 rounded p-3">
-																			<Label className="text-red-700">⚠️ Atenção</Label>
-																			<p className="text-sm text-red-700">{selectedMedicamento.atencao}</p>
+																		<div className="bg-destructive/10 border border-destructive/20 rounded p-3">
+																			<Label className="text-destructive">⚠️ Atenção</Label>
+																			<p className="text-sm text-destructive">{selectedMedicamento.atencao}</p>
 																		</div>
 																	)}
 																</div>
 															</div>
 
 															{/* Calculadora de doses */}
-															<div className="border-t pt-4">
-																<h3 className="font-semibold mb-3">Calculadora de Doses</h3>
+															<div className="border-t border-border pt-4">
+																<h3 className="font-semibold text-card-foreground mb-3">Calculadora de Doses</h3>
 
 																<div className="space-y-3">
 																	<div>
-																		<Label>Peso do Animal</Label>
-																		<p className="font-medium">{formData.peso || 'Não informado'} kg</p>
+																		<Label className="text-card-foreground">Peso do Animal</Label>
+																		<p className="font-medium text-card-foreground">{formData.peso || 'Não informado'} kg</p>
 																	</div>
 
 																	<div>
-																		<Label>Espécie para cálculo</Label>
-																		<p className="font-medium">{formData.especie || 'Não informada'}</p>
+																		<Label className="text-card-foreground">Espécie para cálculo</Label>
+																		<p className="font-medium text-card-foreground">{formData.especie || 'Não informada'}</p>
 																	</div>
 
 																	<Button
 																		onClick={calcularDose}
-																		className="w-full gap-2"
+																		className="w-full gap-2 bg-primary hover:bg-primary/90"
 																		disabled={!formData.peso || !formData.especie}
 																	>
 																		<Calculator className="h-4 w-4" />
@@ -725,12 +753,12 @@ const EditarFicha = () => {
 																	</Button>
 
 																	{doseCalculada !== null && (
-																		<div className={`p-3 rounded ${doseCalculada === 0 ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'}`}>
+																		<div className={`p-3 rounded ${doseCalculada === 0 ? 'bg-destructive/10 border border-destructive/20' : 'bg-emerald-100 border border-emerald-200'}`}>
 																			<p className="font-semibold">
 																				{doseCalculada === 0 ? (
-																					<span className="text-red-600">⚠️ Contra-indicado</span>
+																					<span className="text-destructive">⚠️ Contra-indicado</span>
 																				) : (
-																					<span className="text-green-700">
+																					<span className="text-emerald-700">
 																						Dose calculada: <strong>{doseCalculada.toFixed(2)} {selectedMedicamento.especies[0]?.unidade || 'mg'}</strong>
 																					</span>
 																				)}
@@ -744,7 +772,7 @@ const EditarFicha = () => {
 																			setIsDEFDialogOpen(false);
 																		}}
 																		disabled={!doseCalculada || doseCalculada === 0}
-																		className="w-full"
+																		className="w-full bg-accent hover:bg-accent/90"
 																	>
 																		Adicionar à Prescrição
 																	</Button>
@@ -752,7 +780,7 @@ const EditarFicha = () => {
 															</div>
 														</>
 													) : (
-														<div className="text-center py-8 text-gray-500">
+														<div className="text-center py-8 text-muted-foreground">
 															Selecione um medicamento para ver os detalhes
 														</div>
 													)}
@@ -767,42 +795,42 @@ const EditarFicha = () => {
 								{medicamentosPrescritos.length > 0 ? (
 									<div className="space-y-4">
 										<div className="flex justify-between items-center">
-											<h3 className="text-lg font-semibold text-white">Medicamentos Prescritos</h3>
-											<span className="text-sm text-gray-400">
+											<h3 className="text-lg font-semibold text-card-foreground">Medicamentos Prescritos</h3>
+											<span className="text-sm text-muted-foreground">
 												{medicamentosPrescritos.length} medicamento(s)
 											</span>
 										</div>
 
 										<Table>
 											<TableHeader>
-												<TableRow>
-													<TableHead className="text-white">Medicamento</TableHead>
-													<TableHead className="text-white">Dose</TableHead>
-													<TableHead className="text-white">Peso Animal</TableHead>
-													<TableHead className="text-white">Espécie</TableHead>
-													<TableHead className="text-white">Data</TableHead>
-													<TableHead className="text-white">Ações</TableHead>
+												<TableRow className="border-border">
+													<TableHead className="text-card-foreground">Medicamento</TableHead>
+													<TableHead className="text-card-foreground">Dose</TableHead>
+													<TableHead className="text-card-foreground">Peso Animal</TableHead>
+													<TableHead className="text-card-foreground">Espécie</TableHead>
+													<TableHead className="text-card-foreground">Data</TableHead>
+													<TableHead className="text-card-foreground">Ações</TableHead>
 												</TableRow>
 											</TableHeader>
 											<TableBody>
 												{medicamentosPrescritos.map((med, index) => (
-													<TableRow key={index}>
+													<TableRow key={index} className="border-border">
 														<TableCell>
-															<div className="font-medium text-white">{med.medicamento.nomeComercial}</div>
-															<div className="text-sm text-gray-400">{med.medicamento.nomeQuimico}</div>
+															<div className="font-medium text-card-foreground">{med.medicamento.nomeComercial}</div>
+															<div className="text-sm text-muted-foreground">{med.medicamento.nomeQuimico}</div>
 														</TableCell>
-														<TableCell className="text-white">
+														<TableCell className="text-card-foreground">
 															{med.dose.toFixed(2)} {med.unidade}
 														</TableCell>
-														<TableCell className="text-white">{med.pesoAnimal} kg</TableCell>
-														<TableCell className="text-white">{med.especieAnimal}</TableCell>
-														<TableCell className="text-white">{med.data}</TableCell>
+														<TableCell className="text-card-foreground">{med.pesoAnimal} kg</TableCell>
+														<TableCell className="text-card-foreground">{med.especieAnimal}</TableCell>
+														<TableCell className="text-card-foreground">{med.data}</TableCell>
 														<TableCell>
 															<Button
 																variant="ghost"
 																size="sm"
 																onClick={() => removerMedicamentoPrescrito(index)}
-																className="text-red-400 hover:text-red-300"
+																className="text-destructive hover:text-destructive/80 hover:bg-destructive/10"
 															>
 																<Trash2 className="h-4 w-4" />
 															</Button>
@@ -814,9 +842,9 @@ const EditarFicha = () => {
 									</div>
 								) : (
 									<div className="text-center py-8">
-										<Pill className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-										<h3 className="text-lg font-semibold text-white mb-2">Nenhum medicamento prescrito</h3>
-										<p className="text-gray-400">Consulte o DEF para adicionar medicamentos à prescrição</p>
+										<Pill className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+										<h3 className="text-lg font-semibold text-card-foreground mb-2">Nenhum medicamento prescrito</h3>
+										<p className="text-muted-foreground">Consulte o DEF para adicionar medicamentos à prescrição</p>
 									</div>
 								)}
 							</CardContent>
@@ -825,9 +853,9 @@ const EditarFicha = () => {
 
 					{/* Aba: Observações */}
 					<TabsContent value="observacoes">
-						<Card className="bg-black/50 border-red-600/30">
+						<Card className="bg-card border border-primary/20 shadow-md">
 							<CardHeader>
-								<CardTitle className="text-white">Observações</CardTitle>
+								<CardTitle className="text-card-foreground">Observações</CardTitle>
 							</CardHeader>
 							<CardContent>
 								<Textarea
@@ -836,19 +864,19 @@ const EditarFicha = () => {
 									onChange={handleChange}
 									rows={10}
 									placeholder="Informações adicionais sobre o animal, histórico clínico, tratamentos anteriores, comportamento, etc..."
-									className="bg-black/50 border-red-600/50 text-white"
+									className="bg-background border-input focus:border-primary focus:ring-primary"
 								/>
 							</CardContent>
 						</Card>
 					</TabsContent>
 
 					{/* Botões de ação */}
-					<div className="flex justify-between items-center pt-6 border-t border-gray-800">
+					<div className="flex justify-between items-center pt-6 border-t border-border">
 						<Button
 							type="button"
 							variant="outline"
 							onClick={() => navigate('/fichas/lista')}
-							className="text-white border-gray-600 hover:bg-gray-800"
+							className="border-border text-card-foreground hover:bg-muted"
 						>
 							Cancelar
 						</Button>
@@ -858,10 +886,12 @@ const EditarFicha = () => {
 								type="button"
 								variant="outline"
 								onClick={() => {
-									// Gerar relatório/atestado (opcional)
-									alert('Função de impressão em desenvolvimento');
+									toast({
+										title: 'Em desenvolvimento',
+										description: 'Função de impressão em breve disponível',
+									});
 								}}
-								className="text-white border-gray-600 hover:bg-gray-800"
+								className="border-border text-card-foreground hover:bg-muted"
 							>
 								<FileText className="mr-2 h-4 w-4" />
 								Imprimir Ficha
@@ -870,7 +900,7 @@ const EditarFicha = () => {
 							<Button
 								type="submit"
 								disabled={loading}
-								className="bg-red-600 hover:bg-red-700 text-white font-bold py-6 px-12 text-lg"
+								className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 px-12 text-lg"
 							>
 								{loading ? (
 									<>

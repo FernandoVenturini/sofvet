@@ -225,3 +225,14 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Remove underline de todos os links */
+a, 
+[class*="hover:underline"] {
+  text-decoration: none !important;
+}
+
+/* Especificamente para links com hover */
+a:hover {
+  text-decoration: none !important;
+}

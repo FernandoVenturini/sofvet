@@ -23,6 +23,7 @@ import {
   PawPrint, DollarSign, Eye, Mail, Ban, AlertTriangle
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 const NovaFicha = () => {
   const [codigo, setCodigo] = useState('');
@@ -130,8 +131,10 @@ const NovaFicha = () => {
       await uploadBytes(storageRef, file);
       const url = await getDownloadURL(storageRef);
       setImagemUrl(url);
+      toast.success('Imagem enviada com sucesso!');
     } catch (error) {
       console.error('Erro no upload da imagem:', error);
+      toast.error('Erro ao enviar imagem');
     } finally {
       setUploadingImage(false);
     }
@@ -139,6 +142,7 @@ const NovaFicha = () => {
 
   const adicionarVacina = () => {
     if (!vacinaSelecionada || !dataDose) {
+      toast.error('Selecione a vacina e a data da dose');
       return;
     }
 
@@ -175,11 +179,13 @@ const NovaFicha = () => {
     setVacinaSelecionada('');
     setDoseAtual(1);
     setDataDose('');
+    toast.success('Vacina registrada com sucesso!');
   };
 
   const removerVacina = (index: number) => {
     const novaLista = vacinasAplicadas.filter((_, i) => i !== index);
     setVacinasAplicadas(novaLista);
+    toast.success('Vacina removida');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -197,9 +203,11 @@ const NovaFicha = () => {
         updatedAt: serverTimestamp(),
       });
 
+      toast.success('Ficha cadastrada com sucesso!');
       navigate('/fichas/lista');
     } catch (error) {
       console.error('Erro ao salvar ficha:', error);
+      toast.error('Erro ao salvar ficha');
     } finally {
       setLoading(false);
     }
@@ -219,23 +227,23 @@ const NovaFicha = () => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-up">
       {/* Header */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 rounded-xl bg-gradient-to-br from-red-600/20 to-pink-600/20 border border-red-500/30">
-              <Dog className="h-6 w-6 text-red-400" />
+            <div className="p-2 rounded-xl bg-primary/20 border border-primary/30">
+              <Dog className="h-6 w-6 text-primary" />
             </div>
-            <Badge className="bg-gradient-to-r from-red-600/20 to-pink-600/20 text-red-300 border border-red-500/30">
+            <Badge className="bg-primary/20 text-primary-foreground/80 border border-primary/30">
               <Plus className="h-3 w-3 mr-1" />
               Nova Ficha
             </Badge>
           </div>
-          <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
+          <h1 className="text-3xl lg:text-4xl font-bold text-gradient">
             Cadastrar Novo Animal
           </h1>
-          <p className="text-gray-400 mt-2">
+          <p className="text-muted-foreground mt-2">
             Preencha os dados para criar uma nova ficha de paciente
           </p>
         </div>
@@ -243,14 +251,14 @@ const NovaFicha = () => {
         <div className="flex items-center gap-3">
           <Button
             variant="outline"
-            className="border-gray-800 text-gray-400 hover:text-white hover:bg-gray-800/30 gap-2"
+            className="border-input text-muted-foreground hover:text-foreground hover:bg-muted gap-2"
             onClick={() => navigate('/fichas/lista')}
           >
             <History className="h-4 w-4" />
             Ver Todas
           </Button>
           <Button
-            className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 gap-2"
+            className="bg-primary hover:bg-primary/90 gap-2"
             onClick={(e) => handleSubmit(e)}
             disabled={loading}
           >
@@ -270,24 +278,24 @@ const NovaFicha = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-5 bg-gradient-to-r from-gray-900/50 to-black/50 border border-gray-800/50 p-1">
-          <TabsTrigger value="dados" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-600/30 data-[state=active]:to-pink-600/30">
+        <TabsList className="grid grid-cols-5 bg-muted border border-border p-1 rounded-lg">
+          <TabsTrigger value="dados" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md">
             <Dog className="h-4 w-4 mr-2" />
             Dados
           </TabsTrigger>
-          <TabsTrigger value="proprietario" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-600/30 data-[state=active]:to-pink-600/30">
+          <TabsTrigger value="proprietario" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md">
             <User className="h-4 w-4 mr-2" />
             Proprietário
           </TabsTrigger>
-          <TabsTrigger value="vacinas" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-600/30 data-[state=active]:to-pink-600/30">
+          <TabsTrigger value="vacinas" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md">
             <Syringe className="h-4 w-4 mr-2" />
             Vacinas
           </TabsTrigger>
-          <TabsTrigger value="saude" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-600/30 data-[state=active]:to-pink-600/30">
+          <TabsTrigger value="saude" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md">
             <Heart className="h-4 w-4 mr-2" />
             Saúde
           </TabsTrigger>
-          <TabsTrigger value="foto" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-600/30 data-[state=active]:to-pink-600/30">
+          <TabsTrigger value="foto" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md">
             <Camera className="h-4 w-4 mr-2" />
             Foto
           </TabsTrigger>
@@ -296,18 +304,18 @@ const NovaFicha = () => {
         <TabsContent value="dados" className="mt-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Foto do Animal */}
-            <Card className="lg:col-span-1 bg-gradient-to-br from-gray-900/80 to-black/80 border border-gray-800/50">
+            <Card className="lg:col-span-1 bg-card border border-primary/20 shadow-md">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Camera className="h-5 w-5 text-red-400" />
+                <CardTitle className="flex items-center gap-2 text-card-foreground">
+                  <Camera className="h-5 w-5 text-primary" />
                   Foto do Animal
                 </CardTitle>
-                <CardDescription className="text-gray-400">
+                <CardDescription className="text-muted-foreground">
                   Envie uma foto para identificar melhor
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex flex-col items-center space-y-4">
-                <div className="relative w-full aspect-square rounded-xl overflow-hidden border-2 border-gray-800/50 bg-gradient-to-br from-gray-900/50 to-black/50">
+                <div className="relative w-full aspect-square rounded-xl overflow-hidden border-2 border-border bg-muted">
                   {imagemUrl ? (
                     <img
                       src={imagemUrl}
@@ -315,7 +323,7 @@ const NovaFicha = () => {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center text-gray-500">
+                    <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground">
                       <Camera className="h-20 w-20 mb-4 opacity-30" />
                       <span className="text-sm">Nenhuma foto</span>
                     </div>
@@ -333,7 +341,7 @@ const NovaFicha = () => {
                     type="button"
                     variant="outline"
                     disabled={uploadingImage}
-                    className="w-full gap-2 border-gray-800 text-gray-400 hover:text-white hover:bg-gray-800/30"
+                    className="w-full gap-2 border-input text-muted-foreground hover:text-foreground hover:bg-muted"
                     onClick={() => document.getElementById('foto-animal')?.click()}
                   >
                     {uploadingImage ? (
@@ -354,34 +362,34 @@ const NovaFicha = () => {
 
             {/* Dados do Animal */}
             <div className="lg:col-span-2 space-y-6">
-              <Card className="bg-gradient-to-br from-gray-900/80 to-black/80 border border-gray-800/50">
+              <Card className="bg-card border border-primary/20 shadow-md">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Dog className="h-5 w-5 text-blue-400" />
+                  <CardTitle className="flex items-center gap-2 text-card-foreground">
+                    <Dog className="h-5 w-5 text-blue-500" />
                     Informações Básicas
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label className="text-white">Nome do Animal *</Label>
+                      <Label className="text-card-foreground">Nome do Animal *</Label>
                       <Input
                         name="nomeAnimal"
                         value={formData.nomeAnimal}
                         onChange={handleChange}
                         required
-                        className="bg-gray-900/50 border-gray-700/50 text-white"
+                        className="bg-background border-input focus:border-primary focus:ring-primary"
                         placeholder="Ex: Rex, Luna, Thor"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label className="text-white">Espécie</Label>
+                      <Label className="text-card-foreground">Espécie</Label>
                       <Select onValueChange={handleSelectChange('especie')} value={formData.especie}>
-                        <SelectTrigger className="bg-gray-900/50 border-gray-700/50 text-white">
+                        <SelectTrigger className="bg-background border-input">
                           <SelectValue placeholder="Selecione a espécie" />
                         </SelectTrigger>
-                        <SelectContent className="bg-gray-900 border-gray-800">
+                        <SelectContent className="bg-card border-border">
                           {especies.map((especie) => (
                             <SelectItem key={especie.value} value={especie.value} className="flex items-center gap-2">
                               <especie.icon className="h-4 w-4" />
@@ -393,23 +401,23 @@ const NovaFicha = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label className="text-white">Raça</Label>
+                      <Label className="text-card-foreground">Raça</Label>
                       <Input
                         name="raca"
                         value={formData.raca}
                         onChange={handleChange}
-                        className="bg-gray-900/50 border-gray-700/50 text-white"
+                        className="bg-background border-input focus:border-primary focus:ring-primary"
                         placeholder="Ex: Labrador, Siames"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label className="text-white">Sexo</Label>
+                      <Label className="text-card-foreground">Sexo</Label>
                       <Select onValueChange={handleSelectChange('sexo')} value={formData.sexo}>
-                        <SelectTrigger className="bg-gray-900/50 border-gray-700/50 text-white">
+                        <SelectTrigger className="bg-background border-input">
                           <SelectValue placeholder="Selecione o sexo" />
                         </SelectTrigger>
-                        <SelectContent className="bg-gray-900 border-gray-800">
+                        <SelectContent className="bg-card border-border">
                           <SelectItem value="macho">Macho</SelectItem>
                           <SelectItem value="femea">Fêmea</SelectItem>
                         </SelectContent>
@@ -417,56 +425,56 @@ const NovaFicha = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label className="text-white">Data de Nascimento</Label>
+                      <Label className="text-card-foreground">Data de Nascimento</Label>
                       <div className="relative">
-                        <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+                        <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
                           type="date"
                           name="dataNascimento"
                           value={formData.dataNascimento}
                           onChange={handleChange}
-                          className="bg-gray-900/50 border-gray-700/50 text-white pl-10"
+                          className="bg-background border-input focus:border-primary focus:ring-primary pl-10"
                         />
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <Label className="text-white">Cor</Label>
+                      <Label className="text-card-foreground">Cor</Label>
                       <div className="relative">
-                        <Palette className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+                        <Palette className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
                           name="cor"
                           value={formData.cor}
                           onChange={handleChange}
-                          className="bg-gray-900/50 border-gray-700/50 text-white pl-10"
+                          className="bg-background border-input focus:border-primary focus:ring-primary pl-10"
                           placeholder="Ex: Marrom, Branco"
                         />
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <Label className="text-white">Pelagem</Label>
+                      <Label className="text-card-foreground">Pelagem</Label>
                       <div className="relative">
-                        <Droplets className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+                        <Droplets className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
                           name="pelagem"
                           value={formData.pelagem}
                           onChange={handleChange}
-                          className="bg-gray-900/50 border-gray-700/50 text-white pl-10"
+                          className="bg-background border-input focus:border-primary focus:ring-primary pl-10"
                           placeholder="Ex: Curta, Longa"
                         />
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <Label className="text-white">Peso (kg)</Label>
+                      <Label className="text-card-foreground">Peso (kg)</Label>
                       <div className="relative">
-                        <Scale className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+                        <Scale className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
                           name="peso"
                           value={formData.peso}
                           onChange={handleChange}
-                          className="bg-gray-900/50 border-gray-700/50 text-white pl-10"
+                          className="bg-background border-input focus:border-primary focus:ring-primary pl-10"
                           placeholder="Ex: 25.5"
                           type="number"
                           step="0.1"
@@ -477,22 +485,22 @@ const NovaFicha = () => {
                 </CardContent>
               </Card>
 
-              <Card className="bg-gradient-to-br from-gray-900/80 to-black/80 border border-gray-800/50">
+              <Card className="bg-card border border-primary/20 shadow-md">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Stethoscope className="h-5 w-5 text-purple-400" />
+                  <CardTitle className="flex items-center gap-2 text-card-foreground">
+                    <Stethoscope className="h-5 w-5 text-purple-500" />
                     Identificação
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label className="text-white">Número do Microchip</Label>
+                      <Label className="text-card-foreground">Número do Microchip</Label>
                       <Input
                         name="microchip"
                         value={formData.microchip}
                         onChange={handleChange}
-                        className="bg-gray-900/50 border-gray-700/50 text-white"
+                        className="bg-background border-input focus:border-primary focus:ring-primary"
                         placeholder="Código único de identificação"
                       />
                     </div>
@@ -504,69 +512,69 @@ const NovaFicha = () => {
         </TabsContent>
 
         <TabsContent value="proprietario" className="mt-6">
-          <Card className="bg-gradient-to-br from-gray-900/80 to-black/80 border border-gray-800/50">
+          <Card className="bg-card border border-primary/20 shadow-md">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <User className="h-5 w-5 text-emerald-400" />
+              <CardTitle className="flex items-center gap-2 text-card-foreground">
+                <User className="h-5 w-5 text-emerald-500" />
                 Informações do Proprietário
               </CardTitle>
-              <CardDescription className="text-gray-400">
+              <CardDescription className="text-muted-foreground">
                 Dados de contato do responsável pelo animal
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label className="text-white">Nome *</Label>
+                  <Label className="text-card-foreground">Nome *</Label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
                       name="nomeProprietario"
                       value={formData.nomeProprietario}
                       onChange={handleChange}
                       required
-                      className="bg-gray-900/50 border-gray-700/50 text-white pl-10"
+                      className="bg-background border-input focus:border-primary focus:ring-primary pl-10"
                       placeholder="Nome completo"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-white">Telefone</Label>
+                  <Label className="text-card-foreground">Telefone</Label>
                   <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
                       name="telefoneProprietario"
                       value={formData.telefoneProprietario}
                       onChange={handleChange}
-                      className="bg-gray-900/50 border-gray-700/50 text-white pl-10"
+                      className="bg-background border-input focus:border-primary focus:ring-primary pl-10"
                       placeholder="(11) 99999-9999"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-white">E-mail</Label>
+                  <Label className="text-card-foreground">E-mail</Label>
                   <Input
                     name="emailProprietario"
                     value={formData.emailProprietario}
                     onChange={handleChange}
-                    className="bg-gray-900/50 border-gray-700/50 text-white"
+                    className="bg-background border-input focus:border-primary focus:ring-primary"
                     placeholder="email@exemplo.com"
                     type="email"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-white">Endereço</Label>
+                  <Label className="text-card-foreground">Endereço</Label>
                   <div className="relative">
-                    <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
+                    <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Textarea
                       name="enderecoProprietario"
                       value={formData.enderecoProprietario}
                       onChange={handleChange}
                       rows={3}
-                      className="bg-gray-900/50 border-gray-700/50 text-white pl-10"
+                      className="bg-background border-input focus:border-primary focus:ring-primary pl-10"
                       placeholder="Rua, número, bairro, cidade - Estado"
                     />
                   </div>
@@ -577,25 +585,25 @@ const NovaFicha = () => {
         </TabsContent>
 
         <TabsContent value="vacinas" className="mt-6">
-          <Card className="bg-gradient-to-br from-gray-900/80 to-black/80 border border-gray-800/50">
+          <Card className="bg-card border border-primary/20 shadow-md">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Syringe className="h-5 w-5 text-cyan-400" />
+              <CardTitle className="flex items-center gap-2 text-card-foreground">
+                <Syringe className="h-5 w-5 text-cyan-500" />
                 Controle de Vacinação
               </CardTitle>
-              <CardDescription className="text-gray-400">
+              <CardDescription className="text-muted-foreground">
                 Registre as vacinas aplicadas e programe as próximas doses
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-white">Vacina</Label>
+                  <Label className="text-card-foreground">Vacina</Label>
                   <Select onValueChange={(value) => setVacinaSelecionada(value)} value={vacinaSelecionada}>
-                    <SelectTrigger className="bg-gray-900/50 border-gray-700/50 text-white">
+                    <SelectTrigger className="bg-background border-input">
                       <SelectValue placeholder="Selecione uma vacina" />
                     </SelectTrigger>
-                    <SelectContent className="bg-gray-900 border-gray-800">
+                    <SelectContent className="bg-card border-border">
                       {vacinasTabela.map((vacina) => (
                         <SelectItem key={vacina.id} value={vacina.id} className="flex items-center gap-2">
                           <Shield className="h-4 w-4" />
@@ -606,12 +614,12 @@ const NovaFicha = () => {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-white">Dose Atual</Label>
+                  <Label className="text-card-foreground">Dose Atual</Label>
                   <Select onValueChange={(value) => setDoseAtual(Number(value))} value={doseAtual.toString()}>
-                    <SelectTrigger className="bg-gray-900/50 border-gray-700/50 text-white">
+                    <SelectTrigger className="bg-background border-input">
                       <SelectValue placeholder="Dose" />
                     </SelectTrigger>
-                    <SelectContent className="bg-gray-900 border-gray-800">
+                    <SelectContent className="bg-card border-border">
                       {[1, 2, 3, 4].map((dose) => (
                         <SelectItem key={dose} value={dose.toString()}>
                           {dose}ª dose
@@ -621,14 +629,14 @@ const NovaFicha = () => {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-white">Data da Dose</Label>
+                  <Label className="text-card-foreground">Data da Dose</Label>
                   <div className="relative">
-                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
                       type="date"
                       value={dataDose}
                       onChange={(e) => setDataDose(e.target.value)}
-                      className="bg-gray-900/50 border-gray-700/50 text-white pl-10"
+                      className="bg-background border-input focus:border-primary focus:ring-primary pl-10"
                     />
                   </div>
                 </div>
@@ -637,7 +645,7 @@ const NovaFicha = () => {
                     onClick={adicionarVacina}
                     type="button"
                     disabled={!vacinaSelecionada || !dataDose}
-                    className="w-full gap-2 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700"
+                    className="w-full gap-2 bg-primary hover:bg-primary/90"
                   >
                     <Plus className="h-4 w-4" />
                     Aplicar Dose
@@ -645,56 +653,56 @@ const NovaFicha = () => {
                 </div>
               </div>
 
-              <Separator className="bg-gray-800/50" />
+              <Separator className="bg-border" />
 
               {/* Lista de vacinas aplicadas e programadas */}
               {vacinasAplicadas.length > 0 ? (
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-white">Histórico de Vacinação</h3>
-                    <Badge className="bg-gradient-to-r from-cyan-600/20 to-blue-600/20 text-cyan-400 border border-cyan-500/30">
+                    <h3 className="text-lg font-semibold text-card-foreground">Histórico de Vacinação</h3>
+                    <Badge className="bg-cyan-500/10 text-cyan-500 border-cyan-500/30">
                       {vacinasAplicadas.length} registro{vacinasAplicadas.length !== 1 ? 's' : ''}
                     </Badge>
                   </div>
-                  <div className="rounded-lg border border-gray-800/50 overflow-hidden">
+                  <div className="rounded-lg border border-border overflow-hidden">
                     <Table>
                       <TableHeader>
-                        <TableRow className="border-gray-800/50">
-                          <TableHead className="text-gray-400">Vacina</TableHead>
-                          <TableHead className="text-gray-400">Dose</TableHead>
-                          <TableHead className="text-gray-400">Data Aplicação</TableHead>
-                          <TableHead className="text-gray-400">Próxima Dose</TableHead>
-                          <TableHead className="text-gray-400">Status</TableHead>
-                          <TableHead className="text-gray-400 text-right">Ações</TableHead>
+                        <TableRow className="border-border">
+                          <TableHead className="text-muted-foreground">Vacina</TableHead>
+                          <TableHead className="text-muted-foreground">Dose</TableHead>
+                          <TableHead className="text-muted-foreground">Data Aplicação</TableHead>
+                          <TableHead className="text-muted-foreground">Próxima Dose</TableHead>
+                          <TableHead className="text-muted-foreground">Status</TableHead>
+                          <TableHead className="text-muted-foreground text-right">Ações</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {vacinasAplicadas.map((v, index) => (
-                          <TableRow key={index} className="border-gray-800/30 hover:bg-gray-800/20">
-                            <TableCell className="font-medium text-white">{v.nomeVacina}</TableCell>
-                            <TableCell className="text-white">{v.dose}ª dose</TableCell>
-                            <TableCell className="text-white">
+                          <TableRow key={index} className="border-border hover:bg-muted/50">
+                            <TableCell className="font-medium text-card-foreground">{v.nomeVacina}</TableCell>
+                            <TableCell className="text-card-foreground">{v.dose}ª dose</TableCell>
+                            <TableCell className="text-card-foreground">
                               {v.dataAplicacao ? (
                                 <div className="flex items-center gap-2">
-                                  <Calendar className="h-3 w-3 text-gray-500" />
+                                  <Calendar className="h-3 w-3 text-muted-foreground" />
                                   {new Date(v.dataAplicacao).toLocaleDateString('pt-BR')}
                                 </div>
                               ) : '-'}
                             </TableCell>
-                            <TableCell className="text-white">
+                            <TableCell className="text-card-foreground">
                               {v.proximaData ? (
                                 <div className="flex items-center gap-2">
-                                  <Calendar className="h-3 w-3 text-gray-500" />
+                                  <Calendar className="h-3 w-3 text-muted-foreground" />
                                   {new Date(v.proximaData).toLocaleDateString('pt-BR')}
                                 </div>
                               ) : '-'}
                             </TableCell>
                             <TableCell>
                               <Badge className={cn(
-                                "bg-gradient-to-r border",
+                                "border",
                                 v.proximaData
-                                  ? "from-amber-600/20 to-orange-600/20 text-amber-400 border-amber-500/30"
-                                  : "from-emerald-600/20 to-green-600/20 text-emerald-400 border-emerald-500/30"
+                                  ? "bg-amber-500/10 text-amber-500 border-amber-500/30"
+                                  : "bg-emerald-500/10 text-emerald-500 border-emerald-500/30"
                               )}>
                                 {v.proximaData ? 'Programada' : 'Completa'}
                               </Badge>
@@ -704,7 +712,7 @@ const NovaFicha = () => {
                                 size="sm"
                                 variant="ghost"
                                 onClick={() => removerVacina(index)}
-                                className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                                className="text-destructive hover:text-destructive/80 hover:bg-destructive/10"
                               >
                                 <Trash2 className="h-4 w-4" />
                               </Button>
@@ -717,9 +725,9 @@ const NovaFicha = () => {
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <Syringe className="h-16 w-16 text-gray-600 mx-auto mb-4" />
-                  <p className="text-gray-400 text-lg">Nenhuma vacina registrada</p>
-                  <p className="text-gray-500 text-sm mt-2">
+                  <Syringe className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground text-lg">Nenhuma vacina registrada</p>
+                  <p className="text-muted-foreground/70 text-sm mt-2">
                     Adicione a primeira vacina usando o formulário acima
                   </p>
                 </div>
@@ -729,63 +737,63 @@ const NovaFicha = () => {
         </TabsContent>
 
         <TabsContent value="saude" className="mt-6">
-          <Card className="bg-gradient-to-br from-gray-900/80 to-black/80 border border-gray-800/50">
+          <Card className="bg-card border border-primary/20 shadow-md">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Heart className="h-5 w-5 text-red-400" />
+              <CardTitle className="flex items-center gap-2 text-card-foreground">
+                <Heart className="h-5 w-5 text-rose-500" />
                 Histórico de Saúde
               </CardTitle>
-              <CardDescription className="text-gray-400">
+              <CardDescription className="text-muted-foreground">
                 Informações médicas importantes sobre o animal
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label className="text-white">Alergias Conhecidas</Label>
+                  <Label className="text-card-foreground">Alergias Conhecidas</Label>
                   <Textarea
                     name="alergias"
                     value={formData.alergias}
                     onChange={handleChange}
                     rows={3}
-                    className="bg-gray-900/50 border-gray-700/50 text-white"
+                    className="bg-background border-input focus:border-primary focus:ring-primary"
                     placeholder="Liste as alergias do animal..."
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-white">Doenças Crônicas</Label>
+                  <Label className="text-card-foreground">Doenças Crônicas</Label>
                   <Textarea
                     name="doencasCronicas"
                     value={formData.doencasCronicas}
                     onChange={handleChange}
                     rows={3}
-                    className="bg-gray-900/50 border-gray-700/50 text-white"
+                    className="bg-background border-input focus:border-primary focus:ring-primary"
                     placeholder="Doenças preexistentes..."
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label className="text-white">Medicamentos em Uso</Label>
+                <Label className="text-card-foreground">Medicamentos em Uso</Label>
                 <Textarea
                   name="medicamentos"
                   value={formData.medicamentos}
                   onChange={handleChange}
                   rows={3}
-                  className="bg-gray-900/50 border-gray-700/50 text-white"
+                  className="bg-background border-input focus:border-primary focus:ring-primary"
                   placeholder="Medicamentos de uso contínuo..."
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-white">Observações Gerais</Label>
+                <Label className="text-card-foreground">Observações Gerais</Label>
                 <Textarea
                   name="observacoes"
                   value={formData.observacoes}
                   onChange={handleChange}
                   rows={5}
-                  className="bg-gray-900/50 border-gray-700/50 text-white"
+                  className="bg-background border-input focus:border-primary focus:ring-primary"
                   placeholder="Informações adicionais sobre saúde, comportamento, etc..."
                 />
               </div>
@@ -794,19 +802,19 @@ const NovaFicha = () => {
         </TabsContent>
 
         <TabsContent value="foto" className="mt-6">
-          <Card className="bg-gradient-to-br from-gray-900/80 to-black/80 border border-gray-800/50">
+          <Card className="bg-card border border-primary/20 shadow-md">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Camera className="h-5 w-5 text-purple-400" />
+              <CardTitle className="flex items-center gap-2 text-card-foreground">
+                <Camera className="h-5 w-5 text-purple-500" />
                 Galeria de Fotos
               </CardTitle>
-              <CardDescription className="text-gray-400">
+              <CardDescription className="text-muted-foreground">
                 Adicione fotos para documentação visual do animal
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="aspect-square rounded-xl border-2 border-dashed border-gray-800/50 bg-gradient-to-br from-gray-900/30 to-black/30 flex flex-col items-center justify-center hover:border-purple-500/30 transition-colors cursor-pointer">
+                <div className="aspect-square rounded-xl border-2 border-dashed border-border bg-muted flex flex-col items-center justify-center hover:border-primary/50 transition-colors cursor-pointer">
                   <input
                     type="file"
                     accept="image/*"
@@ -815,14 +823,14 @@ const NovaFicha = () => {
                     id="main-photo"
                   />
                   <label htmlFor="main-photo" className="cursor-pointer text-center p-4">
-                    <Upload className="h-12 w-12 text-gray-500 mx-auto mb-3" />
-                    <p className="text-gray-400">Clique para adicionar</p>
-                    <p className="text-sm text-gray-500">ou arraste uma imagem</p>
+                    <Upload className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+                    <p className="text-muted-foreground">Clique para adicionar</p>
+                    <p className="text-sm text-muted-foreground/70">ou arraste uma imagem</p>
                   </label>
                 </div>
 
                 {imagemUrl && (
-                  <div className="aspect-square rounded-xl overflow-hidden border border-gray-800/50 relative group">
+                  <div className="aspect-square rounded-xl overflow-hidden border border-border relative group">
                     <img
                       src={imagemUrl}
                       alt="Animal"
@@ -833,6 +841,7 @@ const NovaFicha = () => {
                         size="sm"
                         variant="outline"
                         className="border-gray-700 text-white hover:bg-gray-800/30"
+                        onClick={() => document.getElementById('main-photo')?.click()}
                       >
                         <Edit className="h-4 w-4 mr-2" />
                         Alterar
@@ -847,11 +856,11 @@ const NovaFicha = () => {
       </Tabs>
 
       {/* Botões de Ação */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between pt-6 border-t border-border">
         <Button
           variant="outline"
           onClick={() => navigate('/fichas/lista')}
-          className="border-gray-800 text-gray-400 hover:text-white hover:bg-gray-800/30"
+          className="border-input text-muted-foreground hover:text-foreground hover:bg-muted"
         >
           Cancelar
         </Button>
@@ -859,7 +868,7 @@ const NovaFicha = () => {
         <div className="flex items-center gap-3">
           <Button
             variant="outline"
-            className="border-gray-800 text-gray-400 hover:text-white hover:bg-gray-800/30 gap-2"
+            className="border-input text-muted-foreground hover:text-foreground hover:bg-muted gap-2"
             onClick={() => setActiveTab('dados')}
           >
             <FileText className="h-4 w-4" />
@@ -869,7 +878,7 @@ const NovaFicha = () => {
             type="submit"
             disabled={loading || !formData.nomeAnimal || !formData.nomeProprietario}
             onClick={handleSubmit}
-            className="gap-2 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 px-8 py-6"
+            className="gap-2 bg-primary hover:bg-primary/90 px-8 py-6"
           >
             {loading ? (
               <>

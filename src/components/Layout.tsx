@@ -163,23 +163,23 @@ const Layout = () => {
     },
   ];
 
-  const isActive = (path: string) => location.pathname.startsWith(path);
+  const isActive = (path: string) => location.pathname === path || location.pathname.startsWith(path + '/');
 
   return (
-    <div className="flex h-screen bg-red-950 text-gray-100 overflow-hidden">
+    <div className="flex h-screen bg-gray-50 text-gray-900 overflow-hidden">
       {/* Sidebar Desktop */}
-      <div className="hidden lg:flex flex-col w-64 bg-blue-500 border-r border-white-800">
+      <div className="hidden lg:flex flex-col w-64 bg-gradient-to-b from-blue-600 to-blue-700 border-r border-blue-800">
         {/* Logo */}
-        <div className="p-6 border-b border-white-800">
+        <div className="p-6 border-b border-blue-800">
           <div className="flex items-center space-x-3">
             <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center">
               <Heart className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-red-800 to-red-500 bg-clip-text text-transparent">
+              <h1 className="text-xl font-bold text-white">
                 SofVet
               </h1>
-              <p className="text-xs text-white-900">Software Veterinário</p>
+              <p className="text-xs text-blue-200">Software Veterinário</p>
             </div>
           </div>
         </div>
@@ -196,12 +196,12 @@ const Layout = () => {
                       <AccordionItem value={item.title} className="border-none">
                         <AccordionTrigger
                           className={cn(
-                            "flex items-center justify-between w-full px-3 py-2.5 rounded-lg hover:bg-blue-800 transition-colors",
-                            active && "bg-blue-800"
+                            "flex items-center justify-between w-full px-3 py-2.5 rounded-lg transition-colors no-underline",
+                            active ? "bg-blue-800 text-white" : "text-blue-100 hover:bg-blue-800 hover:text-white"
                           )}
                         >
                           <div className="flex items-center space-x-3">
-                            <item.icon className={cn("h-5 w-5", item.color)} />
+                            <item.icon className={cn("h-5 w-5", active ? "text-white" : item.color)} />
                             <span className="font-medium">{item.title}</span>
                           </div>
                         </AccordionTrigger>
@@ -211,7 +211,7 @@ const Layout = () => {
                               <Link
                                 key={subItem.path}
                                 to={subItem.path}
-                                className="block py-2 px-3 rounded-lg text-sm text-gray-300 hover:text-white hover:bg-blue-800 transition-colors"
+                                className="block py-2 px-3 rounded-lg text-sm text-blue-200 hover:text-white hover:bg-blue-800 transition-colors no-underline"
                               >
                                 {subItem.title}
                               </Link>
@@ -224,11 +224,11 @@ const Layout = () => {
                     <Link
                       to={item.path}
                       className={cn(
-                        "flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-blue-800 transition-colors",
-                        active && "bg-gray-800"
+                        "flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors no-underline",
+                        active ? "bg-blue-800 text-white" : "text-blue-100 hover:bg-blue-800 hover:text-white"
                       )}
                     >
-                      <item.icon className={cn("h-5 w-5", item.color)} />
+                      <item.icon className={cn("h-5 w-5", active ? "text-white" : item.color)} />
                       <span className="font-medium">{item.title}</span>
                     </Link>
                   )}
@@ -238,39 +238,39 @@ const Layout = () => {
           </nav>
 
           {/* Quick Stats */}
-          <div className="mt-8 p-4 bg-gray-800/50 rounded-xl">
-            <h3 className="text-sm font-medium text-gray-300 mb-2">Resumo</h3>
+          <div className="mt-8 p-4 bg-blue-800/50 rounded-xl">
+            <h3 className="text-sm font-medium text-blue-200 mb-2">Resumo</h3>
             <div className="grid grid-cols-2 gap-3">
-              <div className="text-center p-3 bg-gray-800 rounded-lg">
+              <div className="text-center p-3 bg-blue-900/50 rounded-lg">
                 <p className="text-2xl font-bold text-white">{animais.length}</p>
-                <p className="text-xs text-gray-400">Pacientes</p>
+                <p className="text-xs text-blue-200">Pacientes</p>
               </div>
-              <div className="text-center p-3 bg-gray-800 rounded-lg">
+              <div className="text-center p-3 bg-blue-900/50 rounded-lg">
                 <p className="text-2xl font-bold text-white">{consultas.length}</p>
-                <p className="text-xs text-gray-400">Consultas</p>
+                <p className="text-xs text-blue-200">Consultas</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* User Profile */}
-        <div className="p-4 border-t border-white-800">
+        <div className="p-4 border-t border-blue-800">
           <div className="flex items-center space-x-3">
-            <Avatar className="h-10 w-10 border-2 border-white-700">
+            <Avatar className="h-10 w-10 border-2 border-blue-400">
               <AvatarImage src={user?.photoURL || ''} />
-              <AvatarFallback className="bg-gray-700">
+              <AvatarFallback className="bg-blue-800 text-white">
                 {user?.displayName?.[0] || user?.email?.[0] || 'U'}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate">{user?.displayName || user?.email}</p>
-              <p className="text-xs text-gray-400 truncate">Veterinário</p>
+              <p className="text-sm font-medium text-white truncate">{user?.displayName || user?.email}</p>
+              <p className="text-xs text-blue-200 truncate">Veterinário</p>
             </div>
             <Button
               variant="ghost"
               size="icon"
               onClick={async () => { await logout(); navigate('/login'); }}
-              className="text-gray-400 hover:text-white hover:bg-gray-800"
+              className="text-blue-200 hover:text-white hover:bg-blue-800"
             >
               <LogOut className="h-4 w-4" />
             </Button>
@@ -281,7 +281,7 @@ const Layout = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="sticky top-0 z-40 bg-blue-500 border-b border-white-800">
+        <header className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
           <div className="flex items-center justify-between px-4 py-3">
             {/* Left: Menu toggle and title */}
             <div className="flex items-center space-x-4">
@@ -289,12 +289,12 @@ const Layout = () => {
                 variant="ghost"
                 size="icon"
                 onClick={() => setSidebarOpen(true)}
-                className="lg:hidden text-gray-400 hover:text-white hover:bg-gray-800"
+                className="lg:hidden text-gray-600 hover:text-gray-900 hover:bg-gray-100"
               >
                 <Menu className="h-5 w-5" />
               </Button>
               <div className="hidden md:block">
-                <h2 className="text-lg font-semibold text-white">
+                <h2 className="text-lg font-semibold text-gray-800">
                   {menuItems.find(item => isActive(item.path))?.title || 'Dashboard'}
                 </h2>
               </div>
@@ -303,42 +303,42 @@ const Layout = () => {
             {/* Center: Search */}
             <div className="flex-1 max-w-2xl mx-4">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
                   placeholder="Buscar pacientes, consultas, medicamentos..."
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  className="pl-10 bg-white-800 border-gray-700 text-white placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  className="pl-10 bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
                 {searchResults.length > 0 && (
-                  <div className="absolute top-full mt-1 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-lg overflow-hidden z-50">
+                  <div className="absolute top-full mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden z-50">
                     {searchResults.map((result, index) => (
                       <div
                         key={result.id || result.path || index}
-                        className="p-3 hover:bg-gray-700 cursor-pointer border-b border-gray-700 last:border-0"
+                        className="p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-0"
                         onClick={() => handleSearchSelect(result)}
                       >
                         <div className="flex items-center space-x-3">
                           {result.type === 'animal' ? (
                             <>
-                              <Dog className="h-4 w-4 text-blue-400" />
+                              <Dog className="h-4 w-4 text-blue-500" />
                               <div>
-                                <p className="font-medium">{result.nomeAnimal}</p>
-                                <p className="text-sm text-gray-400">{result.nomeProprietario}</p>
+                                <p className="font-medium text-gray-900">{result.nomeAnimal}</p>
+                                <p className="text-sm text-gray-500">{result.nomeProprietario}</p>
                               </div>
                             </>
                           ) : result.type === 'consulta' ? (
                             <>
-                              <Activity className="h-4 w-4 text-green-400" />
+                              <Activity className="h-4 w-4 text-green-500" />
                               <div>
-                                <p className="font-medium">Consulta: {result.animalNome}</p>
-                                <p className="text-sm text-gray-400">R$ {result.total?.toFixed(2) || '0.00'}</p>
+                                <p className="font-medium text-gray-900">Consulta: {result.animalNome}</p>
+                                <p className="text-sm text-gray-500">R$ {result.total?.toFixed(2) || '0.00'}</p>
                               </div>
                             </>
                           ) : (
                             <>
-                              {result.icon && <result.icon className="h-4 w-4 text-red-400" />}
-                              <p className="font-medium">{result.label}</p>
+                              {result.icon && <result.icon className="h-4 w-4 text-blue-500" />}
+                              <p className="font-medium text-gray-900">{result.label}</p>
                             </>
                           )}
                         </div>
@@ -351,10 +351,10 @@ const Layout = () => {
 
             {/* Right: Notifications and User */}
             <div className="flex items-center space-x-2">
-              <Button variant="ghost" size="icon" className="relative text-gray-400 hover:text-white hover:bg-gray-800">
+              <Button variant="ghost" size="icon" className="relative text-gray-600 hover:text-gray-900 hover:bg-gray-100">
                 <Bell className="h-5 w-5" />
                 {notifications > 0 && (
-                  <span className="absolute -top-1 -right-1 h-5 w-5 bg-red-600 text-xs rounded-full flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 text-xs rounded-full flex items-center justify-center text-white">
                     {notifications}
                   </span>
                 )}
@@ -362,31 +362,31 @@ const Layout = () => {
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="hidden md:flex items-center space-x-2 hover:bg-gray-800">
+                  <Button variant="ghost" className="hidden md:flex items-center space-x-2 hover:bg-gray-100">
                     <Avatar className="h-8 w-8">
                       <AvatarImage src={user?.photoURL || ''} />
-                      <AvatarFallback className="bg-gray-700">
+                      <AvatarFallback className="bg-gray-200 text-gray-700">
                         {user?.displayName?.[0] || user?.email?.[0] || 'U'}
                       </AvatarFallback>
                     </Avatar>
                     <div className="text-left">
-                      <p className="text-sm font-medium">{user?.displayName?.split(' ')[0] || 'Usuário'}</p>
-                      <p className="text-xs text-gray-400">Veterinário</p>
+                      <p className="text-sm font-medium text-gray-700">{user?.displayName?.split(' ')[0] || 'Usuário'}</p>
+                      <p className="text-xs text-gray-500">Veterinário</p>
                     </div>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="bg-gray-800 border-gray-700">
-                  <DropdownMenuLabel className="text-white">Minha Conta</DropdownMenuLabel>
-                  <DropdownMenuSeparator className="bg-gray-700" />
-                  <DropdownMenuItem asChild className="text-white hover:bg-gray-700 cursor-pointer">
+                <DropdownMenuContent align="end" className="bg-white border-gray-200">
+                  <DropdownMenuLabel className="text-gray-700">Minha Conta</DropdownMenuLabel>
+                  <DropdownMenuSeparator className="bg-gray-100" />
+                  <DropdownMenuItem asChild className="text-gray-700 hover:bg-gray-100 cursor-pointer">
                     <Link to="/perfil" className="flex items-center">
                       <User className="mr-2 h-4 w-4" />
                       Perfil
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem 
+                  <DropdownMenuItem
                     onClick={async () => { await logout(); navigate('/login'); }}
-                    className="text-red-400 hover:text-red-300 hover:bg-gray-700 cursor-pointer"
+                    className="text-red-600 hover:text-red-700 hover:bg-gray-100 cursor-pointer"
                   >
                     <LogOut className="mr-2 h-4 w-4" />
                     Sair
@@ -398,30 +398,30 @@ const Layout = () => {
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto bg-gray-950 p-4 md:p-6">
+        <main className="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-6">
           <div className="max-w-7xl mx-auto">
             <Outlet />
           </div>
         </main>
 
         {/* Footer */}
-        <footer className="border-t border-gray-800 p-4 bg-gray-900">
-          <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
+        <footer className="border-t border-gray-200 p-4 bg-white">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
             <div className="flex items-center space-x-4 mb-2 md:mb-0">
-              <span>© 2024 SofVet - Sistema Veterinário</span>
+              <span>© 2026 SofVet - Sistema Veterinário</span>
               <div className="flex items-center space-x-2">
                 <div className="h-2 w-2 rounded-full bg-green-500"></div>
                 <span>Online</span>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <Button variant="link" size="sm" className="text-gray-400 hover:text-white">
+              <Button variant="link" size="sm" className="text-gray-500 hover:text-gray-700">
                 Termos
               </Button>
-              <Button variant="link" size="sm" className="text-gray-400 hover:text-white">
+              <Button variant="link" size="sm" className="text-gray-500 hover:text-gray-700">
                 Privacidade
               </Button>
-              <Button variant="link" size="sm" className="text-gray-400 hover:text-white">
+              <Button variant="link" size="sm" className="text-gray-500 hover:text-gray-700">
                 Suporte
               </Button>
             </div>
@@ -431,23 +431,23 @@ const Layout = () => {
 
       {/* Mobile Sidebar */}
       <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
-        <SheetContent side="left" className="w-72 p-0 bg-gray-900 border-r border-gray-800">
-          <div className="p-6 border-b border-gray-800">
+        <SheetContent side="left" className="w-72 p-0 bg-gradient-to-b from-blue-600 to-blue-700 border-r border-blue-800">
+          <div className="p-6 border-b border-blue-800">
             <div className="flex items-center space-x-3">
               <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center">
                 <Heart className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-red-400 to-red-300 bg-clip-text text-transparent">
+                <h1 className="text-xl font-bold text-white">
                   SofVet
                 </h1>
-                <p className="text-xs text-gray-400">Sistema Veterinário</p>
+                <p className="text-xs text-blue-200">Sistema Veterinário</p>
               </div>
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setSidebarOpen(false)}
-                className="ml-auto text-gray-400 hover:text-white hover:bg-gray-800"
+                className="ml-auto text-blue-200 hover:text-white hover:bg-blue-800"
               >
                 <X className="h-5 w-5" />
               </Button>
@@ -464,12 +464,12 @@ const Layout = () => {
                         <AccordionItem value={item.title} className="border-none">
                           <AccordionTrigger
                             className={cn(
-                              "flex items-center justify-between w-full px-3 py-2.5 rounded-lg hover:bg-gray-800 transition-colors",
-                              active && "bg-gray-800"
+                              "flex items-center justify-between w-full px-3 py-2.5 rounded-lg transition-colors no-underline",
+                              active ? "bg-blue-800 text-white" : "text-blue-100 hover:bg-blue-800 hover:text-white"
                             )}
                           >
                             <div className="flex items-center space-x-3">
-                              <item.icon className={cn("h-5 w-5", item.color)} />
+                              <item.icon className={cn("h-5 w-5", active ? "text-white" : item.color)} />
                               <span className="font-medium">{item.title}</span>
                             </div>
                           </AccordionTrigger>
@@ -480,7 +480,7 @@ const Layout = () => {
                                   key={subItem.path}
                                   to={subItem.path}
                                   onClick={() => setSidebarOpen(false)}
-                                  className="block py-2 px-3 rounded-lg text-sm text-gray-300 hover:text-white hover:bg-gray-800 transition-colors"
+                                  className="block py-2 px-3 rounded-lg text-sm text-blue-200 hover:text-white hover:bg-blue-800 transition-colors no-underline"
                                 >
                                   {subItem.title}
                                 </Link>
@@ -494,11 +494,11 @@ const Layout = () => {
                         to={item.path}
                         onClick={() => setSidebarOpen(false)}
                         className={cn(
-                          "flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 transition-colors",
-                          active && "bg-gray-800"
+                          "flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors no-underline",
+                          active ? "bg-blue-800 text-white" : "text-blue-100 hover:bg-blue-800 hover:text-white"
                         )}
                       >
-                        <item.icon className={cn("h-5 w-5", item.color)} />
+                        <item.icon className={cn("h-5 w-5", active ? "text-white" : item.color)} />
                         <span className="font-medium">{item.title}</span>
                       </Link>
                     )}

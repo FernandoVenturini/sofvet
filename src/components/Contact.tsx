@@ -88,7 +88,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contato" className="py-24 bg-card/30">
+    <section id="contato" className="py-24 bg-black">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-5xl mx-auto mb-16">
           <span className="text-primary font-semibold text-sm uppercase tracking-wider">

@@ -15,11 +15,12 @@ const Hero = () => {
       <div className="container mx-auto px-6 relative z-10 text-center">
         <div className="max-w-5xl mx-auto">
 
-          {/* Badge */}
+          {/* Badge 
           <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-red-600/10 border border-red-600/30 text-red-400 text-sm font-bold mb-7">
             <HeartHandshake className="w-5 h-5" />
             Feito por quem já atuou na área.
           </div>
+          */}
 
           {/* Título principal */}
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-black leading-tight">

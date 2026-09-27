@@ -149,7 +149,7 @@ const Contact = () => {
                 <h3 className="font-heading font-semibold text-foreground mb-1">
                   WhatsApp
                 </h3>
-                <p className="text-muted-foreground">+44 7470 534807</p>
+                <p className="text-muted-foreground">+44 7747 843073</p>
                 {/* 🔧 NOVO: Texto indicativo de ação */}
                 <p className="text-sm text-primary mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   Clique para conversar

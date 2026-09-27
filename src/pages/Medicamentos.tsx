@@ -384,7 +384,7 @@ const Medicamentos = () => {
 		);
 	}
 
-	return (
+	return ( 
 		<div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6">
 			{/* Header */}
 			<div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">

@@ -198,6 +198,14 @@ const NovaFicha = () => {
 		{ value: 'outro', label: 'Outro', icon: Tag },
 	];
 
+	const tabClass = `
+		border border-transparent rounded-md
+		transition-all duration-200
+		hover:border-red-500/50
+		hover:shadow-[0_0_12px_rgba(239,68,68,0.5)]
+		hover:bg-gradient-to-r hover:from-red-600/20 hover:to-pink-600/20
+	`;
+
 	return (
 		<div className="space-y-6 min-h-screen bg-background p-6">
 			{/* Header */}
@@ -251,25 +259,24 @@ const NovaFicha = () => {
 
 			<Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
 				<TabsList className="grid grid-cols-5 bg-gradient-to-r from-gray-900/50 to-black/50 border border-gray-800/50 p-1">
-					<TabsTrigger value="dados" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-600/30 data-[state=active]:to-pink-600/30">
-						<Dog className="h-4 w-4 mr-2" />
-						Dados
+					<TabsTrigger value="dados" className={tabClass}>
+						<Dog className="h-4 w-4 mr-2" /> Dados
 					</TabsTrigger>
-					<TabsTrigger value="proprietario" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-600/30 data-[state=active]:to-pink-600/30">
-						<User className="h-4 w-4 mr-2" />
-						Proprietário
+
+					<TabsTrigger value="proprietario" className={tabClass}>
+						<User className="h-4 w-4 mr-2" /> Proprietário
 					</TabsTrigger>
-					<TabsTrigger value="vacinas" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-600/30 data-[state=active]:to-pink-600/30">
-						<Syringe className="h-4 w-4 mr-2" />
-						Vacinas
+
+					<TabsTrigger value="vacinas" className={tabClass}>
+						<Syringe className="h-4 w-4 mr-2" /> Vacinas
 					</TabsTrigger>
-					<TabsTrigger value="saude" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-600/30 data-[state=active]:to-pink-600/30">
-						<Heart className="h-4 w-4 mr-2" />
-						Saúde
+
+					<TabsTrigger value="saude" className={tabClass}>
+						<Heart className="h-4 w-4 mr-2" /> Saúde
 					</TabsTrigger>
-					<TabsTrigger value="foto" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-600/30 data-[state=active]:to-pink-600/30">
-						<Camera className="h-4 w-4 mr-2" />
-						Foto
+
+					<TabsTrigger value="foto" className={tabClass}>
+						<Camera className="h-4 w-4 mr-2" /> Foto
 					</TabsTrigger>
 				</TabsList>
 
@@ -755,7 +762,7 @@ const NovaFicha = () => {
 									className="bg-gray-900/50 border-gray-700/50 text-white"
 									placeholder="Medicamentos de uso contínuo..."
 								/>
-								</div>
+							</div>
 
 							<div className="space-y-2">
 								<Label className="text-white">Observações Gerais</Label>

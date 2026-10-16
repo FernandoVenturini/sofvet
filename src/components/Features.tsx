@@ -115,7 +115,7 @@ const Features = () => {
                         className="inline-flex items-center gap-3 bg-red-600 hover:bg-red-700 text-white font-bold px-10 py-5 
                        rounded-xl text-lg shadow-2xl shadow-red-600/30 hover:shadow-red-600/50 transition-all hover:scale-105"
                     >
-                        Testar 14 dias grátis agora
+                        Testar 7 dias grátis agora
                         <Heart className="w-6 h-6 animate-pulse" />
                     </a>
                 </div>

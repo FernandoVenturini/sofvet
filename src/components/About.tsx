@@ -41,7 +41,7 @@ const About = () => {
 
         <div className="text-center mt-16">
           <p className="text-3xl font-bold text-white pt-11">
-            Junte-se às <span className="text-red-500">2.400+</span> clínicas que já escolheram o <span className="text-red-500">SofVet</span>.
+            Junte-se às <span className="text-red-500">93+</span> clínicas que já escolheram o <span className="text-red-500">SofVet</span>.
           </p>
         </div>
       </div>

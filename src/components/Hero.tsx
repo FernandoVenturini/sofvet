@@ -46,7 +46,7 @@ const Hero = () => {
               asChild
             >
               <a href="#planos" className="flex items-center gap-3">
-                Testar 14 dias grátis
+                Testar 7 dias grátis
                 <ArrowRight className="w-6 h-6" />
               </a>
             </Button>
@@ -67,7 +67,7 @@ const Hero = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20 pt-11 pb-10
 		  ">
             {[
-              { value: "2.400+", label: "Clínicas ativas" },
+              { value: "93+", label: "Clínicas ativas" },
               { value: "24/7", label: "Suporte veterinário" },
               { value: "0", label: "Fidelidade" },
               { value: "100%", label: "Na nuvem" },

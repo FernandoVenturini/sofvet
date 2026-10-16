@@ -95,14 +95,14 @@ const Contact = () => {
             Contato
           </span>
           <h2 className="text-6xl font-bold text-center mb-8">
-            Fale com a gente <span className="text-red-600">agora</span> e <span className="text-red-600">teste grátis</span> por 14 dias...
+            Fale com a gente <span className="text-red-600">agora</span> e <span className="text-red-600">teste grátis</span> por 7 dias...
           </h2>
 		  <Button
               size="lg"
               className="bg-red-600 hover:bg-red-700 text-white font-bold px-8 shadow-lg hover:shadow-red-600/50"
               asChild
             >
-              <a href="#planos">Testar 14 dias grátis</a>
+              <a href="#planos">Testar 7 dias grátis</a>
             </Button>
           <p className="text-muted-foreground text-lg pt-5">
             Nao perca essa oportunidade!
@@ -166,7 +166,7 @@ const Contact = () => {
                 <h3 className="font-heading font-semibold text-foreground mb-1">
                   Localização
                 </h3>
-                <p className="text-muted-foreground">Sao Paulo - SP</p>
+                <p className="text-muted-foreground">Nottingham - UK</p>
               </div>
             </div>
           </div>
@@ -225,13 +225,13 @@ const Contact = () => {
                 name="message"
                 value={formData.message}
                 onChange={handleChange}
-                placeholder="Descreva seu projeto..."
+                placeholder="Como podemos ajudar?..."
                 rows={5}
                 className="bg-secondary border-border resize-none"
               />
             </div>
 
-            <Button variant="hero" size="lg" className="w-full group">
+            <Button variant="hero" size="lg" className="w-full group border-2 border-primary hover:bg-primary hover:text-white transition-colors duration-300 text-md" type="submit">
               Enviar Mensagem
               <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Button>

@@ -54,7 +54,7 @@ const Header = () => {
               className="bg-red-600 hover:bg-red-700 text-white font-bold px-8 shadow-lg hover:shadow-red-600/50"
               asChild
             >
-              <a href="#planos">Testar 14 dias grátis</a>
+              <a href="#planos">Testar 7 dias grátis</a>
             </Button>
           </div>
 
@@ -90,7 +90,7 @@ const Header = () => {
                   className="w-full bg-red-600 hover:bg-red-700 text-white font-bold text-lg h-12"
                   asChild
                 >
-                  <a href="#planos">Testar 14 dias grátis</a>
+                  <a href="#planos">Testar 7 dias grátis</a>
                 </Button>
               </div>
             </nav>
